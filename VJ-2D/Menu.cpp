@@ -22,6 +22,7 @@ void Menu::init()
 	background = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
 	menuWindow.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGB);
+	creditsWindow.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -31,7 +32,7 @@ void Menu::update(int deltaTime)
 	currentTime += deltaTime;
 }
 
-void Menu::render()
+void Menu::render(int numScreen)
 {
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
@@ -40,8 +41,12 @@ void Menu::render()
 	glm::mat4 modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-
-	background->render(menuWindow);
+	
+	menuSelection = numScreen;
+	if (menuSelection == 0)
+		background->render(menuWindow);
+	else if (menuSelection == 2)
+		background->render(creditsWindow);
 }
 
 
