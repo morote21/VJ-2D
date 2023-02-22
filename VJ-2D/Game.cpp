@@ -23,13 +23,19 @@ void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//scene.render();
-	menu.render();
+	menu.render(numScreen);
 }
 
 void Game::keyPressed(int key)
 {
 	if (key == 27) // Escape code
 		bPlay = false;
+	if (key == '0')
+		if (!start)		// Ir al menu principal (temporal)
+			numScreen = 0;	
+	if (key == '2')
+		if (!start)		// Ir a los creditos (temporal)
+			numScreen = 2;
 	keys[key] = true;
 }
 
