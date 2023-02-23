@@ -7,6 +7,10 @@
 
 using namespace std;
 
+enum Animations {
+	MENU_BAT
+};
+
 
 // AnimKeyframes contains all information related to a single animation.
 // These are the animation speed measured by millisecsPerKeyframe
