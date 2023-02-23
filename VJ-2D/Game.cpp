@@ -46,6 +46,35 @@ void Game::keyReleased(int key)
 
 void Game::specialKeyPressed(int key)
 {
+	if (key == GLUT_KEY_DOWN)
+	{
+		if (!start) 
+		{
+			if (numScreen == 0)
+			{
+				int currentIndex = menu.getSelectorIndex();
+				if (currentIndex == 2)
+					menu.setSelectorIndex(0);
+				else
+					menu.setSelectorIndex(currentIndex + 1);
+			}
+		}
+	}
+	if (key == GLUT_KEY_UP)
+	{
+		if (!start)
+		{
+			if (numScreen == 0)
+			{
+				int currentIndex = menu.getSelectorIndex();
+				if (currentIndex == 0)
+					menu.setSelectorIndex(2);
+				else
+					menu.setSelectorIndex(currentIndex - 1);
+			}
+		}
+	}
+	
 	specialKeys[key] = true;
 }
 
