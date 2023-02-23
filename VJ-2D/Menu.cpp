@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "Game.h"
+#include <GL/glut.h>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
 
@@ -28,7 +29,7 @@ void Menu::init()
 	selector->addKeyframe(MENU_BAT, glm::vec2(0.33f, 0.f));
 	selector->addKeyframe(MENU_BAT, glm::vec2(0.66f, 0.f));
 
-	selector->changeAnimation(0);
+	selector->changeAnimation(0);	// 0 para volver a la animacion de MENU_BAT
 	selector->setPosition(glm::vec2(0.f, 0.f));
 
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
@@ -44,12 +45,50 @@ void Menu::init()
 
 void Menu::update(int deltaTime)
 {
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_DOWN)) {
+		if (!Game::instance().getStart()) {
+			if (currentWindow == 0) {
+				if (selectorIndex == 2)
+					selectorIndex = 0;
+				else
+					selectorIndex += 1;
+				Game::instance().setSpecialKeyAlreadyPressing(GLUT_KEY_DOWN);
+				cout << selectorIndex << endl;
+			}
+		}
+	}
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_UP)) {
+		if (!Game::instance().getStart()) {
+			if (currentWindow == 0) {
+				if (selectorIndex == 0)
+					selectorIndex = 2;
+				else
+					selectorIndex -= 1;
+				Game::instance().setSpecialKeyAlreadyPressing(GLUT_KEY_UP);
+				cout << selectorIndex << endl;
+			}
+		}
+	}
+
+	if (Game::instance().getKey('0')) {
+		if (!Game::instance().getStart()) {
+			currentWindow = 0;
+		}
+	}
+
+	if (Game::instance().getKey('2')) {
+		if (!Game::instance().getStart()) {
+			currentWindow = 2;
+		}
+	}
+
 	currentTime += deltaTime;
-	if (menuSelection == 0)
+	if (currentWindow == 0)
 		selector->update(deltaTime);
 }
 
-void Menu::render(int numScreen)
+void Menu::render()
 {
 	texProgram.use();
 	texProgram.setUniformMatrix4f("projection", projection);
@@ -59,13 +98,11 @@ void Menu::render(int numScreen)
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	
-	menuSelection = numScreen;
-	if (menuSelection == 0)
-	{
+	if (currentWindow == 0) {
 		background->render(menuWindow);
 		selector->render();
 	}
-	else if (menuSelection == 2)
+	else if (currentWindow == 2)
 		background->render(creditsWindow);
 }
 

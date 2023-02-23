@@ -39,22 +39,27 @@ public:
 	void mouseMove(int x, int y);
 	void mousePress(int button);
 	void mouseRelease(int button);
+	
+	void setStart(bool state);
+	bool getStart();
 
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
+	void setKeyAlreadyPressing(int key);
+	void setSpecialKeyAlreadyPressing(int key);
+	bool getKeyAlreadyPressing(int key) const;
+	bool getSpecialKeyAlreadyPressing(int key) const;
+
 
 private:
 	bool bPlay, start;                       // Continue to play game?
 	Scene scene;						  // Scene to render
 	Menu menu;
-	bool keys[256], specialKeys[256]; // Store key states so that 
+	bool keys[256], specialKeys[256]; // Store key states so 
 	// we can have access at any time
-	int level = 1, menuIndex = 0, numScreen = 0;
-	// numScreen:
-	// menu = 0
-	// game = 1
-	// instructions = 2
-	// credit = 3
+	bool keysAlreadyPressing[256], specialKeysAlreadyPressing[256];
+	int level;
+	
 
 };
 
