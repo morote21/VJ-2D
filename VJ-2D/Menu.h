@@ -14,17 +14,24 @@ public:
 	void init();	
 	void initShaders();
 	void update(int deltaTime);
-	void render(int numScreen);
+	void render();
 
 	void setSelectorIndex(int index);
 	int getSelectorIndex();
 	
 private:
-	int menuSelection, selectorIndex;
+	int currentWindow, selectorIndex;
 	// selector index:
 	// play -> 0
 	// instructions -> 1
 	// credits -> 2
+	
+	// current window:
+	// menu -> 0
+	// game -> 1
+	// instructions -> 2
+	// credits -> 3
+
 	float currentTime;
 	TexturedQuad* background;
 	Texture menuWindow, creditsWindow;
