@@ -18,7 +18,8 @@ Menu::~Menu()
 void Menu::init()
 {
 	initShaders();	// carga la configuracion del texProgram
-
+	credits.init(texProgram);
+	instructions.init(texProgram);
 	// selector sprite
 	spritesheet.loadFromFile("images/bat.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	selector = Sprite::createSprite(glm::ivec2(48, 64), glm::vec2(0.33f, 1.f), &spritesheet, &texProgram);
@@ -37,7 +38,7 @@ void Menu::init()
 	background = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
 	menuWindow.loadFromFile("images/menu.png", TEXTURE_PIXEL_FORMAT_RGB);
-	creditsWindow.loadFromFile("images/credits.png", TEXTURE_PIXEL_FORMAT_RGB);
+	//instructionsWindow.loadFromFile("images/instructions.png", TEXTURE_PIXEL_FORMAT_RGB);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 	selectorIndex = 0;
@@ -91,6 +92,10 @@ void Menu::update(int deltaTime)
 	currentTime += deltaTime;
 	if (currentWindow == 0)
 		selector->update(deltaTime);
+	else if (currentWindow == 1)
+		instructions.update(deltaTime);
+	else if (currentWindow == 2)
+		credits.update(deltaTime);
 }
 
 void Menu::render()
@@ -105,7 +110,7 @@ void Menu::render()
 	
 	if (currentWindow == 0) {
 		background->render(menuWindow);
-		
+
 		if (selectorIndex == 0)
 			selector->setPosition(glm::vec2(0.f, 150.f));
 		else if (selectorIndex == 1)
@@ -114,8 +119,10 @@ void Menu::render()
 			selector->setPosition(glm::vec2(0.f, 310.f));
 		selector->render();
 	}
+	else if (currentWindow == 1)
+		instructions.render(texProgram);
 	else if (currentWindow == 2)
-		background->render(creditsWindow);
+		credits.render(texProgram);
 }
 
 void Menu::setSelectorIndex(int index)
