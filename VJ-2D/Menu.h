@@ -4,6 +4,8 @@
 #include <glm/glm.hpp>
 #include "TexturedQuad.h"
 #include "Sprite.h"
+#include "Credits.h"
+#include "Instructions.h"
 
 class Menu 
 {
@@ -34,7 +36,7 @@ private:
 
 	float currentTime;
 	TexturedQuad* background;
-	Texture menuWindow, creditsWindow;
+	Texture menuWindow, creditsWindow, instructionsWindow;
 	// posiblemente las instrucciones sean un vector de texturas, y ir cambiando entre las posiciones
 	// del vector con las flechas del teclado, donde cada posicion muestra una pagina diferente de las
 	// instrucciones
@@ -44,6 +46,9 @@ private:
 
 	ShaderProgram texProgram;
 	glm::mat4 projection;
+
+	Credits credits;
+	Instructions instructions;
 
 };
 
