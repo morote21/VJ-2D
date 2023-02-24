@@ -71,15 +71,20 @@ void Menu::update(int deltaTime)
 		}
 	}
 
-	if (Game::instance().getKey('0')) {
+	if (Game::instance().getKey(13) && !Game::instance().getKeyAlreadyPressing(13)) {
 		if (!Game::instance().getStart()) {
-			currentWindow = 0;
+			currentWindow = selectorIndex;
+			Game::instance().setKeyAlreadyPressing(13);
 		}
 	}
 
-	if (Game::instance().getKey('2')) {
+	if (Game::instance().getKey(27) && !Game::instance().getKeyAlreadyPressing(27)) {
 		if (!Game::instance().getStart()) {
-			currentWindow = 2;
+			if (currentWindow == 0)
+				Game::instance().stopGame();
+			else if (currentWindow == 1 || currentWindow == 2)
+				currentWindow = 0;
+			Game::instance().setKeyAlreadyPressing(27);
 		}
 	}
 

@@ -30,6 +30,7 @@ public:
 	void init();
 	bool update(int deltaTime);
 	void render();
+	void stopGame();
 
 	// Input callback methods
 	void keyPressed(int key);
