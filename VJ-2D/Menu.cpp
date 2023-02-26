@@ -112,11 +112,11 @@ void Menu::render()
 		background->render(menuWindow);
 
 		if (selectorIndex == 0)
-			selector->setPosition(glm::vec2(0.f, 150.f));
+			selector->setPosition(glm::vec2(140.f, 242.f));
 		else if (selectorIndex == 1)
-			selector->setPosition(glm::vec2(0.f, 250.f));
+			selector->setPosition(glm::vec2(140.f, 302.f));
 		else if (selectorIndex == 2)
-			selector->setPosition(glm::vec2(0.f, 310.f));
+			selector->setPosition(glm::vec2(140.f, 362.f));
 		selector->render();
 	}
 	else if (currentWindow == 1)
