@@ -29,7 +29,7 @@ private:
 	GLint posLocation, texCoordLocation;
 	int nTiles;
 	glm::ivec2 position, mapSize, tilesheetSize;
-	int tileSizeX, tileSizeY;
+	int tileWidth, tileHeight;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int* map;	// seguramente poner aqui una matriz con un vector de vectores en vez de simular una matriz 

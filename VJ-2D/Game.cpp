@@ -11,7 +11,7 @@ void Game::init()
 	bPlay = true; start = false; level = 1;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	menu.init();	// menu
-	//scene.init();	// game
+	scene.init();	// game
 
 	for (int i = 0; i < 256; i++) {
 		keysAlreadyPressing[i] = false;
@@ -21,16 +21,20 @@ void Game::init()
 
 bool Game::update(int deltaTime)
 {
-	//scene.update(deltaTime);
-	menu.update(deltaTime);
+	if (!start)
+		menu.update(deltaTime);
+	else
+		scene.update(deltaTime);
 	return bPlay;
 }
 
 void Game::render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//scene.render();
-	menu.render();
+	if (!start)
+		menu.render();
+	else
+		scene.render();
 }
 
 void Game::keyPressed(int key)

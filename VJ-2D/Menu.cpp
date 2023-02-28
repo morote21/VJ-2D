@@ -74,7 +74,10 @@ void Menu::update(int deltaTime)
 
 	if (Game::instance().getKey(13) && !Game::instance().getKeyAlreadyPressing(13)) {
 		if (!Game::instance().getStart()) {
-			currentWindow = selectorIndex;
+			if (selectorIndex == 0)
+				Game::instance().setStart(true);
+			else
+				currentWindow = selectorIndex;
 			Game::instance().setKeyAlreadyPressing(13);
 		}
 	}

@@ -62,8 +62,9 @@ bool TileMap::loadLevel(const string& levelFile)
 	sstream >> mapSize.x >> mapSize.y;
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tileSizeX >> tileSizeY;
+	sstream >> tileWidth >> tileHeight;
 	getline(fin, line);
+	sstream.str(line);
 	sstream >> tilesheetFile;
 	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
 	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
@@ -92,10 +93,56 @@ bool TileMap::loadLevel(const string& levelFile)
 #endif
 	}
 	fin.close();
+	cout << mapSize.x << " " << mapSize.y << endl;
+	cout << tileWidth << " " << tileHeight << endl;
+	cout << tilesheetFile << endl;
+	cout << tilesheetSize.x << " " << tilesheetSize.y << endl;
+	if (tilesheetFile == "images/tilesheet.png") 
+		cout << "path correcto" << endl;
 }
 
 void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
+	int tile, nTiles = 0;
+	glm::vec2 posTile, texCoordTile[2];
+	vector<float> vertices;
 
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			tile = map[j * mapSize.x + i];
+			if (tile > 0)
+			{
+				nTiles++;
+				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
+				texCoordTile[0] = glm::vec2(0.f, 0.f);	// esto solo es el muro, pero mas adelante elegir segun el valor del txt de los tiles
+				texCoordTile[1] = texCoordTile[0] + tileTexSize;
+				// First triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + tileWidth); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + tileWidth); vertices.push_back(posTile.y + tileHeight);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+
+				// Second triangle
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
+				vertices.push_back(posTile.x + tileWidth); vertices.push_back(posTile.y + tileHeight);
+				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
+				vertices.push_back(posTile.x); vertices.push_back(posTile.y + tileHeight);
+				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
+			}
+		}
+	}
+
+	glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
+	glGenBuffers(1, &vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glBufferData(GL_ARRAY_BUFFER, 24 * nTiles * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+	posLocation = program.bindVertexAttribute("position", 2, 4 * sizeof(float), 0);
+	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
