@@ -99,6 +99,14 @@ bool TileMap::loadLevel(const string& levelFile)
 	cout << tilesheetSize.x << " " << tilesheetSize.y << endl;
 	if (tilesheetFile == "images/tilesheet.png") 
 		cout << "path correcto" << endl;
+	for (int j = 0; j < mapSize.y; j++)
+	{
+		for (int i = 0; i < mapSize.x; i++)
+		{
+			cout << map[j * mapSize.x + i];
+		}
+		cout << endl;
+	}
 }
 
 void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
