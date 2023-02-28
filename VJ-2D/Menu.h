@@ -30,9 +30,8 @@ private:
 	
 	// current window:
 	// menu -> 0
-	// game -> 1
-	// instructions -> 2
-	// credits -> 3
+	// instructions -> 1
+	// credits -> 2
 
 	float currentTime;
 	TexturedQuad* background;
