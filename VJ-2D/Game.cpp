@@ -9,7 +9,7 @@ using namespace std;
 void Game::init()
 {
 	bPlay = true; start = false; level = 1;
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	menu.init();	// menu
 	scene.init();	// game
 
