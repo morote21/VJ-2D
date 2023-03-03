@@ -155,3 +155,67 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
+int TileMap::getTileSizeX() const
+{
+	return tileWidth;
+}
+
+int TileMap::getTileSizeY() const
+{
+	return tileHeight;
+}
+
+
+bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const
+{
+	int x, y0, y1;
+
+	x = pos.x / tileWidth;
+	y0 = pos.y / tileHeight;
+	y1 = (pos.y + size.y - 1) / tileHeight;
+	for (int y = y0; y <= y1; y++)
+	{
+		if (map[y * mapSize.x + x] != 0)
+			return true;
+	}
+
+	return false;
+}
+
+bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const
+{
+	int x, y0, y1;
+
+	x = (pos.x + size.x - 1) / tileWidth;
+	y0 = pos.y / tileHeight;
+	y1 = (pos.y + size.y - 1) / tileHeight;
+	for (int y = y0; y <= y1; y++)
+	{
+		if (map[y * mapSize.x + x] != 0)
+			return true;
+	}
+
+	return false;
+}
+
+bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileWidth;
+	x1 = (pos.x + size.x - 1) / tileWidth;
+	y = (pos.y + size.y - 1) / tileHeight;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] != 0)
+		{
+			if (*posY - tileHeight * y + size.y <= 4)
+			{
+				*posY = tileHeight * y - size.y;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}

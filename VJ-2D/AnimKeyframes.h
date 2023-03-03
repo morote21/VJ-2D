@@ -8,7 +8,7 @@
 using namespace std;
 
 enum Animations {
-	MENU_BAT
+	MENU_BAT, STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
 };
 
 
