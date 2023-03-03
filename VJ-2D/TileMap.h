@@ -19,6 +19,13 @@ public:
 	void render() const;
 	void free();
 
+	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+
+	int getTileSizeX() const;
+	int getTileSizeY() const;
+
 private:
 	bool loadLevel(const string& levelFile);
 	void prepareArrays(const glm::vec2& minCoords, ShaderProgram& program);
