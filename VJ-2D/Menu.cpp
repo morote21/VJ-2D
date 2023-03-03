@@ -23,7 +23,7 @@ void Menu::init()
 	// selector sprite
 	spritesheet.loadFromFile("images/bat.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	selector = Sprite::createSprite(glm::ivec2(48, 64), glm::vec2(0.33f, 1.f), &spritesheet, &texProgram);
-	selector->setNumberAnimations(5);
+	selector->setNumberAnimations(5);	// aqui hay que poner el numero de animaciones que hay en Animations
 
 	selector->setAnimationSpeed(MENU_BAT, 6);
 	selector->addKeyframe(MENU_BAT, glm::vec2(0.f, 0.f));
