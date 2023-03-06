@@ -21,13 +21,13 @@ void Instructions::init(ShaderProgram& texProgram)
 	instructionsWindowSheet.loadFromFile("images/instructions.png", TEXTURE_PIXEL_FORMAT_RGB);
 
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
-	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(0.33f, 1.f) };
+	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(0.5f, 0.5f) };
 	instructionsWindows.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
-	texCoords[0] = glm::vec2(0.33f, 0.f); texCoords[1] = glm::vec2(0.66f, 1.f);
+	texCoords[0] = glm::vec2(0.5f, 0.0f); texCoords[1] = glm::vec2(1.0f, 0.5f);
 	instructionsWindows.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
-	texCoords[0] = glm::vec2(0.67f, 0.f); texCoords[1] = glm::vec2(1.f, 1.f);
+	texCoords[0] = glm::vec2(0.0f, 0.5f); texCoords[1] = glm::vec2(0.5f, 1.0f);
 	instructionsWindows.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
