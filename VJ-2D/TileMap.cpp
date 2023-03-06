@@ -3,6 +3,7 @@
 #include <sstream>
 #include <vector>
 #include "TileMap.h"
+#include "Scene.h"
 
 using namespace std;
 
@@ -27,8 +28,9 @@ TileMap::~TileMap()
 }
 
 
-void TileMap::render() const
+void TileMap::render(const glm::vec2& minCoords, ShaderProgram& program) 
 {
+	prepareArrays(minCoords, program);
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
 	glBindVertexArray(vao);
@@ -110,6 +112,12 @@ bool TileMap::loadLevel(const string& levelFile)
 	return true;
 }
 
+glm::ivec2 TileMap::getMapSize() const
+{
+	return mapSize;
+}
+
+
 void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 {
 	int tile;
@@ -125,7 +133,7 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 			{
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
-				texCoordTile[0] = glm::vec2(0.f, 0.f);	// esto solo es el muro, pero mas adelante elegir segun el valor del txt de los tiles
+				texCoordTile[0] = glm::vec2((tile - 1.f) / 3.f, 0.f);	// esto solo es el muro, pero mas adelante elegir segun el valor del txt de los tiles
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
@@ -218,4 +226,14 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	}
 
 	return false;
+}
+
+int TileMap::getTileInPos(int x, int y) const
+{
+	return map[y * mapSize.x + x];
+}
+
+void TileMap::tileStepped(int x, int y)
+{
+	map[y * mapSize.x + x] = 3;
 }

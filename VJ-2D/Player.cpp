@@ -104,6 +104,12 @@ void Player::update(int deltaTime)
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	int playerX = posPlayer.x / 40;
+	int playerY = (posPlayer.y + int(sprite->getSpriteSize().y)) / 20;
+	int tile = map->getTileInPos(playerX, playerY);
+	if (tile == 2)
+		map->tileStepped(playerX, playerY);
+	
 }
 
 void Player::render()

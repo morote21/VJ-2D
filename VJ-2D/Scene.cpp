@@ -9,7 +9,7 @@ using namespace std;
 #define SCREEN_Y 40
 
 #define INIT_PLAYER_X_TILES 3
-#define INIT_PLAYER_Y_TILES 19
+#define INIT_PLAYER_Y_TILES 18
 
 
 Scene::Scene()
@@ -55,7 +55,7 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render();
+	map->render(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->render();
 }
 

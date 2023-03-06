@@ -16,7 +16,7 @@ public:
 
 	~TileMap();
 
-	void render() const;
+	void render(const glm::vec2& minCoords, ShaderProgram& program);
 	void free();
 
 	bool collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
@@ -25,6 +25,9 @@ public:
 
 	int getTileSizeX() const;
 	int getTileSizeY() const;
+	glm::ivec2 getMapSize() const;
+	int getTileInPos(int x, int y) const;
+	void tileStepped(int x, int y);
 
 private:
 	bool loadLevel(const string& levelFile);
