@@ -32,6 +32,7 @@ Sprite::Sprite(const glm::vec2& quadSize, const glm::vec2& sizeInSpritesheet, Te
 	shaderProgram = program;
 	currentAnimation = -1;
 	position = glm::vec2(0.f);
+	spriteSize = quadSize;
 }
 
 void Sprite::update(int deltaTime)
@@ -106,5 +107,8 @@ void Sprite::setPosition(const glm::vec2& pos)
 	position = pos;
 }
 
-
+glm::vec2 Sprite::getSpriteSize() const
+{
+	return spriteSize;
+}
 
