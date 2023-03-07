@@ -228,6 +228,25 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	return false;
 }
 
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileWidth;
+	x1 = (pos.x + size.x - 1) / tileWidth;
+	y = (pos.y - 1) / tileHeight;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] == 1)
+		{
+			*posY = tileHeight * y + tileHeight;
+			return true;
+		}
+	}
+
+	return false;
+}
+
 int TileMap::getTileInPos(int x, int y) const
 {
 	return map[y * mapSize.x + x];
