@@ -7,7 +7,7 @@
 
 
 #define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 96
+#define JUMP_HEIGHT 75
 #define FALL_STEP 4
 
 
@@ -76,17 +76,22 @@ void Player::update(int deltaTime)
 
 	if (bJumping)
 	{
-		jumpAngle += JUMP_ANGLE_STEP;
-		if (jumpAngle == 180)
-		{
-			bJumping = false;
-			posPlayer.y = startY;
+		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
+			bJumping = false;	// pasara a caer, porque bjumping = false pero no hay colision debajo 
 		}
-		else
-		{
-			posPlayer.y = int(startY - 96 * sin(3.14159f * jumpAngle / 180.f));
-			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+		else {
+			jumpAngle += JUMP_ANGLE_STEP;
+			if (jumpAngle == 180)
+			{
+				bJumping = false;
+				posPlayer.y = startY;
+			}
+			else
+			{
+				posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
+				if (jumpAngle > 90)
+					bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+			}
 		}
 	}
 	else
@@ -104,11 +109,18 @@ void Player::update(int deltaTime)
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	int playerX = posPlayer.x / 40;
+
+	int playerX_left = posPlayer.x / 40;
+	int playerX_right = (posPlayer.x + int(sprite->getSpriteSize().x)) / 40;
 	int playerY = (posPlayer.y + int(sprite->getSpriteSize().y)) / 20;
-	int tile = map->getTileInPos(playerX, playerY);
-	if (tile == 2)
-		map->tileStepped(playerX, playerY);
+	int tile_left_player = map->getTileInPos(playerX_left, playerY);
+	int tile_right_player = map->getTileInPos(playerX_right, playerY);
+	if (!bJumping) {
+		if (tile_left_player == 2)
+			map->tileStepped(playerX_left, playerY);
+		if (tile_right_player == 2)
+			map->tileStepped(playerX_right, playerY);
+	}
 	
 }
 
