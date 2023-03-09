@@ -16,8 +16,9 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
 	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(5);	// hay que poner el numero de animaciones de Animations (incluyendo las que no son del player)
+	size = glm::ivec2(32, 32);
+	sprite = Sprite::createSprite(size, glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
+	sprite->setNumberAnimations(8);	// hay que poner el numero de animaciones de Animations (incluyendo las que no son del player)
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));
@@ -118,7 +119,7 @@ void Player::update(int deltaTime)
 	if (!bJumping) {
 		if (tile_left_player == 2)
 			map->tileStepped(playerX_left, playerY);
-		if (tile_right_player == 2)
+		else if (tile_right_player == 2)
 			map->tileStepped(playerX_right, playerY);
 	}
 	
@@ -140,3 +141,12 @@ void Player::setPosition(const glm::vec2& pos)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
+glm::vec2 Player::getPosition()
+{
+	return posPlayer;
+}
+
+glm::ivec2 Player::getSize() const
+{
+	return size;
+}

@@ -30,11 +30,14 @@ Scene::~Scene()
 void Scene::init()
 {
 	initShaders();
+	keyCollected = false;
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
 	player->setTileMap(map);
+	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 }
@@ -43,6 +46,11 @@ void Scene::update(int deltaTime)
 {
 	currentTime += deltaTime;
 	player->update(deltaTime);
+	key.update(deltaTime);
+	door.update(deltaTime, keyCollected);
+	if (samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+		keyCollected = true;
+	}
 }
 
 void Scene::render()
@@ -56,7 +64,11 @@ void Scene::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 	map->render(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	if (map->keyAppeared() && !keyCollected)
+		key.render();
+	door.render();
 	player->render();
+	
 }
 
 void Scene::initShaders()
@@ -90,4 +102,12 @@ void Scene::initShaders()
 }
 
 
+bool Scene::samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size)
+{
+	if (e1pos.x + e1size.x < e2pos.x || e1pos.x > e2pos.x + e2size.x)
+		return false;
+	else if (e1pos.y + e1size.y < e2pos.y || e1pos.y > e2pos.y + e2size.y)
+		return false;
+	return true;
+}
 

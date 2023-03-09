@@ -27,8 +27,11 @@ public:
 	int getTileSizeX() const;
 	int getTileSizeY() const;
 	glm::ivec2 getMapSize() const;
+	glm::ivec2 getDoorPos();
 	int getTileInPos(int x, int y) const;
 	void tileStepped(int x, int y);
+	bool keyAppeared() const;
+	void keyCollected();
 
 private:
 	bool loadLevel(const string& levelFile);
@@ -38,13 +41,13 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
-	int nTiles;
-	glm::ivec2 position, mapSize, tilesheetSize;
+	bool doorOpened;
+	int nTiles, validTiles, steppedTiles;
+	glm::ivec2 position, mapSize, tilesheetSize, doorPos;
 	int tileWidth, tileHeight;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int* map;	// seguramente poner aqui una matriz con un vector de vectores en vez de simular una matriz 
-
 };
 
 #endif
