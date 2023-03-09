@@ -48,6 +48,8 @@ void TileMap::free()
 
 bool TileMap::loadLevel(const string& levelFile)
 {
+	steppedTiles = 0;
+
 	ifstream fin;
 	string line, tilesheetFile;
 	stringstream sstream;
@@ -78,6 +80,7 @@ bool TileMap::loadLevel(const string& levelFile)
 	sstream >> tilesheetSize.x >> tilesheetSize.y;
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 
+	validTiles = 0;
 	map = new int[mapSize.x * mapSize.y];
 	for (int j = 0; j < mapSize.y; j++)
 	{
@@ -88,6 +91,8 @@ bool TileMap::loadLevel(const string& levelFile)
 				map[j * mapSize.x + i] = 0;
 			else
 				map[j * mapSize.x + i] = tile - int('0');
+			if ((tile - int('0')) == 2)
+				validTiles += 1;
 		}
 		fin.get(tile);
 #ifndef _WIN32
@@ -131,6 +136,9 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 			tile = map[j * mapSize.x + i];
 			if (tile > 0)
 			{
+				if (tile == 4)
+					doorPos = glm::ivec2(i, j);
+
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
 				texCoordTile[0] = glm::vec2((tile - 1.f) / 3.f, 0.f);	// esto solo es el muro, pero mas adelante elegir segun el valor del txt de los tiles
@@ -183,7 +191,7 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) c
 	y1 = (pos.y + size.y - 1) / tileHeight;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != 0)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
 			return true;
 	}
 
@@ -199,7 +207,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 	y1 = (pos.y + size.y - 1) / tileHeight;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != 0)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
 			return true;
 	}
 
@@ -215,7 +223,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / tileHeight;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
 		{
 			if (*posY - tileHeight * y + size.y <= 4)
 			{
@@ -255,4 +263,18 @@ int TileMap::getTileInPos(int x, int y) const
 void TileMap::tileStepped(int x, int y)
 {
 	map[y * mapSize.x + x] = 3;
+	steppedTiles += 1;
+	cout << steppedTiles << " of " << validTiles << endl;
+	if (steppedTiles == validTiles)
+		cout << "all tiles stepped" << endl;
+}
+
+bool TileMap::keyAppeared() const
+{
+	return (validTiles == steppedTiles);
+}
+
+glm::ivec2 TileMap::getDoorPos() 
+{
+	return doorPos;
 }
