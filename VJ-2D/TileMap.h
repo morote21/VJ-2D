@@ -41,7 +41,7 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
-	bool doorOpened;
+	bool doorOpened; // but we have keyCollected on Scene...
 	int nTiles, validTiles, steppedTiles;
 	glm::ivec2 position, mapSize, tilesheetSize, doorPos;
 	int tileWidth, tileHeight;
