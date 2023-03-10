@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -40,6 +41,15 @@ void Scene::init()
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
+
+	
+	if (!livesText.init("fonts/dungeon_font.ttf"))
+		cout << "Could not load lives font" << endl;
+	if (!scoreNumText.init("fonts/dungeon_font.ttf"))
+		cout << "Could not load score font" << endl;
+	if (!scoreTitleText.init("fonts/dungeon_font.ttf"))
+		cout << "Could not load score font" << endl;
+	
 }
 
 void Scene::update(int deltaTime)
@@ -69,6 +79,11 @@ void Scene::render()
 	door.render();
 	player->render();
 	
+	// render vidas del jugador
+	livesText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(0, 0, 0, 1));
+	scoreTitleText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(0, 0, 0, 1));
+	scoreNumText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
+
 }
 
 void Scene::initShaders()

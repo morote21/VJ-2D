@@ -8,6 +8,8 @@ class Door
 {
 public:
 
+	~Door();
+
 	void init(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, bool opened);
 	void render();
@@ -21,7 +23,6 @@ private:
 	glm::ivec2 size;
 	Texture spritesheet;
 	Sprite* sprite;
-	TileMap* map;
 	bool alreadyOpened;
 
 };
