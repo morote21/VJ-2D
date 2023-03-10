@@ -28,28 +28,23 @@ Scene::~Scene()
 }
 
 
-void Scene::init()
+void Scene::init() // We may want to modify this so that it sets up different levels...
 {
 	initShaders();
 	keyCollected = false;
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
 	player->setTileMap(map);
-	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram);
+	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
+	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 
-	
-	if (!livesText.init("fonts/dungeon_font.ttf"))
-		cout << "Could not load lives font" << endl;
-	if (!scoreNumText.init("fonts/dungeon_font.ttf"))
-		cout << "Could not load score font" << endl;
-	if (!scoreTitleText.init("fonts/dungeon_font.ttf"))
-		cout << "Could not load score font" << endl;
-	
+	// REPLACE WITH JUST ONE
+	if (!HUDText.init("fonts/dungeon_font.ttf"))
+		cout << "Could not load HUD font" << endl;
 }
 
 void Scene::update(int deltaTime)
@@ -58,7 +53,7 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 	key.update(deltaTime);
 	door.update(deltaTime, keyCollected);
-	if (samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+	if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 		keyCollected = true;
 	}
 }
@@ -80,9 +75,9 @@ void Scene::render()
 	player->render();
 	
 	// render vidas del jugador
-	livesText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(0, 0, 0, 1));
-	scoreTitleText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(0, 0, 0, 1));
-	scoreNumText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
 
 }
 

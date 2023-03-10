@@ -40,10 +40,10 @@ private:
 	Key key;
 	Door door;
 	ShaderProgram texProgram;
-	float currentTime;
+	float currentTime; // level time
 	glm::mat4 projection;
 	bool keyCollected;
-	Text livesText, scoreTitleText, scoreNumText;
+	Text HUDText; // Is this unnecessary? (probably, just one)
 };
 
 
