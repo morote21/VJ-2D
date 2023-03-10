@@ -11,10 +11,17 @@
 #define FALL_STEP 4
 
 
+Player::~Player()
+{
+	sprite->free();
+	map->free();
+}
 
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
+	lives = 3;
+	score = 0;
 	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(32, 32);
 	sprite = Sprite::createSprite(size, glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
@@ -117,10 +124,14 @@ void Player::update(int deltaTime)
 	int tile_left_player = map->getTileInPos(playerX_left, playerY);
 	int tile_right_player = map->getTileInPos(playerX_right, playerY);
 	if (!bJumping) {
-		if (tile_left_player == 2)
+		if (tile_left_player == 2) {
+			++score;
 			map->tileStepped(playerX_left, playerY);
-		else if (tile_right_player == 2)
+		}
+		else if (tile_right_player == 2) {
+			++score;
 			map->tileStepped(playerX_right, playerY);
+		}
 	}
 	
 }
@@ -149,4 +160,14 @@ glm::vec2 Player::getPosition()
 glm::ivec2 Player::getSize() const
 {
 	return size;
+}
+
+int Player::getLives()
+{
+	return lives;
+}
+
+int Player::getScore()
+{
+	return score;
 }

@@ -11,8 +11,10 @@ Menu::Menu()
 
 Menu::~Menu()
 {
-	if (selector != NULL) delete selector;
-	if (background != NULL) delete background;
+	if (selector != NULL) 
+		delete selector;
+	if (background != NULL) 
+		delete background;
 }
 
 void Menu::init()

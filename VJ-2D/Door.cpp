@@ -5,6 +5,11 @@
 
 using namespace std;
 
+Door::~Door()
+{
+	sprite->free();
+}
+
 void Door::init(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos,  ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/doors.png", TEXTURE_PIXEL_FORMAT_RGBA);

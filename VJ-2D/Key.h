@@ -22,7 +22,6 @@ private:
 	glm::ivec2 size;
 	Texture spritesheet;
 	Sprite* sprite;
-	TileMap* map;
 
 };
 

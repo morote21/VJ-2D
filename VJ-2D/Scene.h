@@ -8,10 +8,14 @@
 #include "Player.h"
 #include "Key.h"
 #include "Door.h"
+#include "Text.h"
 
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
+
+#define CAMERA_WIDTH 640
+#define CAMERA_HEIGHT 480
 
 
 class Scene
@@ -39,6 +43,7 @@ private:
 	float currentTime;
 	glm::mat4 projection;
 	bool keyCollected;
+	Text livesText, scoreTitleText, scoreNumText;
 };
 
 
