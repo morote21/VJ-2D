@@ -46,7 +46,8 @@ private:
 	glm::ivec2 position, mapSize, tilesheetSize, doorPos;
 	int tileWidth, tileHeight;
 	Texture tilesheet;
-	glm::vec2 tileTexSize;
+	glm::vec2 tileTexSize, padding;
+	ShaderProgram texProgram;
 	int* map;	// seguramente poner aqui una matriz con un vector de vectores en vez de simular una matriz 
 };
 
