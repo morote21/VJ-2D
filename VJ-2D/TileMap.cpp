@@ -17,8 +17,10 @@ TileMap* TileMap::createTileMap(const string& levelFile, const glm::vec2& minCoo
 
 TileMap::TileMap(const string& levelFile, const glm::vec2& minCoords, ShaderProgram& program)
 {
+	texProgram = program;
+	padding = minCoords;
 	loadLevel(levelFile);
-	prepareArrays(minCoords, program);
+	prepareArrays(minCoords, texProgram);
 }
 
 TileMap::~TileMap()
@@ -30,7 +32,7 @@ TileMap::~TileMap()
 
 void TileMap::render(const glm::vec2& minCoords, ShaderProgram& program) 
 {
-	prepareArrays(minCoords, program);
+	//prepareArrays(minCoords, program);
 	glEnable(GL_TEXTURE_2D);
 	tilesheet.use();
 	glBindVertexArray(vao);
@@ -263,6 +265,7 @@ int TileMap::getTileInPos(int x, int y) const
 void TileMap::tileStepped(int x, int y)
 {
 	map[y * mapSize.x + x] = 3;
+	prepareArrays(padding, texProgram);	// padding es minCoords (0, 40)
 	steppedTiles += 1;
 	cout << steppedTiles << " of " << validTiles << endl;
 	if (steppedTiles == validTiles)

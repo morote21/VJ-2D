@@ -118,19 +118,16 @@ void Player::update(int deltaTime)
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
-	int playerX_left = posPlayer.x / 40;
-	int playerX_right = (posPlayer.x + int(sprite->getSpriteSize().x)) / 40;
-	int playerY = (posPlayer.y + int(sprite->getSpriteSize().y)) / 20;
-	int tile_left_player = map->getTileInPos(playerX_left, playerY);
-	int tile_right_player = map->getTileInPos(playerX_right, playerY);
 	if (!bJumping) {
-		if (tile_left_player == 2) {
+		// playerxleft
+		if ((map->getTileInPos(posPlayer.x / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
 			++score;
-			map->tileStepped(playerX_left, playerY);
+			map->tileStepped(posPlayer.x / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20);
 		}
-		else if (tile_right_player == 2) {
+		// playerxright
+		else if ((map->getTileInPos((posPlayer.x + int(sprite->getSpriteSize().x)) / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
 			++score;
-			map->tileStepped(playerX_right, playerY);
+			map->tileStepped((posPlayer.x + int(sprite->getSpriteSize().x)) / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20);
 		}
 	}
 	
