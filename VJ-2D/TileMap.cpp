@@ -188,12 +188,13 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) c
 {
 	int x, y0, y1;
 
-	x = pos.x / tileWidth;
+	x = pos.x / tileWidth; // x izquierda (para ref.)
 	y0 = pos.y / tileHeight;
-	y1 = (pos.y + size.y - 1) / tileHeight;
-	for (int y = y0; y <= y1; y++)
+	y1 = (pos.y + size.y - 1) / tileHeight; // anchura en y objeto
+
+	for (int y = y0; y <= y1; y++) // chequeo sobre las y
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4) // si posiciones no son de estas tiles
 			return true;
 	}
 
@@ -204,7 +205,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 {
 	int x, y0, y1;
 
-	x = (pos.x + size.x - 1) / tileWidth;
+	x = (pos.x + size.x - 1) / tileWidth; // x derecha (sumado size a pos., para ref.)
 	y0 = pos.y / tileHeight;
 	y1 = (pos.y + size.y - 1) / tileHeight;
 	for (int y = y0; y <= y1; y++)
@@ -222,7 +223,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 
 	x0 = pos.x / tileWidth;
 	x1 = (pos.x + size.x - 1) / tileWidth;
-	y = (pos.y + size.y - 1) / tileHeight;
+	y = (pos.y + size.y - 1) / tileHeight; // y ref. es la de abajo
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)

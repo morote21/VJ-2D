@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "Key.h"
 #include "Door.h"
+#include "Skeleton.h"
 #include "Text.h"
 
 
@@ -39,6 +40,9 @@ private:
 	Player* player;
 	Key key;
 	Door door;
+
+	Skeleton testSkel;
+
 	ShaderProgram texProgram;
 	float currentTime; // level time
 	glm::mat4 projection;
