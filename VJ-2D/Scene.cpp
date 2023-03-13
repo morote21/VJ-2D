@@ -39,10 +39,16 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	player->setTileMap(map);
 	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
+
+	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY() + 8)); // 1a plataforma desde abajo, sin paredes
+	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+8 )); // suelo inferior, el rodeado por paredes
+	testSkel.setTileMap(map);
+
+
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 
-	// REPLACE WITH JUST ONE
 	if (!HUDText.init("fonts/dungeon_font.ttf"))
 		cout << "Could not load HUD font" << endl;
 }
@@ -53,6 +59,9 @@ void Scene::update(int deltaTime)
 	player->update(deltaTime);
 	key.update(deltaTime);
 	door.update(deltaTime, keyCollected);
+
+	testSkel.update(deltaTime);
+
 	if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 		keyCollected = true;
 	}
@@ -72,6 +81,8 @@ void Scene::render()
 	if (map->keyAppeared() && !keyCollected)
 		key.render();
 	door.render();
+	testSkel.render();
+
 	player->render();
 	
 	// render vidas del jugador
