@@ -43,7 +43,10 @@ void Sprite::update(int deltaTime)
 		while (timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
-			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
+			if (isLoopable) // PER ACABAR
+				currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
+			else if (currentKeyframe != animations[currentAnimation].keyframeDispl.size() - 1)
+				++currentKeyframe;
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
@@ -86,13 +89,14 @@ void Sprite::addKeyframe(int animId, const glm::vec2& displacement)
 		animations[animId].keyframeDispl.push_back(displacement);
 }
 
-void Sprite::changeAnimation(int animId)
+void Sprite::changeAnimation(int animId, bool loopable) // TO UPDATE REST OF THE CODE
 {
 	if (animId < int(animations.size()))
 	{
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;
+		isLoopable = loopable;
 		texCoordDispl = animations[animId].keyframeDispl[0];
 	}
 }

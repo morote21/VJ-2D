@@ -30,7 +30,7 @@ public:
 	void setNumberAnimations(int nAnimations);
 	void setAnimationSpeed(int animId, int keyframesPerSec);
 	void addKeyframe(int animId, const glm::vec2& frame);
-	void changeAnimation(int animId);
+	void changeAnimation(int animId, bool loopable); // loopable es para indicar si la animación se hará en bucle o no
 	int animation() const;
 
 	void setPosition(const glm::vec2& pos);
@@ -44,6 +44,7 @@ private:
 	GLint posLocation, texCoordLocation;
 	glm::vec2 position, spriteSize;
 	int currentAnimation, currentKeyframe;
+	bool isLoopable; // indica si animación actual se hará en bucle o no
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;

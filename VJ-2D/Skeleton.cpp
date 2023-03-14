@@ -30,7 +30,7 @@ void Skeleton::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.25f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.5f));
 
-	sprite->changeAnimation(MOVE_RIGHT);
+	sprite->changeAnimation(MOVE_RIGHT, true);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSkeleton.x), float(tileMapDispl.y + posSkeleton.y))); // default value?
 
@@ -47,7 +47,7 @@ void Skeleton::update(int deltaTime)
 	if (sprite->animation() == MOVE_RIGHT) {
 		if (map->collisionMoveRight(glm::ivec2(posSkeleton.x + 2, posSkeleton.y), glm::ivec2(32, 32)) ||
 			!map->collisionMoveDown(glm::ivec2(posSkeleton.x + 2, Yplatform), glm::ivec2(32, 32), &Yplatform)) // si hay muro enfrente o NO hay plataforma que pisar
-			sprite->changeAnimation(MOVE_LEFT);
+			sprite->changeAnimation(MOVE_LEFT, true);
 
 		else posSkeleton.x += 2;
 
@@ -55,7 +55,7 @@ void Skeleton::update(int deltaTime)
 	}else {// caso MOVE_LEFT
 		if (map->collisionMoveLeft(glm::ivec2(posSkeleton.x - 2, posSkeleton.y), glm::ivec2(32, 32)) ||
 			!map->collisionMoveDown(glm::ivec2(posSkeleton.x - 2, Yplatform), glm::ivec2(32, 32), &Yplatform)) // (igual)
-			sprite->changeAnimation(MOVE_RIGHT);
+			sprite->changeAnimation(MOVE_RIGHT, true);
 		
 		else posSkeleton.x -= 2;
 	}

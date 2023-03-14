@@ -26,7 +26,7 @@ void Key::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(FLOATING, glm::vec2(10.f / 12.f, 0.f));
 	sprite->addKeyframe(FLOATING, glm::vec2(11.f / 12.f, 0.f));
 
-	sprite->changeAnimation(FLOATING);
+	sprite->changeAnimation(FLOATING, true);
 
 	position = glm::vec2(float(tileMapPos.x + 40), float(tileMapPos.y + 18*20));
 	sprite->setPosition(position);
