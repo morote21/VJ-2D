@@ -19,7 +19,7 @@ void Skeleton::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	size = glm::ivec2(32, 32);
 	sprite = Sprite::createSprite(size, glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram); // para el quad representado (+ tamaño frame)
 	sprite->setNumberAnimations(2);	// hay que poner el numero de animaciones de Animations
-
+	
 	sprite->setAnimationSpeed(MOVE_LEFT, 8);
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.f));
 	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.25f));
