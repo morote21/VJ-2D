@@ -43,7 +43,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.25f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25, 0.5f));
 
-	sprite->changeAnimation(STAND_RIGHT);
+	sprite->changeAnimation(STAND_RIGHT, false);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
@@ -55,31 +55,31 @@ void Player::update(int deltaTime)
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		if (sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT);
+			sprite->changeAnimation(MOVE_LEFT, true);
 		posPlayer.x -= 2;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 		{
 			posPlayer.x += 2;
-			sprite->changeAnimation(STAND_LEFT);
+			sprite->changeAnimation(STAND_LEFT, false);
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
 		if (sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT);
+			sprite->changeAnimation(MOVE_RIGHT, true);
 		posPlayer.x += 2;
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 		{
 			posPlayer.x -= 2;
-			sprite->changeAnimation(STAND_RIGHT);
+			sprite->changeAnimation(STAND_RIGHT, false);
 		}
 	}
 	else
 	{
 		if (sprite->animation() == MOVE_LEFT)
-			sprite->changeAnimation(STAND_LEFT);
+			sprite->changeAnimation(STAND_LEFT, false);
 		else if (sprite->animation() == MOVE_RIGHT)
-			sprite->changeAnimation(STAND_RIGHT);
+			sprite->changeAnimation(STAND_RIGHT, false);
 	}
 
 	if (bJumping)

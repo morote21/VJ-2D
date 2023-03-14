@@ -230,7 +230,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 		{
 			if (*posY - tileHeight * y + size.y <= 4)
 			{
-				*posY = tileHeight * y - size.y;
+				*posY = tileHeight * y - size.y; // posy reajusta posició vertical (per si t'has "ficat" en l'objecte; en col·lisions horitzontals no fa falta, doncs moviment sempre es parell)
 				return true;
 			}
 		}

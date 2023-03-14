@@ -32,7 +32,7 @@ void Menu::init()
 	selector->addKeyframe(MENU_BAT, glm::vec2(0.33f, 0.f));
 	selector->addKeyframe(MENU_BAT, glm::vec2(0.66f, 0.f));
 
-	selector->changeAnimation(MENU_BAT);	// 2 para volver a la animacion de MENU_BAT
+	selector->changeAnimation(MENU_BAT, true);	// 2 para volver a la animacion de MENU_BAT
 	selector->setPosition(glm::vec2(0.f, 0.f));
 
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };

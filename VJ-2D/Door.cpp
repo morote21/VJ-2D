@@ -21,12 +21,12 @@ void Door::init(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos,  ShaderProg
 	sprite->addKeyframe(CLOSED, glm::vec2(0.f, 0.f));
 
 	sprite->setAnimationSpeed(OPENING, 1);
-	//sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.f));
-	//sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.25f));
-	//sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.5f));
+	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.25f));
+	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.5f));
 	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.75f));
 
-	sprite->changeAnimation(CLOSED);
+	sprite->changeAnimation(CLOSED, false);
 	sprite->setPosition(glm::vec2(float(tileMapPos.x + doorMapPos.x*40), float(tileMapPos.y + (doorMapPos.y - 1)*20)));
 }
 
@@ -35,7 +35,7 @@ void Door::update(int deltaTime, bool opened)
 {
 	sprite->update(deltaTime);
 	if (opened && sprite->animation() == CLOSED) {
-		sprite->changeAnimation(OPENING);
+		sprite->changeAnimation(OPENING, false);
 	}
 }
 
