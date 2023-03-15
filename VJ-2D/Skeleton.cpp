@@ -4,8 +4,6 @@
 #include <GL/glut.h>
 #include "Skeleton.h"
 
-#define MOVE_LEFT 0
-#define MOVE_RIGHT 1
 
 Skeleton::~Skeleton()
 {

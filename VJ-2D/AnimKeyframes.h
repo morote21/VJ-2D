@@ -7,10 +7,6 @@
 
 using namespace std;
 
-enum Animations {
-	OPENING, CLOSED, FLOATING, MENU_BAT, STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
-};
-
 
 // AnimKeyframes contains all information related to a single animation.
 // These are the animation speed measured by millisecsPerKeyframe

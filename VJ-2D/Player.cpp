@@ -25,7 +25,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	spritesheet.loadFromFile("images/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(32, 32);
 	sprite = Sprite::createSprite(size, glm::vec2(0.25, 0.25), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(8);	// hay que poner el numero de animaciones de Animations (incluyendo las que no son del player)
+	sprite->setNumberAnimations(4);	// hay que poner el numero de animaciones de Animations (incluyendo las que no son del player)
 
 	sprite->setAnimationSpeed(STAND_LEFT, 8);
 	sprite->addKeyframe(STAND_LEFT, glm::vec2(0.f, 0.f));

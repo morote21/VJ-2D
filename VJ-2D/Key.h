@@ -23,6 +23,11 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 
+	enum KeyAnimations
+	{
+		FLOATING
+	};
+
 };
 
 
