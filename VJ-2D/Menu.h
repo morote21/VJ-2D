@@ -49,6 +49,11 @@ private:
 	Credits credits;
 	Instructions instructions;
 
+	enum BatAnimations
+	{
+		MENU_BAT
+	};
+
 };
 
 

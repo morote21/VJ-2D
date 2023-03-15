@@ -37,6 +37,11 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 
+	enum PlayerAnimations
+	{
+		STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
+	};
+
 };
 
 

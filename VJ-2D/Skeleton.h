@@ -29,6 +29,11 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 
+	enum SkeletonAnimations
+	{
+		MOVE_LEFT, MOVE_RIGHT
+	};
+
 };
 
 #endif // _SKELETON_INCLUDE

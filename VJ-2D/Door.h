@@ -25,6 +25,11 @@ private:
 	Sprite* sprite;
 	bool alreadyOpened;
 
+	enum DoorAnimations
+	{
+		OPENING, CLOSED
+	};
+
 };
 
 
