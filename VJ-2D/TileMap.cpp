@@ -267,17 +267,19 @@ void TileMap::tileStepped(int x, int y)
 	map[y * mapSize.x + x] = 3;
 	prepareArrays(padding, texProgram);	// padding es minCoords (0, 40)
 	steppedTiles += 1;
-	cout << steppedTiles << " of " << validTiles << endl;
-	if (steppedTiles == validTiles)
-		cout << "all tiles stepped" << endl;
 }
 
 bool TileMap::keyAppeared() const
 {
-	return (validTiles == steppedTiles);
+	return (steppedTiles >= validTiles);
 }
 
 glm::ivec2 TileMap::getDoorPos() 
 {
 	return doorPos;
+}
+
+void TileMap::setAllSteppedTiles()
+{
+	steppedTiles = validTiles;
 }

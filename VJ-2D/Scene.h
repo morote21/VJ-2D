@@ -46,7 +46,8 @@ private:
 	ShaderProgram texProgram;
 	float currentTime; // level time
 	glm::mat4 projection;
-	bool keyCollected;
+	bool keyCollected, pause;
+	int timer;
 	Text HUDText; // Is this unnecessary? (probably, just one)
 };
 

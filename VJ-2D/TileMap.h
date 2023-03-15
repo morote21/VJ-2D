@@ -32,6 +32,7 @@ public:
 	void tileStepped(int x, int y);
 	bool keyAppeared() const;
 	void keyCollected();
+	void setAllSteppedTiles();
 
 private:
 	bool loadLevel(const string& levelFile);

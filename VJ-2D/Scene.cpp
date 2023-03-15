@@ -32,6 +32,8 @@ void Scene::init() // We may want to modify this so that it sets up different le
 {
 	initShaders();
 	keyCollected = false;
+	timer = 60;
+	pause = false;
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -55,15 +57,39 @@ void Scene::init() // We may want to modify this so that it sets up different le
 
 void Scene::update(int deltaTime)
 {
-	currentTime += deltaTime;
-	player->update(deltaTime);
-	key.update(deltaTime);
-	door.update(deltaTime, keyCollected);
+	// Pause game 
+	// Mas adelante cambiar p por la tecla escape, y entonces hacer que aparezca un menu de opciones
+	// con resume, quit o algunas otras opciones como size de la ventana
+	if (Game::instance().getKey('p') && !Game::instance().getKeyAlreadyPressing('p')) {
+		Game::instance().setKeyAlreadyPressing('p');
+		pause = !pause;
+	}
 
-	testSkel.update(deltaTime);
 
-	if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
-		keyCollected = true;
+	if (!pause) {
+
+		// Make key appear
+		if (Game::instance().getKey('k') && !Game::instance().getKeyAlreadyPressing('k')) {
+			Game::instance().setKeyAlreadyPressing('k');
+			map->setAllSteppedTiles();
+		}
+
+		currentTime += deltaTime;
+		if (currentTime >= 1000) {
+			currentTime = 0;
+			timer -= 1;
+			if (timer == 0)
+				cout << "Time Up!" << endl;
+		}
+		player->update(deltaTime);
+		key.update(deltaTime);
+		door.update(deltaTime, keyCollected);
+
+		testSkel.update(deltaTime);
+
+		if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+			keyCollected = true;
+		}
 	}
 }
 
@@ -89,6 +115,8 @@ void Scene::render()
 	HUDText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(0, 0, 0, 1));
 	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(0, 0, 0, 1));
 	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(0, 0, 0, 1));
 
 }
 
