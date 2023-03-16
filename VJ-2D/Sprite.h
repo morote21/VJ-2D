@@ -44,7 +44,7 @@ private:
 	GLint posLocation, texCoordLocation;
 	glm::vec2 position, spriteSize;
 	int currentAnimation, currentKeyframe;
-	bool isLoopable; // indica si animación actual se hará en bucle o no
+	char animState; // indica estado animación actual (0: parada, 1: corriendo en bucle, 2: corriendo para una sola vez)
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;

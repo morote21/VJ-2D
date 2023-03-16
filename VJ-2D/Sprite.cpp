@@ -37,16 +37,21 @@ Sprite::Sprite(const glm::vec2& quadSize, const glm::vec2& sizeInSpritesheet, Te
 
 void Sprite::update(int deltaTime)
 {
-	if (currentAnimation >= 0)
+	if (currentAnimation >= 0 && animState != 0)
 	{
 		timeAnimation += deltaTime;
 		while (timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
 		{
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
-			if (isLoopable) // PER ACABAR
+			if (animState == 1) // si animación en bucle
 				currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 			else if (currentKeyframe != animations[currentAnimation].keyframeDispl.size() - 1)
 				++currentKeyframe;
+			else
+			{
+				timeAnimation = animState = 0; // el time es para cortar el cálculo animación
+			}
+
 		}
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
@@ -96,7 +101,10 @@ void Sprite::changeAnimation(int animId, bool loopable) // TO UPDATE REST OF THE
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;
-		isLoopable = loopable;
+		if (loopable)
+			animState = 1;
+		else
+			animState = 2;
 		texCoordDispl = animations[animId].keyframeDispl[0];
 	}
 }
