@@ -43,8 +43,8 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 
 	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY() + 8)); // 1a plataforma desde abajo, sin paredes
-	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+8 )); // suelo inferior, el rodeado por paredes
+	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes
+	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
 	testSkel.setTileMap(map);
 
 
