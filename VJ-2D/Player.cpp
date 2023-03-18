@@ -6,7 +6,7 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 6	// ha de ser un numero de manera que si dividimos 180 entre este numero el resultado sea un numero entero
+#define JUMP_ANGLE_STEP 6
 #define JUMP_HEIGHT 65
 #define FALL_STEP 6
 #define PLAYER_SPEED 3
@@ -89,7 +89,7 @@ void Player::update(int deltaTime)
 		else
 			jumpAngle += JUMP_ANGLE_STEP;
 
-		if (jumpAngle == 180)
+		if (jumpAngle >= 180)	// >= de 180 asi no hace falta que el resultado de ir sumando sea exactamente 180
 		{
 			bJumping = false;
 			posPlayer.y = startY;
