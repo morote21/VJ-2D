@@ -6,10 +6,10 @@
 #include "Game.h"
 
 
-#define JUMP_ANGLE_STEP 4
-#define JUMP_HEIGHT 75
-#define FALL_STEP 4
-
+#define JUMP_ANGLE_STEP 6	// ha de ser un numero de manera que si dividimos 180 entre este numero el resultado sea un numero entero
+#define JUMP_HEIGHT 65
+#define FALL_STEP 6
+#define PLAYER_SPEED 3
 
 Player::~Player()
 {
@@ -56,10 +56,10 @@ void Player::update(int deltaTime)
 	{
 		if (sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT, true);
-		posPlayer.x -= 2;
+		posPlayer.x -= PLAYER_SPEED;
 		if (map->collisionMoveLeft(posPlayer, glm::ivec2(32, 32)))
 		{
-			posPlayer.x += 2;
+			posPlayer.x += PLAYER_SPEED;
 			sprite->changeAnimation(STAND_LEFT, false);
 		}
 	}
@@ -67,10 +67,10 @@ void Player::update(int deltaTime)
 	{
 		if (sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT, true);
-		posPlayer.x += 2;
+		posPlayer.x += PLAYER_SPEED;
 		if (map->collisionMoveRight(posPlayer, glm::ivec2(32, 32)))
 		{
-			posPlayer.x -= 2;
+			posPlayer.x -= PLAYER_SPEED;
 			sprite->changeAnimation(STAND_RIGHT, false);
 		}
 	}
@@ -84,23 +84,24 @@ void Player::update(int deltaTime)
 
 	if (bJumping)
 	{
-		if (map->collisionMoveUp(posPlayer, glm::ivec2(32, 32), &posPlayer.y)) {
-			bJumping = false;	// pasara a caer, porque bjumping = false pero no hay colision debajo 
-		}
-		else {
+		// cuando esta en la zona alta del salto, se decrementa la velocidad de subida y bajada
+		if (jumpAngle > 85 && jumpAngle < 95) jumpAngle += JUMP_ANGLE_STEP / 4;
+		else
 			jumpAngle += JUMP_ANGLE_STEP;
-			if (jumpAngle == 180)
-			{
-				bJumping = false;
-				posPlayer.y = startY;
-			}
-			else
-			{
-				posPlayer.y = int(startY - JUMP_HEIGHT * sin(3.14159f * jumpAngle / 180.f));
-				if (jumpAngle > 90)
-					bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
-			}
+
+		if (jumpAngle == 180)
+		{
+			bJumping = false;
+			posPlayer.y = startY;
 		}
+		else
+		{	
+			float angle = sin(3.14159f * jumpAngle / 180.f);
+			posPlayer.y = int(startY - JUMP_HEIGHT * angle);
+			if (jumpAngle > 90)
+				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(32, 32), &posPlayer.y);
+		}
+		
 	}
 	else
 	{

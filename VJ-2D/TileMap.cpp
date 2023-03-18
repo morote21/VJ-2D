@@ -194,7 +194,8 @@ bool TileMap::collisionMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) c
 
 	for (int y = y0; y <= y1; y++) // chequeo sobre las y
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4) // si posiciones no son de estas tiles
+		// true en caso de que la tile sea un muro y no sea el techo
+		if (map[y * mapSize.x + x] == 1 && y != 0) // si posiciones no son de estas tiles
 			return true;
 	}
 
@@ -210,7 +211,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 	y1 = (pos.y + size.y - 1) / tileHeight;
 	for (int y = y0; y <= y1; y++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
+		if (map[y * mapSize.x + x] == 1 && y != 0)
 			return true;
 	}
 
@@ -226,9 +227,9 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / tileHeight; // y ref. es la de abajo
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4)
 		{
-			if (*posY - tileHeight * y + size.y <= 4)
+			if (*posY - tileHeight * y + size.y <= 6)
 			{
 				*posY = tileHeight * y - size.y; // posy es para reajustar posición vertical objeto (por si te has "metido" en el objeto; en colisiones horizontales no hace falta, pues movimiento píxel siempre es 2, con lo que acabarás siempre justo al lado de la tile)
 				return true;
