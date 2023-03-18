@@ -39,12 +39,10 @@ void Skeleton::update(int deltaTime)
 	sprite->update(deltaTime);
 	// ...
 	int Yplatform = posSkeleton.y + 1; // para los collisionMoveDown
-	//ESTA VERSIÓN DEL CHECKEO LLEGA AL LÍMITE DE LAS PLATAFORMAS; QUIZÁS QUERAMOS QUE CAMBIE DE DIRECCIÓN ANTES, CUANDO UN SOLO PÍXEL ESTÉ
-	// YA FUERA EN EL PASO SIGUIENTE (ÉSTO VALDRÍA PARA EL ESQUELETO)
 
 	if (sprite->animation() == MOVE_RIGHT) {
 		if (map->collisionMoveRight(glm::ivec2(posSkeleton.x + 2, posSkeleton.y), glm::ivec2(25, 35)) ||
-			!map->collisionMoveDown(glm::ivec2(posSkeleton.x + 2, Yplatform), glm::ivec2(25, 35), &Yplatform)) // si hay muro enfrente o NO hay plataforma que pisar
+			!map->collisionMoveDown(glm::ivec2(posSkeleton.x + 25, Yplatform), glm::ivec2(25, 35), &posSkeleton.y)) // si hay muro enfrente o NO hay plataforma que pisar (OJO, aquí comprobamos UN tile para delante en lo 2o, para que no apure la plataforma; en el vampiro ésto no valdrá)
 			sprite->changeAnimation(MOVE_LEFT, true);
 
 		else posSkeleton.x += 2;
@@ -52,7 +50,7 @@ void Skeleton::update(int deltaTime)
 		
 	}else {// caso MOVE_LEFT
 		if (map->collisionMoveLeft(glm::ivec2(posSkeleton.x - 2, posSkeleton.y), glm::ivec2(25, 35)) ||
-			!map->collisionMoveDown(glm::ivec2(posSkeleton.x - 2, Yplatform), glm::ivec2(25, 35), &Yplatform)) // (igual)
+			!map->collisionMoveDown(glm::ivec2(posSkeleton.x - 25, Yplatform), glm::ivec2(25, 35), &posSkeleton.y)) // (igual)
 			sprite->changeAnimation(MOVE_RIGHT, true);
 		
 		else posSkeleton.x -= 2;
