@@ -117,3 +117,7 @@ void Game::stopGame()
 }
 
 
+void Game::resetMap()
+{
+	scene.init();
+}

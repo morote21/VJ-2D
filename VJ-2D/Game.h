@@ -43,6 +43,7 @@ public:
 	
 	void setStart(bool state);
 	bool getStart();
+	void resetMap();
 
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;

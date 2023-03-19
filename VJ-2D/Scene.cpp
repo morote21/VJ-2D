@@ -47,6 +47,7 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
 	testSkel.setTileMap(map);
 
+	pauseMenu.init();
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
@@ -60,14 +61,14 @@ void Scene::update(int deltaTime)
 	// Pause game 
 	// Mas adelante cambiar p por la tecla escape, y entonces hacer que aparezca un menu de opciones
 	// con resume, quit o algunas otras opciones como size de la ventana
-	if (Game::instance().getKey('p') && !Game::instance().getKeyAlreadyPressing('p')) {
-		Game::instance().setKeyAlreadyPressing('p');
-		pause = !pause;
-	}
 
 
-	if (!pause) {
+	if (!pauseMenu.isPaused()) {
 
+		if (Game::instance().getKey(27) && !Game::instance().getKeyAlreadyPressing(27)) {
+			Game::instance().setKeyAlreadyPressing(27);
+			pauseMenu.setPaused(true);
+		}
 		// Make key appear
 		if (Game::instance().getKey('k') && !Game::instance().getKeyAlreadyPressing('k')) {
 			Game::instance().setKeyAlreadyPressing('k');
@@ -91,6 +92,9 @@ void Scene::update(int deltaTime)
 			keyCollected = true;
 		}
 	}
+	else 
+		pauseMenu.update(deltaTime);
+	
 }
 
 void Scene::render()
@@ -117,6 +121,10 @@ void Scene::render()
 	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
 	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(0, 0, 0, 1));
 	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(0, 0, 0, 1));
+
+	if (pauseMenu.isPaused()) {
+		pauseMenu.render();
+	}
 
 }
 

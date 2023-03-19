@@ -10,6 +10,7 @@
 #include "Door.h"
 #include "Skeleton.h"
 #include "Text.h"
+#include "Pause.h"
 
 
 // Scene contains all the entities of our game.
@@ -40,6 +41,7 @@ private:
 	Player* player;
 	Key key;
 	Door door;
+	Pause pauseMenu;
 
 	Skeleton testSkel;
 
