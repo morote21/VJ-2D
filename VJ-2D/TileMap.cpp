@@ -143,7 +143,12 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
-				texCoordTile[0] = glm::vec2((tile - 1.f) / 3.f, 0.f);	// esto solo es el muro, pero mas adelante elegir segun el valor del txt de los tiles
+				if (tile == 1)
+					texCoordTile[0] = glm::vec2(0.f, 0.f);
+				else if (tile == 2)
+					texCoordTile[0] = glm::vec2(0.f, 0.5f);
+				else if (tile == 3)
+					texCoordTile[0] = glm::vec2(0.5f, 0.f);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);

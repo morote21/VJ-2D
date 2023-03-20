@@ -39,10 +39,11 @@ private:
 private:
 	TileMap* map;
 	Player* player;
+	TexturedQuad* background;
+	Texture levelBackground;
 	Key key;
 	Door door;
 	Pause pauseMenu;
-
 	Skeleton testSkel;
 
 	ShaderProgram texProgram;

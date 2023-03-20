@@ -35,6 +35,12 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	timer = 60;
 	pause = false;
 	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
+	
+	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
+	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f) };
+	background = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+	levelBackground.loadFromFile("images/background.png", TEXTURE_PIXEL_FORMAT_RGB);
+	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
@@ -107,6 +113,7 @@ void Scene::render()
 	modelview = glm::mat4(1.0f);
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+	background->render(levelBackground);
 	map->render(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	if (map->keyAppeared() && !keyCollected)
 		key.render();
@@ -116,11 +123,11 @@ void Scene::render()
 	player->render();
 	
 	// render vidas del jugador
-	HUDText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(0, 0, 0, 1));
-	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(0, 0, 0, 1));
-	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(0, 0, 0, 1));
-	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(0, 0, 0, 1));
-	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(0, 0, 0, 1));
+	HUDText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(1, 1, 1, 1));
 
 	if (pauseMenu.isPaused()) {
 		pauseMenu.render();
