@@ -9,6 +9,7 @@
 #include "Key.h"
 #include "Door.h"
 #include "Skeleton.h"
+#include "Vampire.h"
 #include "Text.h"
 #include "Pause.h"
 
@@ -45,6 +46,7 @@ private:
 	Door door;
 	Pause pauseMenu;
 	Skeleton testSkel;
+	Vampire testVamp;
 
 	ShaderProgram texProgram;
 	float currentTime; // level time
