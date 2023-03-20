@@ -103,7 +103,7 @@ void Pause::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	background->render(pauseWindow);
-	if (selectorIndex == 0)
+	if (selectorIndex == 0) // mejor marcar posición en el update? (para que no cambie posición en cada render...)
 		selector->setPosition(glm::vec2(100.f, 150.f));
 	else if (selectorIndex == 1)
 		selector->setPosition(glm::vec2(100.f, 285.f));
