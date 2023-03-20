@@ -2,7 +2,7 @@ TILEMAP
 16 22 
 40 20 
 images/tilesheet.png 
-3 1 
+2 2 
 1111111111111111
 1              1
 1              1
