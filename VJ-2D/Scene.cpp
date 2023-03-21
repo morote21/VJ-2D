@@ -53,6 +53,11 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
 	testSkel.setTileMap(map);
 
+	testVamp.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSizeY() + 5)); // 1a plataforma desde abajo, sin paredes
+	testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
+	testVamp.setTileMap(map);
+
 	pauseMenu.init();
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -93,6 +98,7 @@ void Scene::update(int deltaTime)
 		door.update(deltaTime, keyCollected);
 
 		testSkel.update(deltaTime);
+		testVamp.update(deltaTime);
 
 		if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 			keyCollected = true;
@@ -119,6 +125,7 @@ void Scene::render()
 		key.render();
 	door.render();
 	testSkel.render();
+	testVamp.render();
 
 	player->render();
 	
