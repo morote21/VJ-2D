@@ -130,7 +130,7 @@ void Player::update(int deltaTime)
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
-				sprite->changeAnimation(JUMP, false);
+				//sprite->changeAnimation(JUMP, false);
 			}
 		}
 	}
