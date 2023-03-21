@@ -25,9 +25,10 @@ public:
 	glm::vec2 getPosition();
 
 private:
-	glm::ivec2 tileMapDispl, posVampire, size;
+	glm::ivec2 tileMapDispl, posVampire, size; // size2 para forma murciélago?
+
 	glm::ivec2 speed; // en principio sólo para cuando forma de murciélago
-	char currentForm; // 0: humano, 1: murciélago
+	//char currentForm; // 0: humano, 1: murciélago <- de momento no se usa
 
 	float currentTime; // si llegamos a tiempo mínimo, deberá iniciar cambio de forma
 	Texture spritesheet;

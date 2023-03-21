@@ -236,7 +236,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 		{
 			if (*posY - tileHeight * y + size.y <= 6)
 			{
-				*posY = tileHeight * y - size.y; // posy es para reajustar posición vertical objeto (por si te has "metido" en el objeto; en colisiones horizontales no hace falta, pues movimiento píxel siempre es 2, con lo que acabarás siempre justo al lado de la tile)
+				*posY = tileHeight * y - size.y; // posy es para reajustar posición vertical objeto (por si te has "metido" en el objeto; en colisiones horizontales no hace falta, pues movimiento píxel siempre es par (si respetamos velocidad de Bob), con lo que acabarás siempre justo al lado de la tile)
 				return true;
 			}
 		}
