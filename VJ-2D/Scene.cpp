@@ -125,6 +125,7 @@ void Scene::render()
 		key.render();
 	door.render();
 	testSkel.render();
+
 	testVamp.render();
 
 	player->render();
