@@ -30,7 +30,7 @@ public:
 	int getScore();
 
 private:
-	bool bJumping;
+	bool bJumping, alreadyInGround;
 	glm::ivec2 tileMapDispl, posPlayer, size;
 	int jumpAngle, startY, lives, score;
 	Texture spritesheet;
@@ -39,7 +39,7 @@ private:
 
 	enum PlayerAnimations
 	{
-		STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
+		STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, DIE_LEFT, DIE_RIGHT, JUMP, FALL
 	};
 
 };
