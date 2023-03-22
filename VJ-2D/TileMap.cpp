@@ -223,7 +223,7 @@ bool TileMap::collisionMoveRight(const glm::ivec2& pos, const glm::ivec2& size) 
 	return false;
 }
 
-bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const // ¿Podríamos hacer que devolviera el tipo de tile, para los pinchos?
 {
 	int x0, x1, y;
 
@@ -255,6 +255,24 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	for (int x = x0; x <= x1; x++)
 	{
 		if (map[y * mapSize.x + x] == 1)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool TileMap::collisionMoveUpAnything(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const
+{
+	int x0, x1, y;
+
+	x0 = pos.x / tileWidth;
+	x1 = (pos.x + size.x - 1) / tileWidth;
+	y = (pos.y - 1) / tileHeight;
+	for (int x = x0; x <= x1; x++)
+	{
+		if (map[y * mapSize.x + x] != 0)
 		{
 			return true;
 		}
