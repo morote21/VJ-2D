@@ -95,7 +95,7 @@ void Vampire::update(int deltaTime)
 						sprite->changeAnimation(MOVE_LEFT, true);
 				}
 			}else{
-				if (map->collisionMoveUp(posVampire, size, &posVampire.y))
+				if (map->collisionMoveUpAnything(posVampire, size, &posVampire.y))
 					speed.y = 2;
 			}
 		}
@@ -123,7 +123,8 @@ void Vampire::update(int deltaTime)
 				else posVampire.x -= 2;
 			}
 
-		}else{ // FORMA MURCIÉLAGO
+		}
+		else { // FORMA MURCIÉLAGO
 			// Eje x //
 			if (speed.x > 0) {
 				if (map->collisionMoveRight(glm::ivec2(posVampire.x + speed.x, posVampire.y), size))
@@ -131,7 +132,8 @@ void Vampire::update(int deltaTime)
 				else
 					posVampire.x += speed.x;
 
-			}else{
+			}
+			else {
 				if (map->collisionMoveLeft(glm::ivec2(posVampire.x + speed.x, posVampire.y), size))
 					speed.x = 2;
 				else
@@ -139,15 +141,20 @@ void Vampire::update(int deltaTime)
 			}
 
 			// Eje y //
-			posVampire.y += speed.y;
-			if (speed.y > 0) {
-				if (map->collisionMoveDown(posVampire, size, &posVampire.y))
-					speed.y = -2;
+			int upPlatform = posVampire.y - 4;
+			if (!map->collisionMoveUpAnything(glm::ivec2(posVampire.x, upPlatform), size, &upPlatform) ||
+				!map->collisionMoveDown(glm::ivec2(posVampire.x, posVampire.y + 4), size, &upPlatform) ){
+				posVampire.y += speed.y;
+				if (speed.y > 0) {
+					if (map->collisionMoveDown(posVampire, size, &posVampire.y))
+						speed.y = -2;
 
-			}else{
-				if (map->collisionMoveUp(posVampire, size, &posVampire.y))
-					speed.y = 2;
+				}else{
+					if (map->collisionMoveUpAnything(posVampire, size, &posVampire.y))
+						speed.y = 2;
+				}
 			}
+
 		}
 
 	}
