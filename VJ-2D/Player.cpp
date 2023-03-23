@@ -38,12 +38,12 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(STAND_RIGHT, glm::vec2(2/16.f, 0.f));
 
 
-	sprite->setAnimationSpeed(MOVE_LEFT, 8);
+	sprite->setAnimationSpeed(MOVE_LEFT, 16);
 	for (float i = 0; i < 9; i++) {
 		sprite->addKeyframe(MOVE_LEFT, glm::vec2(i / 16.f, 5 / 8.f));
 	}
 
-	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
+	sprite->setAnimationSpeed(MOVE_RIGHT, 16);
 	for (float i = 0; i < 9; i++) {
 		sprite->addKeyframe(MOVE_RIGHT, glm::vec2(i / 16.f, 1 / 8.f));
 	}
