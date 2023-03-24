@@ -22,6 +22,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	bJumping = false;
 	lives = 3;
 	score = 0;
+	invincible = false;
 	spritesheet.loadFromFile("images/marco.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(30, 38);
 	sprite = Sprite::createSprite(size, glm::vec2(1/16.f, 1/8.f), &spritesheet, &shaderProgram);
@@ -162,6 +163,13 @@ void Player::setTileMap(TileMap* tileMap)
 	map = tileMap;
 }
 
+void Player::setStartingPosition(const glm::vec2& pos)
+{
+	startingPosPlayer = pos;
+	posPlayer = pos;
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
 void Player::setPosition(const glm::vec2& pos)
 {
 	posPlayer = pos;
@@ -186,4 +194,22 @@ int Player::getLives()
 int Player::getScore()
 {
 	return score;
+}
+
+void Player::hit() 
+{
+	if (lives == 0)
+		cout << "GAME OVER" << endl;
+	else
+		--lives;
+
+	posPlayer = startingPosPlayer;
+	bJumping = false; // para resetear el estado
+	sprite->changeAnimation(STAND_RIGHT, true);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+}
+
+bool Player::isInvincible()
+{
+	return invincible;
 }

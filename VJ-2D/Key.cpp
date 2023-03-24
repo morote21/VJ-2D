@@ -52,7 +52,7 @@ glm::ivec2 Key::getSize() const
 	return size;
 }
 
-glm::vec2 Key::getPos()
+glm::vec2 Key::getPosition()
 {
 	return position;
 }
