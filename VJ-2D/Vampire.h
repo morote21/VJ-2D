@@ -35,7 +35,7 @@ private:
 	Sprite* sprite;
 	TileMap* map;
 
-	enum SkeletonAnimations
+	enum VampireAnimations
 	{
 		MOVE_LEFT, MOVE_RIGHT, FLY
 	};
