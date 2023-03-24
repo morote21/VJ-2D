@@ -55,7 +55,7 @@ void Vampire::update(int deltaTime)
 			currentTime = -1; // marca para cambio de forma (de momento sirve en lugar de estado)
 	}
 
-	cout << "Time state: " << currentTime << endl;
+	//cout << "Time state: " << currentTime << endl;
 
 	if (currentTime == -1) { // si después de eso estamos aquí
 

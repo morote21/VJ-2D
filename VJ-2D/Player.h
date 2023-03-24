@@ -22,6 +22,7 @@ public:
 	void render();
 
 	void setTileMap(TileMap* tileMap);
+	void setStartingPosition (const glm::vec2& pos); // posición de inicio en el mapa actual (para respawn)
 	void setPosition(const glm::vec2& pos);
 
 	glm::ivec2 getSize() const;
@@ -29,9 +30,13 @@ public:
 	int getLives();
 	int getScore();
 
+	void hit();
+	bool isInvincible();
+
 private:
 	bool bJumping, alreadyInGround;
-	glm::ivec2 tileMapDispl, posPlayer, size;
+	bool invincible; // para trucos y potencialmente para justo después de ser golpeado
+	glm::ivec2 tileMapDispl, posPlayer, startingPosPlayer, size;
 	int jumpAngle, startY, lives, score;
 	Texture spritesheet;
 	Sprite* sprite;

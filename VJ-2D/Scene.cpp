@@ -43,7 +43,7 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
+	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
 	player->setTileMap(map);
 	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
@@ -54,8 +54,8 @@ void Scene::init() // We may want to modify this so that it sets up different le
 	testSkel.setTileMap(map);
 
 	testVamp.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSizeY() + 5)); // 1a plataforma desde abajo, sin paredes
-	testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
+	testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSizeY() + 5)); // 1a plataforma desde abajo, sin paredes
+	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
 	testVamp.setTileMap(map);
 
 	pauseMenu.init();
@@ -100,7 +100,16 @@ void Scene::update(int deltaTime)
 		testSkel.update(deltaTime);
 		testVamp.update(deltaTime);
 
-		if (!keyCollected && samePosition(key.getPos(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+		// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
+		if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
+
+			if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getPosition(), player->getSize())
+			 || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getPosition(), player->getSize()))
+				player->hit();
+		}
+
+
+		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 			keyCollected = true;
 		}
 	}
