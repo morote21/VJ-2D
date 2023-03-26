@@ -153,6 +153,11 @@ void Player::update(int deltaTime)
 	
 }
 
+void Player::setInvincibility(bool inv) 
+{
+	invincible = inv;
+}
+
 void Player::render()
 {
 	sprite->render();

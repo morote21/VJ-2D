@@ -24,6 +24,7 @@ public:
 	void setTileMap(TileMap* tileMap);
 	void setStartingPosition (const glm::vec2& pos); // posición de inicio en el mapa actual (para respawn)
 	void setPosition(const glm::vec2& pos);
+	void setInvincibility(bool inv);
 
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
