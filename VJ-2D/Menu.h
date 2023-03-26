@@ -2,6 +2,7 @@
 #define _MENU_INCLUDE
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "TexturedQuad.h"
 #include "Sprite.h"
 #include "Credits.h"
@@ -23,25 +24,11 @@ public:
 	
 private:
 	int currentWindow, selectorIndex;
-	// selector index:
-	// play -> 0
-	// instructions -> 1
-	// credits -> 2
-	
-	// current window:
-	// menu -> 0
-	// instructions -> 1
-	// credits -> 2
 
 	float currentTime;
-	TexturedQuad* background;
+	vector<TexturedQuad*> backgroundArray;
 	Texture menuWindow, creditsWindow, instructionsWindow;
-	// posiblemente las instrucciones sean un vector de texturas, y ir cambiando entre las posiciones
-	// del vector con las flechas del teclado, donde cada posicion muestra una pagina diferente de las
-	// instrucciones
-
 	Texture spritesheet;
-	Sprite* selector;
 
 	ShaderProgram texProgram;
 	glm::mat4 projection;
