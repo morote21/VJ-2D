@@ -22,9 +22,9 @@ void SceneManager::init()
 
 }
 
-void SceneManager::update(int deltaTime)
+void SceneManager::update(int deltaTime) // ??? (keys)
 {
-	
+	// En todos los casos, reseteamos el nivel actual, y nos movemos al correspondiente
 	if (Game::instance().getKey('1') && !Game::instance().getKeyAlreadyPressing('1')) {
 		Game::instance().setKeyAlreadyPressing('1');
 		string levelString = "levels/level0";

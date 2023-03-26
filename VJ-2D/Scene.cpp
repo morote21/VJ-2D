@@ -33,7 +33,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	initShaders();
 	keyCollected = false;
 	doorEntered = false;
-	timer = 60;
+	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
 	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 	
@@ -44,7 +44,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()));
+	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY())); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
 	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
