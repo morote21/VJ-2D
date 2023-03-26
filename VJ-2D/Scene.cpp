@@ -87,6 +87,12 @@ void Scene::update(int deltaTime)
 			map->setAllSteppedTiles();
 		}
 
+		// Toggle invincibility
+		if (Game::instance().getKey('g') && !Game::instance().getKeyAlreadyPressing('g')) {
+			Game::instance().setKeyAlreadyPressing('g');
+			player->setInvincibility(!player->isInvincible());
+		}
+
 		currentTime += deltaTime;
 		if (currentTime >= 1000) {
 			currentTime = 0;
