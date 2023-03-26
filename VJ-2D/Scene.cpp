@@ -28,13 +28,14 @@ Scene::~Scene()
 }
 
 
-void Scene::init() // We may want to modify this so that it sets up different levels...
+void Scene::init(string mapPath) // We may want to modify this so that it sets up different levels...
 {
 	initShaders();
 	keyCollected = false;
+	doorEntered = false;
 	timer = 60;
 	pause = false;
-	map = TileMap::createTileMap("levels/level01.txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
+	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 	
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f) };
@@ -108,9 +109,15 @@ void Scene::update(int deltaTime)
 				player->hit();
 		}
 
-
+		cout << player->getPosition().x << " " << player->getPosition().y << endl;
+		
 		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+			cout << "Key collected" << endl;
 			keyCollected = true;
+		}
+		if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getPosition(), player->getSize())) {
+			cout << "Door entered" << endl;
+			doorEntered = true;
 		}
 	}
 	else 
@@ -183,12 +190,15 @@ void Scene::initShaders()
 }
 
 
-bool Scene::samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size)
+bool Scene::samePosition(glm::vec2 objPos, glm::vec2 objSize, glm::vec2 playerPos, glm::vec2 playerSize)
 {
-	if (e1pos.x + e1size.x < e2pos.x || e1pos.x > e2pos.x + e2size.x)
+	if (objPos.x + objSize.x < playerPos.x || objPos.x > playerPos.x + playerSize.x)
 		return false;
-	else if (e1pos.y + e1size.y < e2pos.y || e1pos.y > e2pos.y + e2size.y)
+	else if (objPos.y + objSize.y < playerPos.y || objPos.y > playerPos.y + playerSize.y)
 		return false;
 	return true;
 }
 
+bool Scene::getDoorEntered() {
+	return doorEntered;
+}

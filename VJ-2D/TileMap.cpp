@@ -102,20 +102,6 @@ bool TileMap::loadLevel(const string& levelFile)
 #endif
 	}
 	fin.close();
-	cout << mapSize.x << " " << mapSize.y << endl;
-	cout << tileWidth << " " << tileHeight << endl;
-	cout << tilesheetFile << endl;
-	cout << tilesheetSize.x << " " << tilesheetSize.y << endl;
-	if (tilesheetFile == "images/tilesheet.png") 
-		cout << "path correcto" << endl;
-	for (int j = 0; j < mapSize.y; j++)
-	{
-		for (int i = 0; i < mapSize.x; i++)
-		{
-			cout << map[j * mapSize.x + i];
-		}
-		cout << endl;
-	}
 	return true;
 }
 

@@ -28,11 +28,12 @@ public:
 	Scene();
 	~Scene();
 
-	void init();
+	void init(string mapPath);
 	void update(int deltaTime);
 	void render();
 
 	bool samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size);
+	bool getDoorEntered();
 
 private:
 	void initShaders();
@@ -51,7 +52,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime; // level time
 	glm::mat4 projection;
-	bool keyCollected, pause;
+	bool keyCollected, pause, doorEntered;
 	int timer;
 	Text HUDText; // Is this unnecessary? (probably, just one)
 };

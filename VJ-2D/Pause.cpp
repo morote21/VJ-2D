@@ -1,6 +1,7 @@
 #include "Pause.h"
 #include "Scene.h"
 #include "Game.h"
+#include "SceneManager.h"
 #include <GL/glut.h>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
@@ -76,7 +77,7 @@ void Pause::update(int deltaTime)
 				state = false;
 			else if (selectorIndex == 1) {
 				Game::instance().setStart(false);
-				Game::instance().resetMap();
+				Game::instance().resetMaps();
 			}
 			Game::instance().setKeyAlreadyPressing(13);
 		}
