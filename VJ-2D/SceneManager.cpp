@@ -76,6 +76,15 @@ void SceneManager::resetLevels()
 	currentScene = 0;
 }
 
+void SceneManager::resetLevel(int level)
+{
+	string levelString = "levels/level0";
+	levelString += to_string(level);
+	levelString += ".txt";
+	sceneArray[level - 1]->init(levelString);
+	currentScene = level;
+}
+
 int SceneManager::getCurrentScene()
 {
 	return currentScene;

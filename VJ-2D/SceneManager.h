@@ -15,6 +15,7 @@ public:
 	void render();
 
 	void resetLevels();
+	void resetLevel(int level);
 	static int getCurrentScene();
 
 private:

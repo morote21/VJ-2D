@@ -13,35 +13,33 @@ Pause::Pause()
 
 Pause::~Pause()
 {
-	if (selector != NULL)
-		delete selector;
-	if (background != NULL)
-		delete background;
+	
+	for (int i = 0; i < backgroundArray.size(); i++) {
+		if (backgroundArray[i] != NULL)
+			delete backgroundArray[i];
+	}
 }
 
 void Pause::init()
 {
 	initShaders();
-	spritesheet.loadFromFile("images/bat.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	selector = Sprite::createSprite(glm::ivec2(48, 64), glm::vec2(0.33f, 1.f), &spritesheet, &texProgram);
-	selector->setNumberAnimations(1);	// aqui hay que poner el numero de animaciones que hay en Animations
+	
+	glm::vec2 geom[2] = { glm::vec2(80.0f, 0.f), glm::vec2(SCREEN_WIDTH - 80, SCREEN_HEIGHT - 80) };
+	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(0.5f, 0.5f) };
+	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
-	selector->setAnimationSpeed(MENU_BAT, 6);
-	selector->addKeyframe(MENU_BAT, glm::vec2(0.f, 0.f));
-	selector->addKeyframe(MENU_BAT, glm::vec2(0.33f, 0.f));
-	selector->addKeyframe(MENU_BAT, glm::vec2(0.66f, 0.f));
+	texCoords[0] = glm::vec2(0.5f, 0.0f); texCoords[1] = glm::vec2(1.f, 0.5f);
+	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
-	selector->changeAnimation(MENU_BAT, true);	// 2 para volver a la animacion de MENU_BAT
-	selector->setPosition(glm::vec2(0.f, 0.f));
-
-	glm::vec2 geom[2] = { glm::vec2(80.0f, 0.f), glm::vec2(SCREEN_WIDTH-80, SCREEN_HEIGHT-80) };
-	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f) };
-	background = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+	texCoords[0] = glm::vec2(0.0f, 0.5f); texCoords[1] = glm::vec2(0.5f, 1.f);
+	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
+	
+	texCoords[0] = glm::vec2(0.5f, 0.5f); texCoords[1] = glm::vec2(1.f, 1.f);
+	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
 	pauseWindow.loadFromFile("images/pause.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	selectorIndex = 0;
-	currentTime = 0;	// necesario?
 	state = false;
 }
 
@@ -75,6 +73,12 @@ void Pause::update(int deltaTime)
 		if (Game::instance().getStart()) {
 			if (selectorIndex == 0)
 				state = false;
+			
+			else if (selectorIndex == 1) {
+				Game::instance().resetMaps();
+				state = false;
+			}
+
 			else if (selectorIndex == 3) {
 				Game::instance().setStart(false);
 				Game::instance().resetMaps();
@@ -90,7 +94,6 @@ void Pause::update(int deltaTime)
 		}
 	}
 
-	selector->update(deltaTime);
 }
 
 void Pause::render()
@@ -103,16 +106,7 @@ void Pause::render()
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
-	background->render(pauseWindow);
-	if (selectorIndex == 0) // mejor marcar posición en el update? (para que no cambie posición en cada render...)
-		selector->setPosition(glm::vec2(225.f, 135.f));
-	else if (selectorIndex == 1)
-		selector->setPosition(glm::vec2(225.f, 185.f));
-	else if (selectorIndex == 2)
-		selector->setPosition(glm::vec2(225.f, 235.f));
-	else if (selectorIndex == 3)
-		selector->setPosition(glm::vec2(225.f, 285.f));
-	selector->render();
+	backgroundArray[selectorIndex]->render(pauseWindow);
 }
 
 
