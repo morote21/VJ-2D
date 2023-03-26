@@ -15,7 +15,7 @@ public:
 	void render();
 
 	glm::ivec2 getSize() const;
-	glm::vec2 getPos();
+	glm::vec2 getPosition();
 
 
 private:

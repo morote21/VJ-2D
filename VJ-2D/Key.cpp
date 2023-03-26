@@ -28,8 +28,8 @@ void Key::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(FLOATING, true);
 
-	position = glm::vec2(float(tileMapPos.x + 40), float(tileMapPos.y + 18*20));
-	sprite->setPosition(position);
+	position = glm::vec2(float(40), float(18*20));
+	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
 }
 
 void Key::update(int deltaTime)

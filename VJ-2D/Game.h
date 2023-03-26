@@ -2,13 +2,13 @@
 #define _GAME_INCLUDE
 
 
-#include "Scene.h"
 #include "Menu.h"
-
+#include "SceneManager.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+using namespace std;
 
 // Game is a singleton (a class with a single instance) that represents our whole application
 
@@ -43,7 +43,7 @@ public:
 	
 	void setStart(bool state);
 	bool getStart();
-	void resetMap();
+	void resetMaps();
 
 	bool getKey(int key) const;
 	bool getSpecialKey(int key) const;
@@ -55,7 +55,8 @@ public:
 
 private:
 	bool bPlay, start;                       // Continue to play game?
-	Scene scene;						  // Scene to render
+	//Scene scene;						  // Scene to render
+	SceneManager sceneManager;
 	Menu menu;
 	bool keys[256], specialKeys[256]; // Store key states so 
 	// we can have access at any time

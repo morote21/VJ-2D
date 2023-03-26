@@ -11,7 +11,7 @@ void Game::init()
 	bPlay = true; start = false; level = 1;
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	menu.init();	// menu
-	scene.init();	// game
+	sceneManager.init();	// game
 
 	for (int i = 0; i < 256; i++) {
 		keysAlreadyPressing[i] = false;
@@ -24,7 +24,7 @@ bool Game::update(int deltaTime)
 	if (!start)
 		menu.update(deltaTime);
 	else
-		scene.update(deltaTime);
+		sceneManager.update(deltaTime);
 	return bPlay;
 }
 
@@ -34,7 +34,7 @@ void Game::render()
 	if (!start)
 		menu.render();
 	else
-		scene.render();
+		sceneManager.render();
 }
 
 void Game::keyPressed(int key)
@@ -117,7 +117,7 @@ void Game::stopGame()
 }
 
 
-void Game::resetMap()
+void Game::resetMaps()
 {
-	scene.init();
+	sceneManager.resetLevels();
 }
