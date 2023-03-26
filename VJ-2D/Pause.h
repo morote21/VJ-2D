@@ -25,16 +25,11 @@ private:
 	int selectorIndex;
 	float currentTime;
 	bool state;	// juego pausado o no
-	TexturedQuad* background;
+	vector<TexturedQuad*> backgroundArray;
 	Texture spritesheet, pauseWindow;
-	Sprite* selector;
 	ShaderProgram texProgram;
 	glm::mat4 projection;
 
-	enum BatAnimations
-	{
-		MENU_BAT
-	};
 };
 
 
