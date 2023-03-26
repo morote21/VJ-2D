@@ -34,11 +34,11 @@ void Pause::init()
 	selector->changeAnimation(MENU_BAT, true);	// 2 para volver a la animacion de MENU_BAT
 	selector->setPosition(glm::vec2(0.f, 0.f));
 
-	glm::vec2 geom[2] = { glm::vec2(80.0f, 80.0f), glm::vec2(SCREEN_WIDTH-80, SCREEN_HEIGHT-80) };
+	glm::vec2 geom[2] = { glm::vec2(80.0f, 0.f), glm::vec2(SCREEN_WIDTH-80, SCREEN_HEIGHT-80) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f) };
 	background = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
-	pauseWindow.loadFromFile("images/pause.png", TEXTURE_PIXEL_FORMAT_RGB);
+	pauseWindow.loadFromFile("images/pause.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	selectorIndex = 0;
 	currentTime = 0;	// necesario?
@@ -51,7 +51,7 @@ void Pause::update(int deltaTime)
 	currentTime += deltaTime;
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_DOWN)) {
 		if (Game::instance().getStart()) {
-			if (selectorIndex == 1) 
+			if (selectorIndex == 3) 
 				selectorIndex = 0;
 			else
 				selectorIndex += 1;
@@ -63,7 +63,7 @@ void Pause::update(int deltaTime)
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_UP)) {
 		if (Game::instance().getStart()) {
 			if (selectorIndex == 0)
-				selectorIndex = 1;
+				selectorIndex = 3;
 			else
 				selectorIndex -= 1;
 			Game::instance().setSpecialKeyAlreadyPressing(GLUT_KEY_UP);
@@ -75,7 +75,7 @@ void Pause::update(int deltaTime)
 		if (Game::instance().getStart()) {
 			if (selectorIndex == 0)
 				state = false;
-			else if (selectorIndex == 1) {
+			else if (selectorIndex == 3) {
 				Game::instance().setStart(false);
 				Game::instance().resetMaps();
 			}
@@ -105,9 +105,13 @@ void Pause::render()
 
 	background->render(pauseWindow);
 	if (selectorIndex == 0) // mejor marcar posición en el update? (para que no cambie posición en cada render...)
-		selector->setPosition(glm::vec2(100.f, 150.f));
+		selector->setPosition(glm::vec2(225.f, 135.f));
 	else if (selectorIndex == 1)
-		selector->setPosition(glm::vec2(100.f, 285.f));
+		selector->setPosition(glm::vec2(225.f, 185.f));
+	else if (selectorIndex == 2)
+		selector->setPosition(glm::vec2(225.f, 235.f));
+	else if (selectorIndex == 3)
+		selector->setPosition(glm::vec2(225.f, 285.f));
 	selector->render();
 }
 
