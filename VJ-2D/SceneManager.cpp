@@ -2,6 +2,7 @@
 #include "Game.h"
 #include <string>
 #include <iostream>
+#include <glm/gtc/matrix_transform.hpp>
 using namespace std;
 
 SceneManager::SceneManager() {}
@@ -16,10 +17,26 @@ int SceneManager::currentScene;
 
 void SceneManager::init()
 {
+	initShaders();
 	Scene *scene1 = new Scene(), *scene2 = new Scene();
 	scene1->init("levels/level01.txt"); scene2->init("levels/level02.txt");
 	sceneArray.push_back(scene1); sceneArray.push_back(scene2);
 	currentScene = 0;
+
+	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, 40) };
+	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.f, 1.f) };
+	hudBackgroundTexture.loadFromFile("images/hudbackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	hudBackground = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+	
+	/*
+	for (int i = 0; i < 10; i++) {
+		texCoords[0] = glm::vec2(i/10, 0.0f); texCoords[1] = glm::vec2((i+1)/10, 1.f);
+		numbers.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
+	}
+	*/
+	
+	
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	lives = 3;
 	score = 0;
@@ -71,6 +88,16 @@ void SceneManager::render()
 {
 	int timer = sceneArray[currentScene]->render();
 
+	texProgram.use();
+	texProgram.setUniformMatrix4f("projection", projection);
+	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+
+	glm::mat4 modelview = glm::mat4(1.0f);
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+
+	hudBackground->render(hudBackgroundTexture);
+
 	// render de HUD aquí
 	HUDText.render(to_string(lives), glm::vec2(50, 33), 40, glm::vec4(1, 1, 1, 1));
 	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(1, 1, 1, 1));
@@ -102,4 +129,34 @@ void SceneManager::resetLevel(int level)
 int SceneManager::getCurrentScene()
 {
 	return currentScene;
+}
+
+void SceneManager::initShaders()
+{
+	Shader vShader, fShader;
+
+	vShader.initFromFile(VERTEX_SHADER, "shaders/texture.vert");
+	if (!vShader.isCompiled())
+	{
+		cout << "Vertex Shader Error" << endl;
+		cout << "" << vShader.log() << endl << endl;
+	}
+	fShader.initFromFile(FRAGMENT_SHADER, "shaders/texture.frag");
+	if (!fShader.isCompiled())
+	{
+		cout << "Fragment Shader Error" << endl;
+		cout << "" << fShader.log() << endl << endl;
+	}
+	texProgram.init();
+	texProgram.addShader(vShader);
+	texProgram.addShader(fShader);
+	texProgram.link();
+	if (!texProgram.isLinked())
+	{
+		cout << "Shader Linking Error" << endl;
+		cout << "" << texProgram.log() << endl << endl;
+	}
+	texProgram.bindFragmentOutput("outColor");
+	vShader.free();
+	fShader.free();
 }
