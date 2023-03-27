@@ -13,6 +13,7 @@ public:
 	SceneManager();
 	~SceneManager();
 	void init();
+	void initShaders();
 	void update(int deltaTime);
 	void render();
 
@@ -23,9 +24,13 @@ public:
 private:
 	vector<Scene*> sceneArray;
 	static int currentScene;
-
+	TexturedQuad* hudBackground;
+	vector<TexturedQuad*> numbers;
+	Texture hudBackgroundTexture, numbersTexture;
 	int lives, score; // para que sea persistente entre niveles
 	Text HUDText; // para HUD
+	glm::mat4 projection;
+	ShaderProgram texProgram;	// pasarlo a la clase Game mas adelante
 };
 
 
