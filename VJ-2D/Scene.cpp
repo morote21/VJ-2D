@@ -49,6 +49,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 
+	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES+10) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
+
 	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes
 	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
@@ -102,6 +104,8 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		key.update(deltaTime);
 		door.update(deltaTime, keyCollected);
 
+		testGem.update(deltaTime);
+
 		testSkel.update(deltaTime);
 		testVamp.update(deltaTime);
 
@@ -114,7 +118,14 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		}
 
 		cout << player->getPosition().x << " " << player->getPosition().y << endl;
-		
+
+		// Colisión con objetos coleccionables (para recogerlos)
+		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getPosition(), player->getSize()) ){
+			testGem.setVisibility(false);
+			score += 100;
+		}
+
+
 		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 			cout << "Key collected" << endl;
 			keyCollected = true;
@@ -143,6 +154,9 @@ int Scene::render()
 	map->render(glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
 	if (map->keyAppeared() && !keyCollected)
 		key.render();
+
+	testGem.render();
+
 	door.render();
 	testSkel.render();
 
