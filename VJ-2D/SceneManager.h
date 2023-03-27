@@ -2,7 +2,9 @@
 #define _SCENEMANAGER_INCLUDE
 
 #include "Scene.h"
+#include "Text.h"
 #include <vector>
+
 using namespace std;
 
 class SceneManager
@@ -21,6 +23,9 @@ public:
 private:
 	vector<Scene*> sceneArray;
 	static int currentScene;
+
+	int lives, score; // para que sea persistente entre niveles
+	Text HUDText; // para HUD
 };
 
 

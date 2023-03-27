@@ -29,8 +29,8 @@ public:
 	~Scene();
 
 	void init(string mapPath);
-	void update(int deltaTime);
-	void render();
+	void update(int deltaTime, int& lives, int& score);
+	int render(); // devuelve el timer para mostrarlo en SceneManager
 
 	bool samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size);
 	bool getDoorEntered();
@@ -54,7 +54,7 @@ private:
 	glm::mat4 projection;
 	bool keyCollected, pause, doorEntered;
 	int timer;
-	Text HUDText; // Is this unnecessary? (probably, just one)
+	//Text HUDText; // Is this unnecessary? (probably, just one)
 };
 
 
