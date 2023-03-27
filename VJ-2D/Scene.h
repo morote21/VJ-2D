@@ -10,6 +10,8 @@
 #include "Door.h"
 #include "Skeleton.h"
 #include "Vampire.h"
+#include "Gem.h"
+
 #include "Text.h"
 #include "Pause.h"
 
@@ -48,6 +50,8 @@ private:
 	Pause pauseMenu;
 	Skeleton testSkel;
 	Vampire testVamp;
+
+	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
 
 	ShaderProgram texProgram;
 	float currentTime; // level time

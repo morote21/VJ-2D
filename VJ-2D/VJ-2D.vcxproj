@@ -136,6 +136,7 @@
     <ClCompile Include="Credits.cpp" />
     <ClCompile Include="Door.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Gem.cpp" />
     <ClCompile Include="Instructions.cpp" />
     <ClCompile Include="Key.cpp" />
     <ClCompile Include="main.cpp" />
@@ -159,6 +160,7 @@
     <ClInclude Include="Credits.h" />
     <ClInclude Include="Door.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Gem.h" />
     <ClInclude Include="Instructions.h" />
     <ClInclude Include="Key.h" />
     <ClInclude Include="Menu.h" />
