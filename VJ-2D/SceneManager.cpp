@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "Game.h"
 #include <string>
+#include <iostream>
 using namespace std;
 
 SceneManager::SceneManager() {}
@@ -20,11 +21,17 @@ void SceneManager::init()
 	sceneArray.push_back(scene1); sceneArray.push_back(scene2);
 	currentScene = 0;
 
+	lives = 3;
+	score = 0;
+
+	if (!HUDText.init("fonts/dungeon_font.ttf"))
+		cout << "Could not load HUD font" << endl;
 }
 
 void SceneManager::update(int deltaTime) // ??? (keys)
 {
 	// En todos los casos, reseteamos el nivel actual, y nos movemos al correspondiente
+	//(¿resetear vidas y score si hacemos lo de las teclas? porque estamos forzando cambio de nivel sin completarlo...)
 	if (Game::instance().getKey('1') && !Game::instance().getKeyAlreadyPressing('1')) {
 		Game::instance().setKeyAlreadyPressing('1');
 		string levelString = "levels/level0";
@@ -57,12 +64,19 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		}
 	}
 
-	sceneArray[currentScene]->update(deltaTime);
+	sceneArray[currentScene]->update(deltaTime, lives, score);
 }
 
 void SceneManager::render()
 {
-	sceneArray[currentScene]->render();
+	int timer = sceneArray[currentScene]->render();
+
+	// render de HUD aquí
+	HUDText.render(to_string(lives), glm::vec2(50, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render(to_string(score), glm::vec2(330, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(1, 1, 1, 1));
+	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(1, 1, 1, 1));
 }
 
 void SceneManager::resetLevels() 

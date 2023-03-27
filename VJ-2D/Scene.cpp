@@ -64,11 +64,9 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 
-	if (!HUDText.init("fonts/dungeon_font.ttf"))
-		cout << "Could not load HUD font" << endl;
 }
 
-void Scene::update(int deltaTime)
+void Scene::update(int deltaTime, int& lives, int& score)
 {
 	// Pause game 
 	// Mas adelante cambiar p por la tecla escape, y entonces hacer que aparezca un menu de opciones
@@ -100,7 +98,7 @@ void Scene::update(int deltaTime)
 			if (timer == 0)
 				cout << "Time Up!" << endl;
 		}
-		player->update(deltaTime);
+		player->update(deltaTime, score);
 		key.update(deltaTime);
 		door.update(deltaTime, keyCollected);
 
@@ -112,7 +110,7 @@ void Scene::update(int deltaTime)
 
 			if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getPosition(), player->getSize())
 			 || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getPosition(), player->getSize()))
-				player->hit();
+				player->hit(lives);
 		}
 
 		cout << player->getPosition().x << " " << player->getPosition().y << endl;
@@ -131,7 +129,7 @@ void Scene::update(int deltaTime)
 	
 }
 
-void Scene::render()
+int Scene::render()
 {
 	glm::mat4 modelview;
 
@@ -151,18 +149,12 @@ void Scene::render()
 	testVamp.render();
 
 	player->render();
-	
-	// render vidas del jugador
-	HUDText.render(to_string(player->getLives()), glm::vec2(50, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render(to_string(player->getScore()), glm::vec2(330, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(1, 1, 1, 1));
 
 	if (pauseMenu.isPaused()) {
 		pauseMenu.render();
 	}
 
+	return timer;
 }
 
 void Scene::initShaders()

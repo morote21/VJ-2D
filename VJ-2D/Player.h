@@ -18,7 +18,7 @@ public:
 	~Player();
 
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime);
+	void update(int deltaTime, int& score);
 	void render();
 
 	void setTileMap(TileMap* tileMap);
@@ -28,17 +28,17 @@ public:
 
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
-	int getLives();
-	int getScore();
+	//int getLives();
+	//int getScore();
 
-	void hit();
+	void hit(int& lives);
 	bool isInvincible();
 
 private:
 	bool bJumping, alreadyInGround;
 	bool invincible; // para trucos y potencialmente para justo después de ser golpeado
 	glm::ivec2 tileMapDispl, posPlayer, startingPosPlayer, size;
-	int jumpAngle, startY, lives, score;
+	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;

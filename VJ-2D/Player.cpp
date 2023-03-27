@@ -20,8 +20,8 @@ Player::~Player()
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
-	lives = 3;
-	score = 0;
+	//lives = 3;
+	//score = 0;
 	invincible = false;
 	spritesheet.loadFromFile("images/marco.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(30, 38);
@@ -61,7 +61,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 }
 
-void Player::update(int deltaTime)
+void Player::update(int deltaTime, int& score)
 {
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
@@ -191,7 +191,7 @@ glm::ivec2 Player::getSize() const
 	return size;
 }
 
-int Player::getLives()
+/*int Player::getLives()
 {
 	return lives;
 }
@@ -200,8 +200,9 @@ int Player::getScore()
 {
 	return score;
 }
+*/
 
-void Player::hit() 
+void Player::hit(int& lives) 
 {
 	if (lives == 0)
 		cout << "GAME OVER" << endl;
