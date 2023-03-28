@@ -10,24 +10,27 @@ void Gem::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& 
 {
 	// Tal y como está, deberías hacer el init SÓLO cuando aparezca
 
-	spritesheet.loadFromFile("images/key-white.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(32, 32);
-	sprite = Sprite::createSprite(size, glm::vec2(1.f / 12.f, 1.f), &spritesheet, &shaderProgram);
+	spritesheet.loadFromFile("images/gem.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	size = glm::ivec2(20, 20);
+	sprite = Sprite::createSprite(size, glm::vec2(1.f / 10.f, 0.5f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(IDLE, 8);
 	sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(1.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(2.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(3.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(4.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(5.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(6.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(7.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(8.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(9.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(10.f / 12.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(11.f / 12.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(1.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(2.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(3.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(4.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(5.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(6.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(7.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(8.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(9.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.5f));
+	sprite->addKeyframe(IDLE, glm::vec2(1.f / 10.f, 0.5f));
+	sprite->addKeyframe(IDLE, glm::vec2(2.f / 10.f, 0.5f));
+	sprite->addKeyframe(IDLE, glm::vec2(3.f / 10.f, 0.5f));
+	sprite->addKeyframe(IDLE, glm::vec2(4.f / 10.f, 0.5f));
 
 	sprite->changeAnimation(IDLE, true);
 
