@@ -14,17 +14,24 @@ void Door::init(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos,  ShaderProg
 {
 	spritesheet.loadFromFile("images/doors.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(40, 40);
-	sprite = Sprite::createSprite(size, glm::vec2(1.f, 0.25f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(size, glm::vec2(1/6.f, 0.5f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(2);
 
 	sprite->setAnimationSpeed(CLOSED, 1);
 	sprite->addKeyframe(CLOSED, glm::vec2(0.f, 0.f));
 
-	sprite->setAnimationSpeed(OPENING, 6);
-	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.25f));
+	sprite->setAnimationSpeed(OPENING, 14);
+	sprite->addKeyframe(OPENING, glm::vec2(1/6.f, 0.f));
+	sprite->addKeyframe(OPENING, glm::vec2(2/6.f, 0.f));
+	sprite->addKeyframe(OPENING, glm::vec2(3/6.f, 0.f));
+	sprite->addKeyframe(OPENING, glm::vec2(4/6.f, 0.f));
+	sprite->addKeyframe(OPENING, glm::vec2(5/6.f, 0.f));
 	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.5f));
-	sprite->addKeyframe(OPENING, glm::vec2(0.f, 0.75f));
+	sprite->addKeyframe(OPENING, glm::vec2(1/6.f, 0.5f));
+	sprite->addKeyframe(OPENING, glm::vec2(2/6.f, 0.5f));
+	sprite->addKeyframe(OPENING, glm::vec2(3/6.f, 0.5f));
+	sprite->addKeyframe(OPENING, glm::vec2(4/6.f, 0.5f));
+	sprite->addKeyframe(OPENING, glm::vec2(5/6.f, 0.5f));
 
 	sprite->changeAnimation(CLOSED, false);
 
