@@ -132,6 +132,10 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			++lives;
 		}
 
+		if (timer == 0) {
+			player->hit(lives);
+			timer = 60;
+		}
 
 		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
 			cout << "Key collected" << endl;
