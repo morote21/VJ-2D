@@ -7,24 +7,20 @@ using namespace std;
 
 void Key::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	spritesheet.loadFromFile("images/key-white.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(32, 32);
-	sprite = Sprite::createSprite(size, glm::vec2(1.f / 12.f, 1.f), &spritesheet, &shaderProgram);
+	spritesheet.loadFromFile("images/key.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	size = glm::ivec2(20, 20);
+	sprite = Sprite::createSprite(size, glm::vec2(1.f / 7.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
 	sprite->setAnimationSpeed(FLOATING, 8);
 	sprite->addKeyframe(FLOATING, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(1.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(2.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(3.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(4.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(5.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(6.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(7.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(8.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(9.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(10.f / 12.f, 0.f));
-	sprite->addKeyframe(FLOATING, glm::vec2(11.f / 12.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(1.f / 7.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(2.f / 7.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(3.f / 7.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(4.f / 7.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(5.f / 7.f, 0.f));
+	sprite->addKeyframe(FLOATING, glm::vec2(6.f / 7.f, 0.f));
+	
 
 	sprite->changeAnimation(FLOATING, true);
 
