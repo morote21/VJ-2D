@@ -75,7 +75,7 @@ bool ExtraLife::isVisible()
 void ExtraLife::setVisibility(bool visible)
 {
 	if (visible)
-		timeLeft = 0.0;
+		timeLeft = TIME_TO_COLLECT;
 	else
 		timeLeft = -1;
 }
