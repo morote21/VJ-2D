@@ -209,6 +209,7 @@ void Player::hit(int& lives)
 	else
 		--lives;
 
+
 	posPlayer = startingPosPlayer;
 	bJumping = false; // para resetear el estado
 	sprite->changeAnimation(STAND_RIGHT, true);
