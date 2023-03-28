@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 using namespace std;
 
 SceneManager::SceneManager() {}
@@ -28,12 +29,14 @@ void SceneManager::init()
 	hudBackgroundTexture.loadFromFile("images/hudbackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	hudBackground = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 	
-	/*
+	numbersTexture.loadFromFile("images/numbers.png", TEXTURE_PIXEL_FORMAT_RGBA);
+
+	geom[0] = glm::vec2(0.f, 0.f); geom[1] = glm::vec2(20.f, 30.f);
 	for (int i = 0; i < 10; i++) {
-		texCoords[0] = glm::vec2(i/10, 0.0f); texCoords[1] = glm::vec2((i+1)/10, 1.f);
+		texCoords[0] = glm::vec2(i/10.f, 0.0f); texCoords[1] = glm::vec2((i+1)/10.f, 1.f);
 		numbers.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 	}
-	*/
+	
 	
 	
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
@@ -41,8 +44,6 @@ void SceneManager::init()
 	lives = 3;
 	score = 0;
 
-	if (!HUDText.init("fonts/dungeon_font.ttf"))
-		cout << "Could not load HUD font" << endl;
 }
 
 void SceneManager::update(int deltaTime) // ??? (keys)
@@ -67,6 +68,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		currentScene = 1;
 	}
 	
+	sceneArray[currentScene]->update(deltaTime, lives, score);
+	
 	if (sceneArray[currentScene]->getDoorEntered()) {
 		// Reseteamos el nivel actual y pasamos al siguiente
 		string levelString = "levels/level0";
@@ -78,10 +81,10 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		if (currentScene == sceneArray.size()) {
 			Game::instance().setStart(false);
 			currentScene = 0;
+			lives = 3;
+			score = 0;
 		}
 	}
-
-	sceneArray[currentScene]->update(deltaTime, lives, score);
 }
 
 void SceneManager::render()
@@ -99,11 +102,36 @@ void SceneManager::render()
 	hudBackground->render(hudBackgroundTexture);
 
 	// render de HUD aquí
-	HUDText.render(to_string(lives), glm::vec2(50, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render("Score: ", glm::vec2(200, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render(to_string(score), glm::vec2(330, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render("Time: ", glm::vec2(450, 33), 40, glm::vec4(1, 1, 1, 1));
-	HUDText.render(to_string(timer), glm::vec2(570, 33), 40, glm::vec4(1, 1, 1, 1));
+
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(70, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[lives]->render(numbersTexture);
+
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(300, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int((score / 10000) % 10)]->render(numbersTexture);
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(322, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int((score / 1000) % 10)]->render(numbersTexture);
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(344, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int((score / 100) % 10)]->render(numbersTexture);
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(366, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int((score / 10) % 10)]->render(numbersTexture);
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(388, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int(score % 10)]->render(numbersTexture);
+
+
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(580, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int((timer / 10) % 10)]->render(numbersTexture);
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(602, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[int(timer % 10)]->render(numbersTexture);
+
+
 }
 
 void SceneManager::resetLevels() 
@@ -115,6 +143,8 @@ void SceneManager::resetLevels()
 		sceneArray[i - 1]->init(levelString);
 	}
 	currentScene = 0;
+	lives = 3;
+	score = 0;
 }
 
 void SceneManager::resetLevel(int level)
