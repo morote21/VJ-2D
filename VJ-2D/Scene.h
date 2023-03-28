@@ -12,6 +12,7 @@
 #include "Vampire.h"
 #include "Gem.h"
 #include "ExtraLife.h"
+#include "Stopwatch.h"
 
 #include "Text.h"
 #include "Pause.h"
@@ -54,6 +55,7 @@ private:
 
 	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
 	ExtraLife testLife;
+	Stopwatch testWatch;
 
 
 	ShaderProgram texProgram;
@@ -61,6 +63,8 @@ private:
 	glm::mat4 projection;
 	bool keyCollected, pause, doorEntered;
 	int timer;
+	char timeState; // 0: objetos congelados (debería tambien timer), 1: enemigos congelados, 2: todo en marcha
+
 	//Text HUDText; // Is this unnecessary? (probably, just one)
 };
 
