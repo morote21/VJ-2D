@@ -35,6 +35,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	doorEntered = false;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
+	timeState = 2;
 	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 	
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
@@ -51,6 +52,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES+10) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
 	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 7) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
+	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 4) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
 
 	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes
@@ -107,9 +109,12 @@ void Scene::update(int deltaTime, int& lives, int& score)
 
 		testGem.update(deltaTime);
 		testLife.update(deltaTime);
+		testWatch.update(deltaTime, timeState);
 
-		testSkel.update(deltaTime);
-		testVamp.update(deltaTime);
+		if (timeState == 2) { // para evitar que se muevan si no se mueve todo
+			testSkel.update(deltaTime);
+			testVamp.update(deltaTime);
+		}
 
 		// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
 		if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
@@ -131,6 +136,9 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			testLife.setVisibility(false);
 			++lives;
 		}
+
+		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getPosition(), player->getSize()))
+			testWatch.activate(timeState);
 
 		if (timer == 0) {
 			player->hit(lives);
@@ -168,6 +176,7 @@ int Scene::render()
 
 	testGem.render();
 	testLife.render();
+	testWatch.render();
 
 	door.render();
 	testSkel.render();

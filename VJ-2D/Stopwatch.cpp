@@ -1,4 +1,4 @@
-#include "ExtraLife.h"
+#include "Stopwatch.h"
 #include <GL/glew.h>
 #include <GL/glut.h>
 
@@ -6,7 +6,9 @@ using namespace std;
 
 #define TIME_TO_COLLECT 7000.f
 
-void ExtraLife::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& shaderProgram)
+#define FREEZE_TIME 10000.f
+
+void Stopwatch::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& shaderProgram)
 {
 	// Tal y como está, deberías hacer el init SÓLO cuando aparezca
 
@@ -29,53 +31,70 @@ void ExtraLife::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderPro
 
 	sprite->changeAnimation(IDLE, true);
 
+	clockState = 1;
 	timeLeft = TIME_TO_COLLECT;
 	position = itemPos;
 	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
 }
 
-void ExtraLife::update(int deltaTime)
+void Stopwatch::update(int deltaTime, char& timeState)
 {
-	if (timeLeft != -1) {
+	if (clockState > 0) { // activo
 		timeLeft -= deltaTime;
 
-		if (timeLeft <= 0.0)
-			timeLeft = -1; // marca para hacer invisible (no coleccionable)
-	}
+		if (timeLeft <= 0.0) {
+			
+			if (clockState == 2)
+				timeState = 2; // poner en marcha enemigos
+			
+			clockState = 0; // se desactiva
+		}
 
+	}
 	sprite->update(deltaTime);
 }
 
-void ExtraLife::render()
+void Stopwatch::render()
 {
-	if (timeLeft != -1)
+	if (clockState == 1)
 		sprite->render();
 }
 
-ExtraLife::~ExtraLife()
+Stopwatch::~Stopwatch()
 {
 	sprite->free();
 }
 
-glm::ivec2 ExtraLife::getSize() const
+glm::ivec2 Stopwatch::getSize() const
 {
 	return size;
 }
 
-glm::vec2 ExtraLife::getPosition()
+glm::vec2 Stopwatch::getPosition()
 {
 	return position;
 }
 
-bool ExtraLife::isVisible()
+bool Stopwatch::isVisible()
 {
-	return (timeLeft != -1);
+	return (clockState == 1);
 }
 
-void ExtraLife::setVisibility(bool visible)
+void Stopwatch::setVisibility(bool visible)
 {
-	if (visible)
+	if (visible) {
 		timeLeft = TIME_TO_COLLECT;
+		clockState = 1;
+	}
 	else
-		timeLeft = -1;
+		clockState = 0; // a diferencia de otros objetos, ésto lo desactiva totalmente (ya lo usaremos)
+
 }
+
+void Stopwatch::activate(char& timeState) // se asume visibilidad (ya veremos)
+{
+	timeState = 1; // parar enemigos
+	clockState = 2;
+	timeLeft = FREEZE_TIME;
+}
+

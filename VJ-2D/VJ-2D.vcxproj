@@ -150,6 +150,7 @@
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Skeleton.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Stopwatch.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturedQuad.cpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Skeleton.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Stopwatch.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TexturedQuad.h" />
