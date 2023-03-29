@@ -76,12 +76,14 @@ void Pause::update(int deltaTime)
 			
 			else if (selectorIndex == 1) {
 				Game::instance().resetMaps();
+				SoundManager::instance().playStage(0);
 				state = false;
 			}
 
 			else if (selectorIndex == 3) {
 				Game::instance().setStart(false);
 				Game::instance().resetMaps();
+				SoundManager::instance().playMenu();
 			}
 			Game::instance().setKeyAlreadyPressing(13);
 		}

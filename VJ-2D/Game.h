@@ -4,6 +4,7 @@
 
 #include "Menu.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -63,7 +64,8 @@ private:
 	bool keysAlreadyPressing[256], specialKeysAlreadyPressing[256];
 	int level;
 	
-
+	bool menuSoundStarted;
+	//ISoundEngine* engine;
 };
 
 

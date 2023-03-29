@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "Game.h"
+#include "SoundManager.h"
 #include <GL/glut.h>
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
@@ -70,8 +71,10 @@ void Menu::update(int deltaTime)
 
 	if (Game::instance().getKey(13) && !Game::instance().getKeyAlreadyPressing(13)) {
 		if (!Game::instance().getStart()) {
-			if (selectorIndex == 0)
+			if (selectorIndex == 0) {
 				Game::instance().setStart(true);
+				SoundManager::instance().playStage(0);
+			}
 			else
 				currentWindow = selectorIndex;
 			Game::instance().setKeyAlreadyPressing(13);

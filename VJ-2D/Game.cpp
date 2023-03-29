@@ -8,7 +8,7 @@ using namespace std;
 
 void Game::init()
 {
-	bPlay = true; start = false; level = 1;
+	bPlay = true; start = false; level = 1, menuSoundStarted = true;
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 	menu.init();	// menu
 	sceneManager.init();	// game
@@ -17,12 +17,17 @@ void Game::init()
 		keysAlreadyPressing[i] = false;
 		specialKeysAlreadyPressing[i] = false;
 	}
+
+	SoundManager::instance().playMenu();
+
 }
 
 bool Game::update(int deltaTime)
 {
-	if (!start)
+	if (!start) {
 		menu.update(deltaTime);
+	}
+	
 	else
 		sceneManager.update(deltaTime);
 	return bPlay;
