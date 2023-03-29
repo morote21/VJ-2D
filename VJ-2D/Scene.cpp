@@ -12,6 +12,8 @@ using namespace std;
 #define INIT_PLAYER_X_TILES 3
 #define INIT_PLAYER_Y_TILES 18
 
+#define SIZEITEMS_X 16
+#define SIZEITEMS_Y 16
 
 Scene::Scene()
 {
@@ -47,12 +49,12 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY())); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
-	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram); // this could be on the object map
+	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(float(40) + int((40-SIZEITEMS_X) / 2), float(18 * 20) + int((40 - SIZEITEMS_Y) / 2)), texProgram); // this could be on the object map
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 
-	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES+10) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
-	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 7) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
-	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 4) * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()), texProgram);
+	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES+10) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
+	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 7) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
+	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 4) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
 	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes

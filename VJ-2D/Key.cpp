@@ -5,10 +5,10 @@
 using namespace std;
 
 
-void Key::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
+void Key::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& shaderProgram)
 {
 	spritesheet.loadFromFile("images/key.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(20, 20);
+	size = glm::ivec2(16, 16);
 	sprite = Sprite::createSprite(size, glm::vec2(1.f / 7.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
@@ -24,7 +24,7 @@ void Key::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	sprite->changeAnimation(FLOATING, true);
 
-	position = glm::vec2(float(40), float(18*20));
+	position = itemPos;
 	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
 }
 

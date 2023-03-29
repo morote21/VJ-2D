@@ -11,7 +11,7 @@ void ExtraLife::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderPro
 	// Tal y como está, deberías hacer el init SÓLO cuando aparezca
 
 	spritesheet.loadFromFile("images/life.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(20, 20);
+	size = glm::ivec2(16, 16);
 	sprite = Sprite::createSprite(size, glm::vec2(1.f / 10.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
