@@ -9,7 +9,7 @@ class Key
 public:
 	~Key();
 
-	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
+	void init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime);
 	void render();
 
