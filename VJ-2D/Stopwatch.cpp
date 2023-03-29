@@ -12,22 +12,16 @@ void Stopwatch::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderPro
 {
 	// Tal y como está, deberías hacer el init SÓLO cuando aparezca
 
-	spritesheet.loadFromFile("images/life.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	spritesheet.loadFromFile("images/clock.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	size = glm::ivec2(20, 20);
-	sprite = Sprite::createSprite(size, glm::vec2(1.f / 10.f, 1.f), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(size, glm::vec2(1.f / 4.f, 1.f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
-	sprite->setAnimationSpeed(IDLE, 8);
+	sprite->setAnimationSpeed(IDLE, 2);
 	sprite->addKeyframe(IDLE, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(1.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(2.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(3.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(4.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(5.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(6.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(7.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(8.f / 10.f, 0.f));
-	sprite->addKeyframe(IDLE, glm::vec2(9.f / 10.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(1.f / 4.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(2.f / 4.f, 0.f));
+	sprite->addKeyframe(IDLE, glm::vec2(3.f / 4.f, 0.f));
 
 	sprite->changeAnimation(IDLE, true);
 

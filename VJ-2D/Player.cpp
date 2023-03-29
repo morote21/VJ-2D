@@ -11,6 +11,8 @@
 #define FALL_STEP 6
 #define PLAYER_SPEED 3
 
+#define HITBOXOFFSETX 8
+
 Player::~Player()
 {
 	sprite->free();
@@ -20,6 +22,7 @@ Player::~Player()
 void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
 	bJumping = false;
+	falling = false;
 	//lives = 3;
 	//score = 0;
 	invincible = false;
@@ -50,15 +53,25 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	}
 
 	// implementarlo bien mas adelante
-	sprite->setAnimationSpeed(JUMP, 4);
-	for (float i = 0; i < 5; i++) {
-		sprite->addKeyframe(JUMP, glm::vec2(i / 16.f, 2 / 8.f));
+	sprite->setAnimationSpeed(AIR_RIGHT, 0);
+	for (float i = 0; i < 9; i++) {
+		sprite->addKeyframe(AIR_RIGHT, glm::vec2(i / 16.f, 2 / 8.f));
+	}
+
+	sprite->setAnimationSpeed(AIR_LEFT, 0);
+	for (float i = 0; i < 9; i++) {
+		sprite->addKeyframe(AIR_LEFT, glm::vec2(i / 16.f, 6 / 8.f));
 	}
 	
+	
 	sprite->changeAnimation(STAND_RIGHT, true);
+	prevDir = 1;
 	tileMapDispl = tileMapPos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	posPlayer = glm::ivec2(tileMapDispl.x, tileMapDispl.y);
+	sprite->setPosition(posPlayer);
 
+	hitboxSize = glm::ivec2(8, 38);
+	hitboxPos = glm::ivec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
 }
 
 void Player::update(int deltaTime, int& score)
@@ -66,26 +79,65 @@ void Player::update(int deltaTime, int& score)
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
-		if (sprite->animation() != MOVE_LEFT)
-			sprite->changeAnimation(MOVE_LEFT, true);
+		prevDir = 2;
 		posPlayer.x -= PLAYER_SPEED;
-		if (map->collisionMoveLeft(posPlayer, size))
+		hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
+		if (map->collisionMoveLeft(hitboxPos, hitboxSize))
 		{
 			posPlayer.x += PLAYER_SPEED;
-			sprite->changeAnimation(STAND_LEFT, true);
+			hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
+			if (sprite->animation() != STAND_LEFT)
+				sprite->changeAnimation(STAND_LEFT, true);
+		}
+		else {	
+			if (!bJumping) {
+				if (falling) {
+					cout << "entra aqui 2" << endl;
+					if (sprite->animation() != AIR_LEFT)
+						sprite->changeAnimation(AIR_LEFT, false);
+				}
+				else {
+					if (sprite->animation() != MOVE_LEFT)
+						sprite->changeAnimation(MOVE_LEFT, true);
+				}
+			}
+			else {
+				if (sprite->animation() != AIR_LEFT)
+					sprite->changeAnimation(AIR_LEFT, false);
+			}
 		}
 	}
 	else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT))
 	{
-		if (sprite->animation() != MOVE_RIGHT)
-			sprite->changeAnimation(MOVE_RIGHT, true);
+		prevDir = 1;
 		posPlayer.x += PLAYER_SPEED;
-		if (map->collisionMoveRight(posPlayer, size))
+		hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
+		if (map->collisionMoveRight(hitboxPos, hitboxSize))
 		{
 			posPlayer.x -= PLAYER_SPEED;
-			sprite->changeAnimation(STAND_RIGHT, true);
+			hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
+			if (sprite->animation() != STAND_RIGHT)
+				sprite->changeAnimation(STAND_RIGHT, true);
+		}
+		else {
+			if (!bJumping) {
+				if (falling) {
+					cout << "entra aqui 2" << endl;
+					if (sprite->animation() != AIR_RIGHT)
+						sprite->changeAnimation(AIR_RIGHT, false);
+				}
+				else {
+					if (sprite->animation() != MOVE_RIGHT)
+						sprite->changeAnimation(MOVE_RIGHT, true);
+				}
+			}
+			else {
+				if (sprite->animation() != AIR_RIGHT)
+					sprite->changeAnimation(AIR_RIGHT, false);
+			}
 		}
 	}
+
 	else
 	{
 		if (sprite->animation() == MOVE_LEFT)
@@ -104,35 +156,69 @@ void Player::update(int deltaTime, int& score)
 		if (jumpAngle >= 180)	// >= de 180 asi no hace falta que el resultado de ir sumando sea exactamente 180
 		{
 			bJumping = false;
+			falling = true;
 			posPlayer.y = startY;
+			hitboxPos.y = posPlayer.y;
 		}
 		else
 		{	
 			float angle = sin(3.14159f * jumpAngle / 180.f);
 			posPlayer.y = int(startY - JUMP_HEIGHT * angle);
-			if (jumpAngle > 90)
-				bJumping = !map->collisionMoveDown(posPlayer, size, &posPlayer.y);
+			hitboxPos.y = posPlayer.y;
+			if (jumpAngle > 90) {
+				bJumping = !map->collisionMoveDown(hitboxPos, hitboxSize, &posPlayer.y);
+				hitboxPos.y = posPlayer.y;
+			}
 		}
 		
 	}
 	else
 	{
 		posPlayer.y += FALL_STEP;
-		if (map->collisionMoveDown(posPlayer, size, &posPlayer.y))
+		hitboxPos.y = posPlayer.y;
+		if (map->collisionMoveDown(hitboxPos, hitboxSize, &posPlayer.y))
 		{
-			// cuando este todo acabado intentar hacer animacion de salto 
-			// teniendo en cuenta las direcciones desde donde salta
+			
+			falling = false;
+			bJumping = false;
+			hitboxPos.y = posPlayer.y;
+			
+			if (prevDir == 1) {
+				if (sprite->animation() != MOVE_RIGHT)
+					sprite->changeAnimation(MOVE_RIGHT, true);
+			}
+			else if (prevDir == 2) {
+				if (sprite->animation() != MOVE_LEFT)
+					sprite->changeAnimation(MOVE_LEFT, true);
+			}
 
-			//if (!alreadyInGround)
-			//	sprite->changeAnimation(JUMP, false);
-			//alreadyInGround = true;
+			
 			if (Game::instance().getSpecialKey(GLUT_KEY_UP))
 			{
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
-				//sprite->changeAnimation(JUMP, false);
+				if (prevDir == 1)
+					sprite->changeAnimation(AIR_RIGHT, false);
+				else if (prevDir == 2)
+					sprite->changeAnimation(AIR_LEFT, false);
 			}
+		}
+		else {
+			falling = true;
+			if (prevDir == 1) {
+				if (sprite->animation() != AIR_RIGHT) {
+					sprite->changeAnimation(AIR_RIGHT, false);
+					cout << "entra aqui " << endl;
+				}
+			}
+			else if (prevDir == 2) {
+				if (sprite->animation() != AIR_LEFT) {
+					sprite->changeAnimation(AIR_LEFT, false);
+					cout << "entra aqui" << endl;
+				}
+			}
+			
 		}
 	}
 
@@ -140,14 +226,14 @@ void Player::update(int deltaTime, int& score)
 
 	if (!bJumping) {
 		// playerxleft
-		if ((map->getTileInPos(posPlayer.x / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
+		if ((map->getTileInPos(hitboxPos.x / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
 			++score;
-			map->tileStepped(posPlayer.x / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20);
+			map->tileStepped(hitboxPos.x / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20);
 		}
 		// playerxright
-		else if ((map->getTileInPos((posPlayer.x + int(sprite->getSpriteSize().x)) / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
+		else if ((map->getTileInPos((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
 			++score;
-			map->tileStepped((posPlayer.x + int(sprite->getSpriteSize().x)) / 40, (posPlayer.y + int(sprite->getSpriteSize().y)) / 20);
+			map->tileStepped((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20);
 		}
 	}
 	
@@ -172,12 +258,14 @@ void Player::setStartingPosition(const glm::vec2& pos)
 {
 	startingPosPlayer = pos;
 	posPlayer = pos;
+	hitboxPos = posPlayer;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::setPosition(const glm::vec2& pos)
 {
 	posPlayer = pos;
+	hitboxPos = posPlayer;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
@@ -189,6 +277,16 @@ glm::vec2 Player::getPosition()
 glm::ivec2 Player::getSize() const
 {
 	return size;
+}
+
+glm::vec2 Player::getHitBoxPosition()
+{
+	return hitboxPos;
+}
+
+glm::ivec2 Player::getHitBoxSize() const
+{
+	return hitboxSize;
 }
 
 /*int Player::getLives()
