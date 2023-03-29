@@ -69,6 +69,7 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 	}
 	
 	sceneArray[currentScene]->update(deltaTime, lives, score);
+
 	
 	if (sceneArray[currentScene]->getDoorEntered()) {
 		// Reseteamos el nivel actual y pasamos al siguiente
@@ -76,13 +77,14 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += to_string(currentScene + 1);
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
-
 		currentScene += 1;
+		SoundManager::instance().playStage(currentScene);
 		if (currentScene == sceneArray.size()) {
 			Game::instance().setStart(false);
 			currentScene = 0;
 			lives = 3;
 			score = 0;
+			SoundManager::instance().playMenu();
 		}
 	}
 }
