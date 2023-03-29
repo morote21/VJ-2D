@@ -28,6 +28,8 @@ public:
 
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
+	glm::ivec2 getHitBoxSize() const;
+	glm::vec2 getHitBoxPosition();
 	//int getLives();
 	//int getScore();
 
@@ -35,17 +37,21 @@ public:
 	bool isInvincible();
 
 private:
-	bool bJumping, alreadyInGround;
+	bool bJumping, falling;
 	bool invincible; // para trucos y potencialmente para justo después de ser golpeado
-	glm::ivec2 tileMapDispl, posPlayer, startingPosPlayer, size;
+	glm::ivec2 tileMapDispl, posPlayer, startingPosPlayer, size, hitboxPos, hitboxSize;
 	int jumpAngle, startY;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
 
+	int prevDir;
+	// prevDir = 1 -> personaje estaba direccion hacia derecha
+	// prevDir = 2 -> personaje estaba direccion hacia izquierda
+
 	enum PlayerAnimations
 	{
-		STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, DIE_LEFT, DIE_RIGHT, JUMP, FALL
+		STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT, DIE_LEFT, DIE_RIGHT, AIR_LEFT, AIR_RIGHT
 	};
 
 };

@@ -119,25 +119,25 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
 		if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
 
-			if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getPosition(), player->getSize())
-			 || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getPosition(), player->getSize()))
+			if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
+			 || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
 				player->hit(lives);
 		}
 
 		cout << player->getPosition().x << " " << player->getPosition().y << endl;
 
 		// Colisión con objetos coleccionables (para recogerlos)
-		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getPosition(), player->getSize()) ){
+		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
 			testGem.setVisibility(false);
 			score += 100;
 		}
 
-		if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getPosition(), player->getSize()) ) {
+		if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ) {
 			testLife.setVisibility(false);
 			++lives;
 		}
 
-		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getPosition(), player->getSize()))
+		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
 			testWatch.activate(timeState);
 
 		if (timer == 0) {
@@ -145,11 +145,11 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			timer = 60;
 		}
 
-		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getPosition(), player->getSize()) && map->keyAppeared()) {
+		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
 			cout << "Key collected" << endl;
 			keyCollected = true;
 		}
-		if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getPosition(), player->getSize())) {
+		if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
 			cout << "Door entered" << endl;
 			doorEntered = true;
 		}

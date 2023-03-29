@@ -11,7 +11,7 @@ void Gem::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& 
 	// Tal y como está, deberías hacer el init SÓLO cuando aparezca
 
 	spritesheet.loadFromFile("images/gem.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(20, 20);
+	size = glm::ivec2(10, 10);
 	sprite = Sprite::createSprite(size, glm::vec2(1.f / 10.f, 0.5f), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(1);
 
