@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <random>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Scene.h"
 #include "Game.h"
@@ -39,6 +40,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	pause = false;
 	timeState = 2;
 	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
+
+	vector<glm::ivec2> itemsPositions = map->getItemsPositions();	// siempre tendra 4 posiciones, ya que habra 1 objeto de cada por mapa (si el objeto aparece o no al final sera opcional, a excepcion de la llave)
 	
 	glm::vec2 geom[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(SCREEN_WIDTH, SCREEN_HEIGHT) };
 	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.0f, 1.0f) };
@@ -49,12 +52,38 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY())); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
-	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(float(40) + int((40-SIZEITEMS_X) / 2), float(18 * 20) + int((40 - SIZEITEMS_Y) / 2)), texProgram); // this could be on the object map
+	
+
+	random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int> dist(0, itemsPositions.size()-1);
+	int indexItem1, indexItem2, indexItem3, indexItem4;
+	// asignamos indices de posiciones random a los objetos y evitamos que se repitan entre objetos 
+
+	indexItem1 = dist(mt);
+
+	indexItem2 = dist(mt);
+	while (indexItem2 == indexItem1)
+		indexItem2 = dist(mt);
+
+	indexItem3 = dist(mt);
+	while (indexItem3 == indexItem1 || indexItem3 == indexItem2)
+		indexItem3 = dist(mt);
+
+	indexItem4 = dist(mt);
+	while (indexItem4 == indexItem1 || indexItem4 == indexItem2 || indexItem4 == indexItem3)
+		indexItem4 = dist(mt);
+
+
+	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(int(itemsPositions[indexItem1].x) + int((40 - SIZEITEMS_X) / 2), int(itemsPositions[indexItem1].y) + int((40 - SIZEITEMS_Y) / 2)), texProgram); // this could be on the object map
+	
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 
-	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES+10) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
-	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 7) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
-	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2((INIT_PLAYER_X_TILES + 4) * map->getTileSizeX() + int((40 - SIZEITEMS_X) / 2), INIT_PLAYER_Y_TILES * map->getTileSizeY() + int((40 - SIZEITEMS_Y) / 2)), texProgram);
+	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem2].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem2].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
+
+	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem3].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem3].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
+
+	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem4].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem4].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
 	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes
