@@ -2,6 +2,7 @@
 #define _TILE_MAP_INCLUDE
 
 #include <glm/glm.hpp>
+#include <vector>
 #include "Texture.h"
 #include "ShaderProgram.h"
 
@@ -34,6 +35,7 @@ public:
 	bool keyAppeared() const;
 	void keyCollected();
 	void setAllSteppedTiles();
+	vector<glm::ivec2> getItemsPositions();
 
 private:
 	bool loadLevel(const string& levelFile);
@@ -51,6 +53,8 @@ private:
 	glm::vec2 tileTexSize, padding;
 	ShaderProgram texProgram;
 	int* map;	// seguramente poner aqui una matriz con un vector de vectores en vez de simular una matriz 
+	vector<glm::ivec2> itemsPositions;
+
 };
 
 #endif

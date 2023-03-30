@@ -122,11 +122,8 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 		for (int i = 0; i < mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if (tile > 0)
+			if (tile != 0 && tile != 8)
 			{
-				if (tile == 4)
-					doorPos = glm::ivec2(i, j);
-
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
 				if (tile == 1)
@@ -153,6 +150,12 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[1].y);
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y + tileHeight);
 				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[1].y);
+			}
+			if (tile == 4) {
+				doorPos = glm::ivec2(i, j);
+			}
+			if (tile == 8) {
+				itemsPositions.push_back(glm::ivec2( i * tileWidth, j * tileHeight));
 			}
 		}
 	}
@@ -220,7 +223,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / tileHeight; // y ref. es la de abajo
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8)
 		{
 			if (*posY - tileHeight * y + size.y <= 6)
 			{
@@ -294,4 +297,9 @@ glm::ivec2 TileMap::getDoorPos()
 void TileMap::setAllSteppedTiles()
 {
 	steppedTiles = validTiles;
+}
+
+vector<glm::ivec2> TileMap::getItemsPositions()
+{
+	return itemsPositions;
 }
