@@ -3,6 +3,7 @@
 
 #include "Scene.h"
 #include "Text.h"
+#include "TexturedQuad.h"
 #include <vector>
 
 using namespace std;
@@ -26,11 +27,18 @@ private:
 	static int currentScene;
 	TexturedQuad* hudBackground;
 	vector<TexturedQuad*> numbers;
-	Texture hudBackgroundTexture, numbersTexture;
+	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, timeTexture;
+	TexturedQuad* heart, *scoreHud, *timeHud;
 	int lives, score; // para que sea persistente entre niveles
 	Text HUDText; // para HUD
 	glm::mat4 projection;
 	ShaderProgram texProgram;	// pasarlo a la clase Game mas adelante
+
+	enum VampireAnimations
+	{
+		HEART_ANIMATION
+	};
+
 };
 
 
