@@ -18,7 +18,7 @@ public:
 	~Player();
 
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime, int& score);
+	void update(int deltaTime, int& score, int& lives);
 	void render();
 
 	void setTileMap(TileMap* tileMap);

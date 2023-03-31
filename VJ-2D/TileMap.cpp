@@ -122,7 +122,7 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 		for (int i = 0; i < mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if (tile != 0 && tile != 8)
+			if (tile != 0 && tile != 8 && tile != 6 && tile != 3 && tile != 9)
 			{
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
@@ -130,7 +130,7 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 					texCoordTile[0] = glm::vec2(0.f, 0.f);
 				else if (tile == 2)
 					texCoordTile[0] = glm::vec2(0.f, 0.5f);
-				else if (tile == 3)
+				else if (tile == -1)
 					texCoordTile[0] = glm::vec2(0.5f, 0.f);
 				else if (tile == 5)
 					texCoordTile[0] = glm::vec2(0.5f, 0.5f);
@@ -156,6 +156,15 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 			}
 			if (tile == 8) {
 				itemsPositions.push_back(glm::ivec2( i * tileWidth, j * tileHeight));
+			}
+			if (tile == 3) {
+				soldiersPositions.push_back(glm::ivec2(i * tileWidth, j * tileHeight));
+			}
+			if (tile == 6) {
+				aliensPositions.push_back(glm::ivec2(i * tileWidth, j * tileHeight));
+			}
+			if (tile == 9) {
+				playerInitPos = glm::ivec2(i * tileWidth, j * tileHeight);
 			}
 		}
 	}
@@ -223,7 +232,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / tileHeight; // y ref. es la de abajo
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8 && map[y * mapSize.x + x] != 3 && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9)
 		{
 			if (*posY - tileHeight * y + size.y <= 6)
 			{
@@ -263,7 +272,7 @@ bool TileMap::collisionMoveUpAnything(const glm::ivec2& pos, const glm::ivec2& s
 	y = (pos.y - 1) / tileHeight;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8 && map[y * mapSize.x + x] != 3 && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9)
 		{
 			return true;
 		}
@@ -279,7 +288,7 @@ int TileMap::getTileInPos(int x, int y) const
 
 void TileMap::tileStepped(int x, int y)
 {
-	map[y * mapSize.x + x] = 3;
+	map[y * mapSize.x + x] = -1;
 	prepareArrays(padding, texProgram);	// padding es minCoords (0, 40)
 	steppedTiles += 1;
 }
@@ -302,4 +311,20 @@ void TileMap::setAllSteppedTiles()
 vector<glm::ivec2> TileMap::getItemsPositions()
 {
 	return itemsPositions;
+}
+
+vector<glm::ivec2> TileMap::getSoldiersPositions()
+{
+	return soldiersPositions;
+}
+
+
+vector<glm::ivec2> TileMap::getAliensPositions()
+{
+	return aliensPositions;
+}
+
+glm::ivec2 TileMap::getPlayerInitPos()
+{
+	return playerInitPos;
 }

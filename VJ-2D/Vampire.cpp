@@ -14,29 +14,46 @@ Vampire::~Vampire()
 
 void Vampire::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 {
-	spritesheet.loadFromFile("images/skeleton.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	size = glm::ivec2(25, 35);
-	sprite = Sprite::createSprite(size, glm::vec2(0.25, 0.5), &spritesheet, &shaderProgram); // para el quad representado (+ tamaño frame)
-	sprite->setNumberAnimations(3);	// hay que poner el numero de animaciones de Animations
+	spritesheet.loadFromFile("images/marspeople.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	size = glm::ivec2(35, 35);
+	sprite = Sprite::createSprite(size, glm::vec2(1/10.f, 0.5f), &spritesheet, &shaderProgram); // para el quad representado (+ tamaño frame)
+	sprite->setNumberAnimations(4);	// hay que poner el numero de animaciones de Animations
 
 	sprite->setAnimationSpeed(MOVE_LEFT, 8);
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.5f));
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.5f));
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.5f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(1/10.f, 0.f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(2/10.f, 0.f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(3/10.f, 0.f));
+	sprite->addKeyframe(MOVE_LEFT, glm::vec2(4/10.f, 0.f));
 
 	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.f));
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(5 / 10.f, 0.f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(6 / 10.f, 0.f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(7 / 10.f, 0.f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(8 / 10.f, 0.f));
+	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(9 / 10.f, 0.f));
 
-	sprite->setAnimationSpeed(FLY, 0);
-	sprite->addKeyframe(FLY, glm::vec2(0.f, 0.f));
+	sprite->setAnimationSpeed(FLY_LEFT, 8);
+	sprite->addKeyframe(FLY_LEFT, glm::vec2(0.f, 0.5f));
+	sprite->addKeyframe(FLY_LEFT, glm::vec2(1 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_LEFT, glm::vec2(2 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_LEFT, glm::vec2(3 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_LEFT, glm::vec2(4 / 10.f, 0.5f));
+
+	sprite->setAnimationSpeed(FLY_RIGHT, 8);
+	sprite->addKeyframe(FLY_RIGHT, glm::vec2(5 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_RIGHT, glm::vec2(6 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_RIGHT, glm::vec2(7 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_RIGHT, glm::vec2(8 / 10.f, 0.5f));
+	sprite->addKeyframe(FLY_RIGHT, glm::vec2(9 / 10.f, 0.5f));
 
 	//currentForm = 0; <- de momento no se usa
 	//speed.x = 2; <- se inicializan en el update()
 	//speed.y = -2;
 	sprite->changeAnimation(MOVE_RIGHT, true);
 	tileMapDispl = tileMapPos;
+	//hitboxPos = glm::vec2(posVampire.x + 5, posVampire.y + 10);
+	//hitboxSize = glm::vec2(25, 25);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posVampire.x), float(tileMapDispl.y + posVampire.y))); // default value?
 
 	currentTime = 0.0;
@@ -59,15 +76,18 @@ void Vampire::update(int deltaTime)
 
 	if (currentTime == -1) { // si después de eso estamos aquí
 
-		if (sprite->animation() != FLY) { // Cambiar a murciélago
-			if (sprite->animation() == MOVE_RIGHT)
+		if (sprite->animation() != FLY_LEFT && sprite->animation() != FLY_RIGHT) { // Cambiar a murciélago
+			if (sprite->animation() == MOVE_RIGHT) {
 				speed.x = 2;
-			else
+				sprite->changeAnimation(FLY_RIGHT, true);
+			}
+			else {
 				speed.x = -2;
+				sprite->changeAnimation(FLY_LEFT, true);
+			}
 
 			speed.y = -2;
 			currentTime = 0.0;
-			sprite->changeAnimation(FLY, true);
 
 		}else { // Cambiar a humano (si sobre un suelo)
 			// Eje x //
@@ -102,13 +122,13 @@ void Vampire::update(int deltaTime)
 
 	}else{ // Comportamiento cuando no se transforma
 
-		if (sprite->animation() != FLY) { // FORMA "HUMANA"
+		if (sprite->animation() != FLY_LEFT && sprite->animation() != FLY_RIGHT) { // FORMA "HUMANA"
 			
 			int Yplatform = posVampire.y + 35; // para los collisionMoveDown
 
 			if (sprite->animation() == MOVE_RIGHT) {
 
-				if (map->collisionMoveRight(glm::ivec2(posVampire.x + 2, posVampire.y), glm::ivec2(25, 35)) ||
+				if (map->collisionMoveRight(glm::ivec2(posVampire.x + 2, posVampire.y), glm::ivec2(35, 35)) ||
 					!map->collisionMoveDown(glm::ivec2(posVampire.x + 27, Yplatform), glm::ivec2(1, 1), &Yplatform)) // si hay muro enfrente o NO hay plataforma que pisar (pasarle Yplatform es sólo para relleno)
 					sprite->changeAnimation(MOVE_LEFT, true);
 
@@ -116,7 +136,7 @@ void Vampire::update(int deltaTime)
 		
 			}else {// caso MOVE_LEFT
 
-				if (map->collisionMoveLeft(glm::ivec2(posVampire.x - 2, posVampire.y), glm::ivec2(25, 35)) ||
+				if (map->collisionMoveLeft(glm::ivec2(posVampire.x - 2, posVampire.y), glm::ivec2(35, 35)) ||
 					!map->collisionMoveDown(glm::ivec2(posVampire.x - 3, Yplatform), glm::ivec2(1, 1), &Yplatform)) // (igual)
 					sprite->changeAnimation(MOVE_RIGHT, true);
 
@@ -127,15 +147,19 @@ void Vampire::update(int deltaTime)
 		else { // FORMA MURCIÉLAGO
 			// Eje x //
 			if (speed.x > 0) {
-				if (map->collisionMoveRight(glm::ivec2(posVampire.x + speed.x, posVampire.y), size))
+				if (map->collisionMoveRight(glm::ivec2(posVampire.x + speed.x, posVampire.y), size)) {
 					speed.x = -2;
+					sprite->changeAnimation(FLY_LEFT, true);
+				}
 				else
 					posVampire.x += speed.x;
 
 			}
 			else {
-				if (map->collisionMoveLeft(glm::ivec2(posVampire.x + speed.x, posVampire.y), size))
+				if (map->collisionMoveLeft(glm::ivec2(posVampire.x + speed.x, posVampire.y), size)) {
 					speed.x = 2;
+					sprite->changeAnimation(FLY_RIGHT, true);
+				}
 				else
 					posVampire.x += speed.x;
 			}

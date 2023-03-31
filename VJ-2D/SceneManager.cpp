@@ -70,6 +70,13 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 	
 	sceneArray[currentScene]->update(deltaTime, lives, score);
 
+	if (lives == 0) {
+		Game::instance().setStart(false);
+		currentScene = 0;
+		lives = 3;
+		score = 0;
+		SoundManager::instance().playMenu();
+	}
 	
 	if (sceneArray[currentScene]->getDoorEntered()) {
 		// Reseteamos el nivel actual y pasamos al siguiente
