@@ -74,7 +74,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	hitboxPos = glm::ivec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
 }
 
-void Player::update(int deltaTime, int& score)
+void Player::update(int deltaTime, int& score, int& lives)
 {
 	sprite->update(deltaTime);
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
@@ -234,6 +234,13 @@ void Player::update(int deltaTime, int& score)
 		else if ((map->getTileInPos((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 2) {
 			++score;
 			map->tileStepped((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20);
+		}
+		if ((map->getTileInPos(hitboxPos.x / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
+			this->hit(lives);
+		}
+		// playerxright
+		else if ((map->getTileInPos((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
+			this->hit(lives);
 		}
 	}
 	

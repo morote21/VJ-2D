@@ -10,9 +10,6 @@ using namespace std;
 #define SCREEN_X 0
 #define SCREEN_Y 40
 
-#define INIT_PLAYER_X_TILES 3
-#define INIT_PLAYER_Y_TILES 18
-
 #define SIZEITEMS_X 16
 #define SIZEITEMS_Y 16
 
@@ -50,7 +47,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setStartingPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY())); // ¿LIGADO AL NIVEL?
+	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y)); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
 	
 
@@ -85,15 +82,23 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem4].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem4].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
-	testSkel.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES-3) * map->getTileSizeY()+5 )); // 1a plataforma desde abajo, sin paredes
+	for (int i = 0; i < map->getSoldiersPositions().size(); i++) {
+		Skeleton *testSkel = new Skeleton();
+		testSkel->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		testSkel->setPosition(glm::vec2(map->getSoldiersPositions()[i].x, map->getSoldiersPositions()[i].y + 2)); // 1a plataforma desde abajo, sin paredes
+		testSkel->setTileMap(map);
+		testSkelArray.push_back(testSkel);
+	}
 	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
-	testSkel.setTileMap(map);
 
-	testVamp.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), (INIT_PLAYER_Y_TILES - 3) * map->getTileSizeY() + 5)); // 1a plataforma desde abajo, sin paredes
+	for (int i = 0; i < map->getAliensPositions().size(); i++) {
+		Vampire *testVamp = new Vampire();
+		testVamp->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		testVamp->setPosition(glm::vec2(map->getAliensPositions()[i].x, map->getAliensPositions()[i].y + 5)); // 1a plataforma desde abajo, sin paredes
+		testVamp->setTileMap(map);
+		testVampArray.push_back(testVamp);
+	}
 	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
-	testVamp.setTileMap(map);
 
 	pauseMenu.init();
 
@@ -134,28 +139,38 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			if (timer == 0)
 				cout << "Time Up!" << endl;
 		}
-		player->update(deltaTime, score);
+		player->update(deltaTime, score, lives);
 		key.update(deltaTime);
 		door.update(deltaTime, keyCollected);
 
 		testGem.update(deltaTime);
 		testLife.update(deltaTime);
 		testWatch.update(deltaTime, timeState);
-
+		
 		if (timeState == 2) { // para evitar que se muevan si no se mueve todo
-			testSkel.update(deltaTime);
-			testVamp.update(deltaTime);
+			for (int i = 0; i < testSkelArray.size(); i++) {
+				testSkelArray[i]->update(deltaTime);
+			}
+			for (int i = 0; i < testVampArray.size(); i++) {
+				testVampArray[i]->update(deltaTime);
+			}
 		}
-
+		
 		// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
 		if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
-
-			if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
-			 || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
-				player->hit(lives);
+			for (int i = 0; i < testSkelArray.size(); i++) {
+				if (samePosition(testSkelArray[i]->getPosition(), testSkelArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+					player->hit(lives);
+			}
+			for (int i = 0; i < testVampArray.size(); i++) {
+				if (samePosition(testVampArray[i]->getPosition(), testVampArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+					player->hit(lives);
+			}
+			//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
+			// || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+			//	player->hit(lives);
 		}
 
-		cout << player->getPosition().x << " " << player->getPosition().y << endl;
 
 		// Colisión con objetos coleccionables (para recogerlos)
 		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
@@ -210,9 +225,15 @@ int Scene::render()
 	testWatch.render();
 
 	door.render();
-	testSkel.render();
-
-	testVamp.render();
+	
+	for (int i = 0; i < testSkelArray.size(); i++) {
+		testSkelArray[i]->render();
+		
+	}
+	
+	for (int i = 0; i < testVampArray.size(); i++) {
+		testVampArray[i]->render();
+	}
 
 	player->render();
 

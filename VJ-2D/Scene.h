@@ -50,8 +50,8 @@ private:
 	Key key;
 	Door door;
 	Pause pauseMenu;
-	Skeleton testSkel;
-	Vampire testVamp;
+	vector<Skeleton*> testSkelArray;
+	vector<Vampire*> testVampArray;
 
 	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
 	ExtraLife testLife;

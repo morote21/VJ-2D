@@ -48,17 +48,6 @@ void Skeleton::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(10 / 12.f, 0.5f));
 	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(11 / 12.f, 0.5f));
 
-
-	/*
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.f, 0.5f));
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.25f, 0.5f));
-	sprite->addKeyframe(MOVE_LEFT, glm::vec2(0.5f, 0.5f));
-
-	sprite->setAnimationSpeed(MOVE_RIGHT, 8);
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.f, 0.f));
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.25f, 0.f));
-	sprite->addKeyframe(MOVE_RIGHT, glm::vec2(0.5f, 0.f));
-	*/
 	sprite->changeAnimation(MOVE_RIGHT, true);
 	tileMapDispl = tileMapPos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posSkeleton.x), float(tileMapDispl.y + posSkeleton.y))); // default value?

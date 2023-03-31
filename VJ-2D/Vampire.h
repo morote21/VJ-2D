@@ -25,7 +25,7 @@ public:
 	glm::vec2 getPosition();
 
 private:
-	glm::ivec2 tileMapDispl, posVampire, size; // size2 para forma murciélago?
+	glm::ivec2 tileMapDispl, posVampire, size, hitboxPos, hitboxSize; // size2 para forma murciélago?
 
 	glm::ivec2 speed; // en principio sólo para cuando forma de murciélago
 	//char currentForm; // 0: humano, 1: murciélago <- de momento no se usa
@@ -37,7 +37,7 @@ private:
 
 	enum VampireAnimations
 	{
-		MOVE_LEFT, MOVE_RIGHT, FLY
+		MOVE_LEFT, MOVE_RIGHT, FLY_LEFT, FLY_RIGHT
 	};
 
 
