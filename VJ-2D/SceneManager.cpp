@@ -28,6 +28,21 @@ void SceneManager::init()
 	glm::vec2 texCoords[2] = { glm::vec2(0.0f, 0.0f), glm::vec2(1.f, 1.f) };
 	hudBackgroundTexture.loadFromFile("images/hudbackground.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	hudBackground = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+
+	heartTexture.loadFromFile("images/heart.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(20.f, 0.f); geom[1] = glm::vec2(70.f, 40.f);
+	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(0.20f, 1.0f);
+	heart = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+
+	scoreTexture.loadFromFile("images/score.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(170.f, 5.f); geom[1] = glm::vec2(280.f, 35.f);
+	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(1.0f, 1.0f);
+	scoreHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+
+	timeTexture.loadFromFile("images/time.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(480.f, 5.f); geom[1] = glm::vec2(560.f, 35.f);
+	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(1.0f, 1.0f);
+	timeHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 	
 	numbersTexture.loadFromFile("images/numbers.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
@@ -43,7 +58,6 @@ void SceneManager::init()
 
 	lives = 3;
 	score = 0;
-
 }
 
 void SceneManager::update(int deltaTime) // ??? (keys)
@@ -94,6 +108,7 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 			SoundManager::instance().playMenu();
 		}
 	}
+
 }
 
 void SceneManager::render()
@@ -109,7 +124,9 @@ void SceneManager::render()
 	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 
 	hudBackground->render(hudBackgroundTexture);
-
+	heart->render(heartTexture);
+	scoreHud->render(scoreTexture);
+	timeHud->render(timeTexture);
 	// render de HUD aquí
 
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(70, 5, 0.f));
