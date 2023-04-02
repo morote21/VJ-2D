@@ -5,7 +5,7 @@ using namespace std;
 SoundManager::SoundManager()
 {
 	engine = NULL;
-	menu = stage1 = stage2 = stage3 = NULL;
+	menu = stage1 = stage2 = stage3 = item = death = NULL;
 }
 
 SoundManager::~SoundManager()
@@ -18,7 +18,6 @@ void SoundManager::init()
 {
 	engine = irrklang::createIrrKlangDevice();
 	menu = engine->play2D("sounds/menu.mp3", true, true);
-	cout << "musica: " << menu << endl;
 	menu->setVolume(0.4f);
 
 	stage1 = engine->play2D("sounds/stage1.mp3", true, true);
@@ -29,6 +28,9 @@ void SoundManager::init()
 
 	stage3 = engine->play2D("sounds/stage3.mp3", true, true);
 	stage3->setVolume(0.2f);
+
+	//item = engine->play2D("sounds/coin.mp3", true, true);
+	//item->setVolume(0.5f);
 }
 
 
@@ -71,3 +73,26 @@ void SoundManager::playStage(int nStage)
 	}
 }
 
+void SoundManager::playItem()
+{
+	item = engine->play2D("sounds/coin.mp3", false, true);
+	item->setIsPaused(false);
+	item->setVolume(0.5f);
+	item->setPlayPosition(200);
+}
+
+void SoundManager::playDeath()
+{
+	item = engine->play2D("sounds/death.mp3", false, true);
+	item->setIsPaused(false);
+	item->setVolume(0.4f);
+	item->setPlayPosition(320);
+}
+
+void SoundManager::playDoor()
+{
+	door = engine->play2D("sounds/door.mp3", false, true);
+	door->setIsPaused(false);
+	door->setVolume(0.4f);
+	door->setPlayPosition(0);
+}
