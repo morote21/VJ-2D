@@ -20,7 +20,7 @@ void Door::init(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos,  ShaderProg
 	sprite->setAnimationSpeed(CLOSED, 1);
 	sprite->addKeyframe(CLOSED, glm::vec2(0.f, 0.f));
 
-	sprite->setAnimationSpeed(OPENING, 14);
+	sprite->setAnimationSpeed(OPENING, 20);
 	sprite->addKeyframe(OPENING, glm::vec2(1/6.f, 0.f));
 	sprite->addKeyframe(OPENING, glm::vec2(2/6.f, 0.f));
 	sprite->addKeyframe(OPENING, glm::vec2(3/6.f, 0.f));

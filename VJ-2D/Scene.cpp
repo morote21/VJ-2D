@@ -178,15 +178,19 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
 			testGem.setVisibility(false);
 			score += 100;
+			SoundManager::instance().playItem();
 		}
 
 		if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ) {
 			testLife.setVisibility(false);
 			++lives;
+			SoundManager::instance().playItem();
 		}
 
-		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
 			testWatch.activate(timeState);
+			SoundManager::instance().playItem();
+		}
 
 		if (timer == 0) {
 			player->hit(lives);
@@ -196,6 +200,7 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
 			cout << "Key collected" << endl;
 			keyCollected = true;
+			SoundManager::instance().playDoor();
 		}
 		if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
 			cout << "Door entered" << endl;

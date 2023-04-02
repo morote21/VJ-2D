@@ -17,12 +17,15 @@ public:
 
 	void init();
 	void playMenu();
+	void playItem();
 	void playStage(int nStage);
+	void playDeath();
+	void playDoor();
 	ISoundEngine* getSoundEngine();
 
 private:
 	ISoundEngine* engine;
-	ISound* menu, * stage1, * stage2, * stage3;
+	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door;
 
 };
 
