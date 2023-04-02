@@ -71,6 +71,7 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
 		currentScene = 0;
+		SoundManager::instance().playStage(currentScene);
 	}
 
 	if (Game::instance().getKey('2') && !Game::instance().getKeyAlreadyPressing('2')) {
@@ -80,12 +81,17 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
 		currentScene = 1;
+		SoundManager::instance().playStage(currentScene);
 	}
 	
 	sceneArray[currentScene]->update(deltaTime, lives, score);
 
 	if (lives == 0) {
 		Game::instance().setStart(false);
+		string levelString = "levels/level0";
+		levelString += to_string(currentScene + 1);
+		levelString += ".txt";
+		sceneArray[currentScene]->init(levelString);
 		currentScene = 0;
 		lives = 3;
 		score = 0;

@@ -24,6 +24,9 @@ public:
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
 
+	glm::ivec2 getHitboxSize() const;
+	glm::vec2 getHitboxPosition();
+
 private:
 	glm::ivec2 tileMapDispl, posVampire, size, hitboxPos, hitboxSize; // size2 para forma murciélago?
 
