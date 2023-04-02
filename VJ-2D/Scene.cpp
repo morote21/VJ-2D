@@ -47,7 +47,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	
 	player = new Player();
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y)); // ¿LIGADO AL NIVEL?
+	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y + 2)); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
 	
 
@@ -82,6 +82,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem4].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem4].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
+	testSkelArray = vector<Skeleton*>();
 	for (int i = 0; i < map->getSoldiersPositions().size(); i++) {
 		Skeleton *testSkel = new Skeleton();
 		testSkel->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -91,6 +92,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	}
 	//testSkel.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
 
+	testVampArray = vector<Vampire*>();
 	for (int i = 0; i < map->getAliensPositions().size(); i++) {
 		Vampire *testVamp = new Vampire();
 		testVamp->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -163,7 +165,7 @@ void Scene::update(int deltaTime, int& lives, int& score)
 					player->hit(lives);
 			}
 			for (int i = 0; i < testVampArray.size(); i++) {
-				if (samePosition(testVampArray[i]->getPosition(), testVampArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+				if (samePosition(testVampArray[i]->getHitboxPosition(), testVampArray[i]->getHitboxSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
 					player->hit(lives);
 			}
 			//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())

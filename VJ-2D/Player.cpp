@@ -77,6 +77,7 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 void Player::update(int deltaTime, int& score, int& lives)
 {
 	sprite->update(deltaTime);
+	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 	{
 		prevDir = 2;
@@ -222,7 +223,6 @@ void Player::update(int deltaTime, int& score, int& lives)
 		}
 	}
 
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 
 	if (!bJumping) {
 		// playerxleft
@@ -235,15 +235,15 @@ void Player::update(int deltaTime, int& score, int& lives)
 			++score;
 			map->tileStepped((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20);
 		}
-		if ((map->getTileInPos(hitboxPos.x / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
-			this->hit(lives);
-		}
-		// playerxright
-		else if ((map->getTileInPos((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
-			this->hit(lives);
-		}
 	}
 	
+	if ((map->getTileInPos(hitboxPos.x / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
+		this->hit(lives);
+	}
+	// playerxright
+	else if ((map->getTileInPos((hitboxPos.x + HITBOXOFFSETX) / 40, (hitboxPos.y + int(sprite->getSpriteSize().y)) / 20)) == 5) {
+		this->hit(lives);
+	}
 }
 
 void Player::setInvincibility(bool inv) 
@@ -265,14 +265,14 @@ void Player::setStartingPosition(const glm::vec2& pos)
 {
 	startingPosPlayer = pos;
 	posPlayer = pos;
-	hitboxPos = posPlayer;
+	hitboxPos = glm::vec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::setPosition(const glm::vec2& pos)
 {
 	posPlayer = pos;
-	hitboxPos = posPlayer;
+	hitboxPos = glm::vec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 
@@ -314,8 +314,9 @@ void Player::hit(int& lives)
 	else
 		--lives;
 
-
-	posPlayer = startingPosPlayer;
+	falling = false;
+	posPlayer = glm::vec2(startingPosPlayer.x, startingPosPlayer.y);
+	hitboxPos = glm::vec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
 	bJumping = false; // para resetear el estado
 	sprite->changeAnimation(STAND_RIGHT, true);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
