@@ -39,10 +39,10 @@ void SceneManager::init()
 	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(1.0f, 1.0f);
 	scoreHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
-	timeTexture.loadFromFile("images/time.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	geom[0] = glm::vec2(480.f, 5.f); geom[1] = glm::vec2(560.f, 35.f);
+	missionTexture.loadFromFile("images/mission.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(440.f, 5.f); geom[1] = glm::vec2(600.f, 35.f);
 	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(1.0f, 1.0f);
-	timeHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+	missionHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 	
 	numbersTexture.loadFromFile("images/numbers.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
@@ -102,7 +102,7 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		SoundManager::instance().playMenu();
 	}
 	
-	if (sceneArray[currentScene]->getDoorEntered()) {
+	if (sceneArray[currentScene]->getStageCompleted()) {
 		// Reseteamos el nivel actual y pasamos al siguiente
 		string levelString = "levels/level0";
 		levelString += to_string(currentScene + 1);
@@ -135,38 +135,41 @@ void SceneManager::render()
 
 	hudBackground->render(hudBackgroundTexture);
 	heart->render(heartTexture);
-	scoreHud->render(scoreTexture);
-	timeHud->render(timeTexture);
+	//scoreHud->render(scoreTexture);
+	missionHud->render(missionTexture);
 	// render de HUD aquí
 
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(70, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[lives]->render(numbersTexture);
 
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(300, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(120, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int((score / 10000) % 10)]->render(numbersTexture);
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(322, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(142, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int((score / 1000) % 10)]->render(numbersTexture);
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(344, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(164, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int((score / 100) % 10)]->render(numbersTexture);
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(366, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(186, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int((score / 10) % 10)]->render(numbersTexture);
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(388, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(208, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int(score % 10)]->render(numbersTexture);
 
 
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(580, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(320, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int((timer / 10) % 10)]->render(numbersTexture);
-	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(602, 5, 0.f));
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(342, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[int(timer % 10)]->render(numbersTexture);
 
+	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(610, 5, 0.f));
+	texProgram.setUniformMatrix4f("modelview", modelview);
+	numbers[currentScene+1]->render(numbersTexture);
 
 }
 

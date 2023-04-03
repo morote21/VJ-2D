@@ -27,8 +27,8 @@ private:
 	static int currentScene;
 	TexturedQuad* hudBackground;
 	vector<TexturedQuad*> numbers;
-	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, timeTexture;
-	TexturedQuad* heart, *scoreHud, *timeHud;
+	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, missionTexture;
+	TexturedQuad* heart, *scoreHud, * missionHud;
 	int lives, score; // para que sea persistente entre niveles
 	Text HUDText; // para HUD
 	glm::mat4 projection;
