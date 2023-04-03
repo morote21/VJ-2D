@@ -62,7 +62,7 @@ private:
 	ShaderProgram texProgram;
 	float currentTime; // level time
 	glm::mat4 projection;
-	bool keyCollected, pause, doorEntered, countdownDone;
+	bool keyCollected, pause, doorEntered, countdownDone, playedOne, playedTwo, playedThree, playedStart;
 	int timer, countdownTimer;
 	char timeState; // 0: objetos congelados (debería tambien timer), 1: enemigos congelados, 2: todo en marcha
 

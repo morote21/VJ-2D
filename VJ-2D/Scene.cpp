@@ -35,6 +35,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	doorEntered = false;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
+	playedOne = playedTwo = playedThree = playedStart = false;
 	timeState = 2;
 	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
 
@@ -136,15 +137,31 @@ void Scene::update(int deltaTime, int& lives, int& score)
 		countdownTimer += deltaTime;
 		if (countdownTimer <= 1000.f) {
 			countdown->changeAnimation(THREE, false);
+			if (!playedOne) {
+				SoundManager::instance().playThree();
+				playedOne = true;
+			}
 		}
 		else if (countdownTimer <= 2000.f) {
 			countdown->changeAnimation(TWO, false);
+			if (!playedTwo) {
+				SoundManager::instance().playTwo();
+				playedTwo = true;
+			}
 		}
 		else if (countdownTimer <= 3000.f) {
 			countdown->changeAnimation(ONE, false);
+			if (!playedThree) {
+				SoundManager::instance().playOne();
+				playedThree = true;
+			}
 		}
 		else {
 			countdownDone = true;
+			if (!playedStart) {
+				SoundManager::instance().playStart();
+				playedStart = true;
+			}
 		}
 	}
 	else {
