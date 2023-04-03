@@ -21,11 +21,15 @@ public:
 	void playStage(int nStage);
 	void playDeath();
 	void playDoor();
+	void playThree();
+	void playTwo();
+	void playOne();
+	void playStart();
 	ISoundEngine* getSoundEngine();
 
 private:
 	ISoundEngine* engine;
-	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door;
+	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door, * three, * two, * one, * start;
 
 };
 

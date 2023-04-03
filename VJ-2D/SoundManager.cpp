@@ -96,3 +96,35 @@ void SoundManager::playDoor()
 	door->setVolume(0.4f);
 	door->setPlayPosition(0);
 }
+
+void SoundManager::playThree()
+{
+	three = engine->play2D("sounds/three.mp3", false, true);
+	three->setIsPaused(false);
+	three->setVolume(0.4f);
+	three->setPlayPosition(100);
+}
+
+void SoundManager::playTwo()
+{
+	two = engine->play2D("sounds/two.mp3", false, true);
+	two->setIsPaused(false);
+	two->setVolume(0.4f);
+	two->setPlayPosition(100);
+}
+
+void SoundManager::playOne()
+{
+	one = engine->play2D("sounds/one.mp3", false, true);
+	one->setIsPaused(false);
+	one->setVolume(0.4f);
+	one->setPlayPosition(100);
+}
+
+void SoundManager::playStart()
+{
+	start = engine->play2D("sounds/start.mp3", false, true);
+	start->setIsPaused(false);
+	start->setVolume(0.4f);
+	start->setPlayPosition(100);
+}
