@@ -124,3 +124,8 @@ glm::vec2 Sprite::getSpriteSize() const
 	return spriteSize;
 }
 
+bool Sprite::animationFinished()
+{
+	return (animState == 0);
+}
+
