@@ -35,6 +35,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	doorEntered = false;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
+	stageCompleted = false;
 	playedOne = playedTwo = playedThree = playedStart = false;
 	timeState = 2;
 	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
@@ -68,6 +69,20 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	countdown->changeAnimation(THREE, false);
 
+
+	stageCompletedTexture.loadFromFile("images/missioncomplete.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	stageCompleteSprite = Sprite::createSprite(glm::vec2(400, 100), glm::vec2(1.f, 1/2.f), &stageCompletedTexture, &texProgram);
+	stageCompleteSprite->setPosition(glm::vec2(120, 200));
+
+	stageCompleteSprite->setNumberAnimations(2);
+
+	stageCompleteSprite->setAnimationSpeed(ONE, 0);
+	stageCompleteSprite->addKeyframe(ONE, glm::vec2(0.f, 0.f));
+
+	stageCompleteSprite->setAnimationSpeed(TWO, 0);
+	stageCompleteSprite->addKeyframe(TWO, glm::vec2(0.f, 1/2.f));
+
+	stageCompleteSprite->changeAnimation(ONE, true);
 
 	random_device rd;
 	std::mt19937 mt(rd());
@@ -125,7 +140,9 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
 	countdownTimer = 0.f;
+	completeTimer = 0.f;
 	countdownDone = false;
+	playedMissionComplete = false;
 }
 
 void Scene::update(int deltaTime, int& lives, int& score)
@@ -163,6 +180,21 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				playedStart = true;
 			}
 		}
+	}
+	else if (doorEntered) {
+		completeTimer += deltaTime;
+		if (!playedMissionComplete) {
+			SoundManager::instance().playMissionComplete();
+			playedMissionComplete = true;
+		}
+		if (timer > 0) {	//se hace asi para el efecto de sumar time al score 
+			for (int j = 0; j < 10000; j++);
+			timer -= 1;
+			score += 1;
+		}
+
+		if (completeTimer >= 3000.f)
+			stageCompleted = true;
 	}
 	else {
 		if (!pauseMenu.isPaused()) {
@@ -299,6 +331,15 @@ int Scene::render()
 		countdown->render();
 	}
 
+	if (doorEntered) {
+		stageCompleteSprite->render();
+		if (completeTimer >= 1000) {
+			if (stageCompleteSprite->animation() == ONE) {
+				stageCompleteSprite->changeAnimation(TWO, true);
+			}
+		}
+	}
+
 	if (pauseMenu.isPaused()) {
 		pauseMenu.render();
 	}
@@ -348,4 +389,8 @@ bool Scene::samePosition(glm::vec2 objPos, glm::vec2 objSize, glm::vec2 playerPo
 
 bool Scene::getDoorEntered() {
 	return doorEntered;
+}
+
+bool Scene::getStageCompleted() {
+	return stageCompleted;
 }

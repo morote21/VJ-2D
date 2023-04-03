@@ -128,3 +128,11 @@ void SoundManager::playStart()
 	start->setVolume(0.4f);
 	start->setPlayPosition(100);
 }
+
+void SoundManager::playMissionComplete()
+{
+	missioncomplete = engine->play2D("sounds/missioncomplete.mp3", false, true);
+	missioncomplete->setIsPaused(false);
+	missioncomplete->setVolume(0.4f);
+	missioncomplete->setPlayPosition(100);
+}

@@ -25,12 +25,13 @@ public:
 	void playTwo();
 	void playOne();
 	void playStart();
+	void playMissionComplete();
 	ISoundEngine* getSoundEngine();
 
 private:
 	ISoundEngine* engine;
 	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door, * three, * two, * one, * start;
-
+	ISound* missioncomplete;
 };
 
 #endif	

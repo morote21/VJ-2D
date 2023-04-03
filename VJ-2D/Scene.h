@@ -38,6 +38,7 @@ public:
 
 	bool samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size);
 	bool getDoorEntered();
+	bool getStageCompleted();
 
 private:
 	void initShaders();
@@ -46,13 +47,13 @@ private:
 	TileMap* map;
 	Player* player;
 	TexturedQuad* background;
-	Texture levelBackground, countdownTexture;
+	Texture levelBackground, countdownTexture, stageCompletedTexture;
 	Key key;
 	Door door;
 	Pause pauseMenu;
 	vector<Skeleton*> testSkelArray;
 	vector<Vampire*> testVampArray;
-	Sprite* countdown;
+	Sprite* countdown, *stageCompleteSprite;
 
 	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
 	ExtraLife testLife;
@@ -62,8 +63,8 @@ private:
 	ShaderProgram texProgram;
 	float currentTime; // level time
 	glm::mat4 projection;
-	bool keyCollected, pause, doorEntered, countdownDone, playedOne, playedTwo, playedThree, playedStart;
-	int timer, countdownTimer;
+	bool keyCollected, playedMissionComplete, pause, doorEntered, stageCompleted, countdownDone, playedOne, playedTwo, playedThree, playedStart;
+	int timer, countdownTimer, completeTimer;
 	char timeState; // 0: objetos congelados (debería tambien timer), 1: enemigos congelados, 2: todo en marcha
 
 	//Text HUDText; // Is this unnecessary? (probably, just one)
