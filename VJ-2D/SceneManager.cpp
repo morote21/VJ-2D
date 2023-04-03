@@ -19,9 +19,9 @@ int SceneManager::currentScene;
 void SceneManager::init()
 {
 	initShaders();
-	Scene *scene1 = new Scene(), *scene2 = new Scene();
-	scene1->init("levels/level01.txt"); scene2->init("levels/level02.txt");
-	sceneArray.push_back(scene1); sceneArray.push_back(scene2);
+	Scene* scene1 = new Scene(), * scene2 = new Scene(), * scene3 = new Scene();
+	scene1->init("levels/level01.txt"); scene2->init("levels/level02.txt"); scene3->init("levels/level03.txt");
+	sceneArray.push_back(scene1); sceneArray.push_back(scene2); sceneArray.push_back(scene3);
 	currentScene = 0;
 
 	glm::vec2 geom[2] = { glm::vec2(0.f, 0.f), glm::vec2(SCREEN_WIDTH, 40) };
@@ -83,6 +83,18 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
 		currentScene = 1;
+		score = 0;
+		lives = 3;
+		SoundManager::instance().playStage(currentScene);
+	}
+
+	if (Game::instance().getKey('3') && !Game::instance().getKeyAlreadyPressing('3')) {
+		Game::instance().setKeyAlreadyPressing('3');
+		string levelString = "levels/level0";
+		levelString += to_string(currentScene + 1);
+		levelString += ".txt";
+		sceneArray[currentScene]->init(levelString);
+		currentScene = 2;
 		score = 0;
 		lives = 3;
 		SoundManager::instance().playStage(currentScene);

@@ -54,8 +54,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	
 	
 	countdownTexture.loadFromFile("images/countdown.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	countdown = Sprite::createSprite(glm::vec2(100, 150), glm::vec2(1 / 3.f, 1.f), &countdownTexture, &texProgram); // para el quad representado (+ tamaño frame)
-	countdown->setPosition(glm::vec2(280, 180));
+	countdown = Sprite::createSprite(glm::vec2(120, 150), glm::vec2(1 / 3.f, 1.f), &countdownTexture, &texProgram); // para el quad representado (+ tamaño frame)
+	countdown->setPosition(glm::vec2(260, 180));
 	countdown->setNumberAnimations(3);	// hay que poner el numero de animaciones de Animations
 
 	countdown->setAnimationSpeed(THREE, 0);
@@ -71,8 +71,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 
 	stageCompletedTexture.loadFromFile("images/missioncomplete.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	stageCompleteSprite = Sprite::createSprite(glm::vec2(400, 100), glm::vec2(1.f, 1/2.f), &stageCompletedTexture, &texProgram);
-	stageCompleteSprite->setPosition(glm::vec2(120, 200));
+	stageCompleteSprite = Sprite::createSprite(glm::vec2(550, 100), glm::vec2(1.f, 1/2.f), &stageCompletedTexture, &texProgram);
+	stageCompleteSprite->setPosition(glm::vec2(50, 200));
 
 	stageCompleteSprite->setNumberAnimations(2);
 
@@ -106,13 +106,22 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 
 	key.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(int(itemsPositions[indexItem1].x) + int((40 - SIZEITEMS_X) / 2), int(itemsPositions[indexItem1].y) + int((40 - SIZEITEMS_Y) / 2)), texProgram); // this could be on the object map
-	
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
+	
 
+	dist = std::uniform_int_distribution<int>(2, 58);
+	
+	cout << mapPath << endl;
+	gemSec = dist(mt);
+	cout << "segundo aparicion gema: " << gemSec << endl;
 	testGem.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem2].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem2].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
+	lifeSec = dist(mt);
+	cout << "segundo aparicion life: " << lifeSec << endl;
 	testLife.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem3].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem3].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
+	watchSec = dist(mt);
+	cout << "segundo aparicion watch: " << watchSec << endl;
 	testWatch.init(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem4].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem4].y + int((40 - SIZEITEMS_Y) / 2)), texProgram);
 
 	testSkelArray = vector<Skeleton*>();
@@ -254,6 +263,27 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				//	player->hit(lives);
 			}
 
+			
+			if (lifeSec != -1) {
+				if (timer == lifeSec) {
+					testLife.setVisibility(true);
+					lifeSec = -1;
+				}
+			}
+
+			if (gemSec != -1) {
+				if (timer == gemSec) {
+					testGem.setVisibility(true);
+					gemSec = -1;
+				}
+			}
+
+			if (watchSec != -1) {
+				if (timer == watchSec) {
+					testWatch.setVisibility(true);
+					watchSec = -1;
+				}
+			}
 
 			// Colisión con objetos coleccionables (para recogerlos)
 			if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
