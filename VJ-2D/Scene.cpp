@@ -134,6 +134,9 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 		testVampArray.push_back(testVamp);
 	}
 	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
+	testMummy.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	testMummy.setPosition(glm::vec2(map->getSoldiersPositions()[0].x + 18, map->getSoldiersPositions()[0].y + 2)); // 1a plataforma desde abajo, sin paredes
+	testMummy.setTileMap(map);
 
 	pauseMenu.init();
 
@@ -237,9 +240,11 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				for (int i = 0; i < testVampArray.size(); i++) {
 					testVampArray[i]->update(deltaTime);
 				}
+
+				testMummy.update(deltaTime, player->getPosition(), player->getSize());
 			}
 		
-			// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
+			// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente) (saliendo del bucle después de un hit())
 			if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
 				for (int i = 0; i < testSkelArray.size(); i++) {
 					if (samePosition(testSkelArray[i]->getPosition(), testSkelArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
@@ -252,6 +257,10 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
 				// || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
 				//	player->hit(lives);
+
+				if (testMummy.poisonExists() && samePosition(testMummy.getPoisonPosition(), testMummy.getPoisonSize(), player->getHitBoxPosition(), player->getHitBoxSize())
+				 || samePosition(testMummy.getPosition(), testMummy.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) )
+					player->hit(lives);
 			}
 
 
@@ -321,6 +330,8 @@ int Scene::render()
 		
 	}
 	
+	testMummy.render();
+
 	for (int i = 0; i < testVampArray.size(); i++) {
 		testVampArray[i]->render();
 	}

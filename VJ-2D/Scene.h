@@ -10,6 +10,7 @@
 #include "Door.h"
 #include "Skeleton.h"
 #include "Vampire.h"
+#include "Mummy.h"
 #include "Gem.h"
 #include "ExtraLife.h"
 #include "Stopwatch.h"
@@ -36,7 +37,7 @@ public:
 	void update(int deltaTime, int& lives, int& score);
 	int render(); // devuelve el timer para mostrarlo en SceneManager
 
-	bool samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size);
+	static bool samePosition(glm::vec2 e1pos, glm::vec2 e1size, glm::vec2 e2pos, glm::vec2 e2size);
 	bool getDoorEntered();
 	bool getStageCompleted();
 
@@ -53,6 +54,9 @@ private:
 	Pause pauseMenu;
 	vector<Skeleton*> testSkelArray;
 	vector<Vampire*> testVampArray;
+
+	Mummy testMummy;
+
 	Sprite* countdown, *stageCompleteSprite;
 
 	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
