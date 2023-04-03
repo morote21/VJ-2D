@@ -50,6 +50,23 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y + 2)); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
 	
+	
+	countdownTexture.loadFromFile("images/countdown.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	countdown = Sprite::createSprite(glm::vec2(100, 150), glm::vec2(1 / 3.f, 1.f), &countdownTexture, &texProgram); // para el quad representado (+ tamaño frame)
+	countdown->setPosition(glm::vec2(280, 180));
+	countdown->setNumberAnimations(3);	// hay que poner el numero de animaciones de Animations
+
+	countdown->setAnimationSpeed(THREE, 0);
+	countdown->addKeyframe(THREE, glm::vec2(0.f, 0.f));
+
+	countdown->setAnimationSpeed(TWO, 0);
+	countdown->addKeyframe(TWO, glm::vec2(1 / 3.f, 0.f));
+
+	countdown->setAnimationSpeed(ONE, 0);
+	countdown->addKeyframe(ONE, glm::vec2(2 / 3.f, 0.f));
+
+	countdown->changeAnimation(THREE, false);
+
 
 	random_device rd;
 	std::mt19937 mt(rd());
@@ -106,7 +123,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 	currentTime = 0.0f;
-
+	countdownTimer = 0.f;
+	countdownDone = false;
 }
 
 void Scene::update(int deltaTime, int& lives, int& score)
@@ -114,101 +132,117 @@ void Scene::update(int deltaTime, int& lives, int& score)
 	// Pause game 
 	// Mas adelante cambiar p por la tecla escape, y entonces hacer que aparezca un menu de opciones
 	// con resume, quit o algunas otras opciones como size de la ventana
-
-
-	if (!pauseMenu.isPaused()) {
-
-		if (Game::instance().getKey(27) && !Game::instance().getKeyAlreadyPressing(27)) {
-			Game::instance().setKeyAlreadyPressing(27);
-			pauseMenu.setPaused(true);
+	if (!countdownDone) {
+		countdownTimer += deltaTime;
+		if (countdownTimer <= 1000.f) {
+			countdown->changeAnimation(THREE, false);
 		}
-		// Make key appear
-		if (Game::instance().getKey('k') && !Game::instance().getKeyAlreadyPressing('k')) {
-			Game::instance().setKeyAlreadyPressing('k');
-			map->setAllSteppedTiles();
+		else if (countdownTimer <= 2000.f) {
+			countdown->changeAnimation(TWO, false);
 		}
-
-		// Toggle invincibility
-		if (Game::instance().getKey('g') && !Game::instance().getKeyAlreadyPressing('g')) {
-			Game::instance().setKeyAlreadyPressing('g');
-			player->setInvincibility(!player->isInvincible());
+		else if (countdownTimer <= 3000.f) {
+			countdown->changeAnimation(ONE, false);
 		}
-
-		currentTime += deltaTime;
-		if (currentTime >= 1000) {
-			currentTime = 0;
-			timer -= 1;
-			if (timer == 0)
-				cout << "Time Up!" << endl;
-		}
-		player->update(deltaTime, score, lives);
-		key.update(deltaTime);
-		door.update(deltaTime, keyCollected);
-
-		testGem.update(deltaTime);
-		testLife.update(deltaTime);
-		testWatch.update(deltaTime, timeState);
-		
-		if (timeState == 2) { // para evitar que se muevan si no se mueve todo
-			for (int i = 0; i < testSkelArray.size(); i++) {
-				testSkelArray[i]->update(deltaTime);
-			}
-			for (int i = 0; i < testVampArray.size(); i++) {
-				testVampArray[i]->update(deltaTime);
-			}
-		}
-		
-		// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
-		if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
-			for (int i = 0; i < testSkelArray.size(); i++) {
-				if (samePosition(testSkelArray[i]->getPosition(), testSkelArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
-					player->hit(lives);
-			}
-			for (int i = 0; i < testVampArray.size(); i++) {
-				if (samePosition(testVampArray[i]->getHitboxPosition(), testVampArray[i]->getHitboxSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
-					player->hit(lives);
-			}
-			//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
-			// || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
-			//	player->hit(lives);
-		}
-
-
-		// Colisión con objetos coleccionables (para recogerlos)
-		if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
-			testGem.setVisibility(false);
-			score += 100;
-			SoundManager::instance().playItem();
-		}
-
-		if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ) {
-			testLife.setVisibility(false);
-			++lives;
-			SoundManager::instance().playItem();
-		}
-
-		if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
-			testWatch.activate(timeState);
-			SoundManager::instance().playItem();
-		}
-
-		if (timer == 0) {
-			player->hit(lives);
-			timer = 60;
-		}
-
-		if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
-			cout << "Key collected" << endl;
-			keyCollected = true;
-			SoundManager::instance().playDoor();
-		}
-		if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
-			cout << "Door entered" << endl;
-			doorEntered = true;
+		else {
+			countdownDone = true;
 		}
 	}
-	else 
-		pauseMenu.update(deltaTime);
+	else {
+		if (!pauseMenu.isPaused()) {
+
+			if (Game::instance().getKey(27) && !Game::instance().getKeyAlreadyPressing(27)) {
+				Game::instance().setKeyAlreadyPressing(27);
+				pauseMenu.setPaused(true);
+			}
+			// Make key appear
+			if (Game::instance().getKey('k') && !Game::instance().getKeyAlreadyPressing('k')) {
+				Game::instance().setKeyAlreadyPressing('k');
+				map->setAllSteppedTiles();
+			}
+
+			// Toggle invincibility
+			if (Game::instance().getKey('g') && !Game::instance().getKeyAlreadyPressing('g')) {
+				Game::instance().setKeyAlreadyPressing('g');
+				player->setInvincibility(!player->isInvincible());
+			}
+
+			currentTime += deltaTime;
+			if (currentTime >= 1000) {
+				currentTime = 0;
+				timer -= 1;
+				if (timer == 0)
+					cout << "Time Up!" << endl;
+			}
+			player->update(deltaTime, score, lives);
+			key.update(deltaTime);
+			door.update(deltaTime, keyCollected);
+
+			testGem.update(deltaTime);
+			testLife.update(deltaTime);
+			testWatch.update(deltaTime, timeState);
+		
+			if (timeState == 2) { // para evitar que se muevan si no se mueve todo
+				for (int i = 0; i < testSkelArray.size(); i++) {
+					testSkelArray[i]->update(deltaTime);
+				}
+				for (int i = 0; i < testVampArray.size(); i++) {
+					testVampArray[i]->update(deltaTime);
+				}
+			}
+		
+			// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente)
+			if (!player->isInvincible()) { // tal vez queramos algo más complejo, como canBeHit(), para considerar animaciones
+				for (int i = 0; i < testSkelArray.size(); i++) {
+					if (samePosition(testSkelArray[i]->getPosition(), testSkelArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+						player->hit(lives);
+				}
+				for (int i = 0; i < testVampArray.size(); i++) {
+					if (samePosition(testVampArray[i]->getHitboxPosition(), testVampArray[i]->getHitboxSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+						player->hit(lives);
+				}
+				//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
+				// || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
+				//	player->hit(lives);
+			}
+
+
+			// Colisión con objetos coleccionables (para recogerlos)
+			if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
+				testGem.setVisibility(false);
+				score += 100;
+				SoundManager::instance().playItem();
+			}
+
+			if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ) {
+				testLife.setVisibility(false);
+				++lives;
+				SoundManager::instance().playItem();
+			}
+
+			if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
+				testWatch.activate(timeState);
+				SoundManager::instance().playItem();
+			}
+
+			if (timer == 0) {
+				player->hit(lives);
+				timer = 60;
+			}
+
+			if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
+				cout << "Key collected" << endl;
+				keyCollected = true;
+				SoundManager::instance().playDoor();
+			}
+			if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
+				cout << "Door entered" << endl;
+				doorEntered = true;
+			}
+		}
+		else 
+			pauseMenu.update(deltaTime);
+	}
+
 	
 }
 
@@ -243,6 +277,10 @@ int Scene::render()
 	}
 
 	player->render();
+
+	if (!countdownDone) {
+		countdown->render();
+	}
 
 	if (pauseMenu.isPaused()) {
 		pauseMenu.render();

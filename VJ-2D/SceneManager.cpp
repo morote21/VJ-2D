@@ -71,6 +71,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
 		currentScene = 0;
+		score = 0;
+		lives = 3;
 		SoundManager::instance().playStage(currentScene);
 	}
 
@@ -81,6 +83,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		levelString += ".txt";
 		sceneArray[currentScene]->init(levelString);
 		currentScene = 1;
+		score = 0;
+		lives = 3;
 		SoundManager::instance().playStage(currentScene);
 	}
 	
