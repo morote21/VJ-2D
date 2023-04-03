@@ -64,7 +64,7 @@ private:
 	float currentTime; // level time
 	glm::mat4 projection;
 	bool keyCollected, playedMissionComplete, pause, doorEntered, stageCompleted, countdownDone, playedOne, playedTwo, playedThree, playedStart;
-	int timer, countdownTimer, completeTimer;
+	int timer, countdownTimer, completeTimer, gemSec, lifeSec, watchSec;
 	char timeState; // 0: objetos congelados (debería tambien timer), 1: enemigos congelados, 2: todo en marcha
 
 	//Text HUDText; // Is this unnecessary? (probably, just one)
