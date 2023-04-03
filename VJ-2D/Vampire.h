@@ -37,10 +37,12 @@ private:
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;
+	bool transforming, flying;
+	int transformationTime;
 
 	enum VampireAnimations
 	{
-		MOVE_LEFT, MOVE_RIGHT, FLY_LEFT, FLY_RIGHT
+		MOVE_LEFT, MOVE_RIGHT, FLY_LEFT, FLY_RIGHT, TRANSFORM
 	};
 
 
