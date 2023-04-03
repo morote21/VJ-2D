@@ -112,7 +112,13 @@ void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
 	map->collisionMoveDown(posMummy, size, &posMummy.y);
 	if (sprite->animation() == MOVE_RIGHT) {
 
-		if (Scene::samePosition(playerPos, playerSize, glm::ivec2(posMummy.x + 2, posMummy.y), size)) { // si player enfrente nuestro
+		bool found = false;
+
+		for (int current_x = posMummy.x + 2; !found && !map->collisionMoveRight(glm::ivec2(current_x, posMummy.y), size)  
+													&& current_x <= posMummy.x + 10; ++current_x)
+			found = Scene::samePosition(playerPos, playerSize, glm::ivec2(current_x, posMummy.y), size);
+
+		if (found) { // si player enfrente nuestro (dentro del rango de búsqueda)
 
 			sprite->changeAnimation(BREATHE_RIGHT, false);
 			poisonSprite->changeAnimation(POISON_RIGHT, false);
@@ -132,7 +138,14 @@ void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
 	}
 	else if (sprite->animation() == MOVE_LEFT){
 
-		if (Scene::samePosition(playerPos, playerSize, glm::ivec2(posMummy.x - 2, posMummy.y), size)) { // si player enfrente nuestro
+		bool found = false;
+
+		for (int current_x = posMummy.x - 2; !found && !map->collisionMoveLeft(glm::ivec2(current_x, posMummy.y), size) 
+													&& current_x >= posMummy.x - 10; --current_x)
+			found = Scene::samePosition(playerPos, playerSize, glm::ivec2(current_x, posMummy.y), size);
+
+
+		if (found) { // si player enfrente nuestro (dentro del rango de búsqueda)
 
 			sprite->changeAnimation(BREATHE_LEFT, false);
 			poisonSprite->changeAnimation(POISON_LEFT, false);
