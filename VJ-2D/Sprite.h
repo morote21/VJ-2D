@@ -35,6 +35,7 @@ public:
 
 	void setPosition(const glm::vec2& pos);
 	glm::vec2 getSpriteSize() const;
+	bool animationFinished();
 
 private:
 	Texture* texture;
