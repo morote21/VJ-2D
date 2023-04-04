@@ -35,7 +35,7 @@ void SceneManager::init()
 	heart = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
 	scoreTexture.loadFromFile("images/score.png", TEXTURE_PIXEL_FORMAT_RGBA);
-	geom[0] = glm::vec2(170.f, 5.f); geom[1] = glm::vec2(280.f, 35.f);
+	geom[0] = glm::vec2(0.f, 0.f); geom[1] = glm::vec2(400.f, 100.f);
 	texCoords[0] = glm::vec2(0.0f, 0.0f); texCoords[1] = glm::vec2(1.0f, 1.0f);
 	scoreHud = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
 
@@ -53,12 +53,29 @@ void SceneManager::init()
 	}
 	
 	
+	gameoverTexture.loadFromFile("images/gameover.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(0.f, 0.f); geom[1] = glm::vec2(600.f, 120.f);
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(1.f, 1.f);
+	gameoverQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+
+
+	alloverTexture.loadFromFile("images/allover.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	geom[0] = glm::vec2(0.f, 0.f); geom[1] = glm::vec2(400.f, 280.f);
+	texCoords[0] = glm::vec2(0.f, 0.f); texCoords[1] = glm::vec2(1.f, 1.f);
+	alloverQuad = TexturedQuad::createTexturedQuad(geom, texCoords, texProgram);
+
+
 	
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
 
 	lives = 3;
 	score = 0;
 	finishTime = 0.f;
+	gameoverPlayed = false;
+	gameover = false;
+	showScore = false;
+	allover = false;
+	alloverPlayed = false;
 }
 
 void SceneManager::update(int deltaTime) // ??? (keys)
@@ -104,32 +121,76 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 	sceneArray[currentScene]->update(deltaTime, lives, score);
 	
 	if (lives == 0) {
-		finishTime = 0;
-		Game::instance().setStart(false);
-		string levelString = "levels/level0";
-		levelString += to_string(currentScene + 1);
-		levelString += ".txt";
-		sceneArray[currentScene]->init(levelString);
-		currentScene = 0;
-		lives = 3;
-		score = 0;
-		SoundManager::instance().playMenu();
+		finishTime += deltaTime;
+		if (!gameoverPlayed) {
+			if (finishTime >= 500.f) {
+				gameoverPlayed = true;
+				SoundManager::instance().playGameover();
+			}
+		}
+		if (finishTime >= 6000.f) {
+			gameoverPlayed = false;
+			showScore = false;
+			finishTime = 0;
+			Game::instance().setStart(false);
+			string levelString = "levels/level0";
+			levelString += to_string(currentScene + 1);
+			levelString += ".txt";
+			sceneArray[currentScene]->init(levelString);
+			currentScene = 0;
+			lives = 3;
+			score = 0;
+			SoundManager::instance().playMenu();
+		}
+		else if (finishTime >= 3000.f) {
+			showScore = true;
+		}
 	}
-	
-	if (sceneArray[currentScene]->getStageCompleted()) {
-		// Reseteamos el nivel actual y pasamos al siguiente
-		string levelString = "levels/level0";
-		levelString += to_string(currentScene + 1);
-		levelString += ".txt";
-		sceneArray[currentScene]->init(levelString);
-		currentScene += 1;
-		SoundManager::instance().playStage(currentScene);
-		if (currentScene == sceneArray.size()) {
+
+	if (allover) {
+		finishTime += deltaTime;
+		if (!alloverPlayed) {
+			if (finishTime >= 1000.f) {
+				alloverPlayed = true;
+				SoundManager::instance().playAllOver();
+			}
+		}
+		if (finishTime >= 6000.f) {
+			alloverPlayed = false;
+			allover = false;
+			showScore = false;
+			finishTime = 0;
+
+			string levelString = "levels/level0";
+			levelString += to_string(currentScene + 1);
+			levelString += ".txt";
+			sceneArray[currentScene]->init(levelString);
+			currentScene += 1;
+			SoundManager::instance().playStage(currentScene);
+
 			Game::instance().setStart(false);
 			currentScene = 0;
 			lives = 3;
 			score = 0;
 			SoundManager::instance().playMenu();
+		}
+		else if (finishTime >= 3000.f) {
+			showScore = true;
+		}
+	}
+	
+	if (sceneArray[currentScene]->getStageCompleted()) {
+		// Reseteamos el nivel actual y pasamos al siguiente
+		if (currentScene != sceneArray.size() - 1) {
+			string levelString = "levels/level0";
+			levelString += to_string(currentScene + 1);
+			levelString += ".txt";
+			sceneArray[currentScene]->init(levelString);
+			currentScene += 1;
+			SoundManager::instance().playStage(currentScene);
+		}
+		else {
+			allover = true;
 		}
 	}
 
@@ -184,6 +245,49 @@ void SceneManager::render()
 	modelview = glm::translate(glm::mat4(1.0f), glm::vec3(610, 5, 0.f));
 	texProgram.setUniformMatrix4f("modelview", modelview);
 	numbers[currentScene+1]->render(numbersTexture);
+
+	if (gameoverPlayed && !showScore) {
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(20, 180, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		gameoverQuad->render(gameoverTexture);
+	}
+	if (allover && !showScore) {
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(120, 80, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		alloverQuad->render(alloverTexture);
+	}
+
+	if (showScore) {
+		// render score text
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(120, 100, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		scoreHud->render(scoreTexture);
+
+
+		// render score numbers
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(220, 250, 0.f));
+		modelview = glm::scale(modelview, glm::vec3(2, 2, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		numbers[int((score / 10000) % 10)]->render(numbersTexture);
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(262, 250, 0.f));
+		modelview = glm::scale(modelview, glm::vec3(2, 2, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		numbers[int((score / 1000) % 10)]->render(numbersTexture);
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(304, 250, 0.f));
+		modelview = glm::scale(modelview, glm::vec3(2, 2, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		numbers[int((score / 100) % 10)]->render(numbersTexture);
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(346, 250, 0.f));
+		modelview = glm::scale(modelview, glm::vec3(2, 2, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		numbers[int((score / 10) % 10)]->render(numbersTexture);
+		modelview = glm::translate(glm::mat4(1.0f), glm::vec3(388, 250, 0.f));
+		modelview = glm::scale(modelview, glm::vec3(2, 2, 0.f));
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		numbers[int(score % 10)]->render(numbersTexture);
+
+	}
+
 
 }
 

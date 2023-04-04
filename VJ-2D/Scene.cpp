@@ -379,17 +379,20 @@ int Scene::render()
 		testVampArray[i]->render();
 	}
 
-	player->render();
+	if (!doorEntered)
+		player->render();
 
 	if (!countdownDone) {
 		countdown->render();
 	}
 
 	if (doorEntered) {
-		stageCompleteSprite->render();
-		if (completeTimer >= 1000) {
-			if (stageCompleteSprite->animation() == ONE) {
-				stageCompleteSprite->changeAnimation(TWO, true);
+		if (!stageCompleted) {
+			stageCompleteSprite->render();
+			if (completeTimer >= 1000) {
+				if (stageCompleteSprite->animation() == ONE) {
+					stageCompleteSprite->changeAnimation(TWO, true);
+				}
 			}
 		}
 	}

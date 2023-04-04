@@ -27,12 +27,13 @@ private:
 	static int currentScene;
 	TexturedQuad* hudBackground;
 	vector<TexturedQuad*> numbers;
-	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, missionTexture;
-	TexturedQuad* heart, *scoreHud, * missionHud;
+	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, missionTexture, gameoverTexture, alloverTexture;
+	TexturedQuad* heart, *scoreHud, * missionHud, * gameoverQuad, * alloverQuad;
 	int lives, score, finishTime; // para que sea persistente entre niveles
 	Text HUDText; // para HUD
 	glm::mat4 projection;
 	ShaderProgram texProgram;	// pasarlo a la clase Game mas adelante
+	bool gameoverPlayed, gameover, showScore, allover, alloverPlayed;
 
 	enum VampireAnimations
 	{

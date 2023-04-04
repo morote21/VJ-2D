@@ -26,13 +26,15 @@ public:
 	void playOne();
 	void playStart();
 	void playPoison();
+	void playGameover();
 	void playMissionComplete();
+	void playAllOver();
 	ISoundEngine* getSoundEngine();
 
 private:
 	ISoundEngine* engine;
 	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door, * three, * two, * one, * start;
-	ISound* missioncomplete, * poison;
+	ISound* missioncomplete, * poison, * gameover, * allover;
 };
 
 #endif	
