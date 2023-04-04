@@ -37,10 +37,10 @@ public:
 	bool isInvincible();
 
 private:
-	bool bJumping, falling, dead;
+	bool bJumping, falling, dead, reappeared;
 	bool invincible; // para trucos y potencialmente para justo después de ser golpeado
 	glm::ivec2 tileMapDispl, posPlayer, startingPosPlayer, size, hitboxPos, hitboxSize;
-	int jumpAngle, startY, deathTime;
+	int jumpAngle, startY, deathTime, currentTime, reappearedTime;
 	Texture spritesheet;
 	Sprite* sprite;
 	TileMap* map;

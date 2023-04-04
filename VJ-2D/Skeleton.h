@@ -19,6 +19,7 @@ public:
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);
+	void resetAnimation();
 
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();

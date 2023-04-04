@@ -87,7 +87,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		string levelString = "levels/level0";
 		levelString += to_string(currentScene+1);
 		levelString += ".txt";
-		sceneArray[currentScene]->init(levelString);
+		//sceneArray[currentScene]->init(levelString);
+		sceneArray[currentScene]->resetLevel();
 		currentScene = 0;
 		score = 0;
 		lives = 3;
@@ -99,7 +100,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		string levelString = "levels/level0";
 		levelString += to_string(currentScene+1);
 		levelString += ".txt";
-		sceneArray[currentScene]->init(levelString);
+		//sceneArray[currentScene]->init(levelString);
+		sceneArray[currentScene]->resetLevel();
 		currentScene = 1;
 		score = 0;
 		lives = 3;
@@ -111,7 +113,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 		string levelString = "levels/level0";
 		levelString += to_string(currentScene + 1);
 		levelString += ".txt";
-		sceneArray[currentScene]->init(levelString);
+		//sceneArray[currentScene]->init(levelString);
+		sceneArray[currentScene]->resetLevel();
 		currentScene = 2;
 		score = 0;
 		lives = 3;
@@ -136,7 +139,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 			string levelString = "levels/level0";
 			levelString += to_string(currentScene + 1);
 			levelString += ".txt";
-			sceneArray[currentScene]->init(levelString);
+			//sceneArray[currentScene]->init(levelString);
+			sceneArray[currentScene]->resetLevel();
 			currentScene = 0;
 			lives = 3;
 			score = 0;
@@ -164,7 +168,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 			string levelString = "levels/level0";
 			levelString += to_string(currentScene + 1);
 			levelString += ".txt";
-			sceneArray[currentScene]->init(levelString);
+			//sceneArray[currentScene]->init(levelString);
+			sceneArray[currentScene]->resetLevel();
 			currentScene += 1;
 			SoundManager::instance().playStage(currentScene);
 
@@ -185,7 +190,8 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 			string levelString = "levels/level0";
 			levelString += to_string(currentScene + 1);
 			levelString += ".txt";
-			sceneArray[currentScene]->init(levelString);
+			//sceneArray[currentScene]->init(levelString);
+			sceneArray[currentScene]->resetLevel();
 			currentScene += 1;
 			SoundManager::instance().playStage(currentScene);
 		}
@@ -297,7 +303,8 @@ void SceneManager::resetLevels()
 		string levelString = "levels/level0";
 		levelString += to_string(i);
 		levelString += ".txt";
-		sceneArray[i - 1]->init(levelString);
+		//sceneArray[i - 1]->init(levelString);
+		sceneArray[i-1]->resetLevel();
 	}
 	currentScene = 0;
 	lives = 3;
@@ -309,7 +316,8 @@ void SceneManager::resetLevel(int level)
 	string levelString = "levels/level0";
 	levelString += to_string(level);
 	levelString += ".txt";
-	sceneArray[level - 1]->init(levelString);
+	//sceneArray[level - 1]->init(levelString);
+	sceneArray[level-1]->resetLevel();
 	currentScene = level;
 }
 

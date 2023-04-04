@@ -288,3 +288,10 @@ glm::ivec2 Vampire::getHitboxSize() const
 {
 	return hitboxSize;
 }
+
+void Vampire::resetAnimation() {
+	currentTime = 0.0;
+	transformationTime = 0.f;
+	flying = false;
+	sprite->changeAnimation(MOVE_RIGHT, true);
+}

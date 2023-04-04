@@ -52,3 +52,8 @@ glm::vec2 Key::getPosition()
 {
 	return position;
 }
+
+void Key::setPosition(const glm::ivec2& tileMapPos, glm::ivec2 itemPos) {
+	position = itemPos;
+	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+}

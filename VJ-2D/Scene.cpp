@@ -30,6 +30,7 @@ Scene::~Scene()
 
 void Scene::init(string mapPath) // We may want to modify this so that it sets up different levels...
 {
+	this->mapPath = mapPath;
 	initShaders();
 	keyCollected = false;
 	doorEntered = false;
@@ -450,4 +451,85 @@ bool Scene::getDoorEntered() {
 
 bool Scene::getStageCompleted() {
 	return stageCompleted;
+}
+
+void Scene::resetLevel() {
+	keyCollected = false;
+	doorEntered = false;
+	timer = 60; // Debería ser diferente entre niveles...
+	pause = false;
+	stageCompleted = false;
+	playedOne = playedTwo = playedThree = playedStart = false;
+	timeState = 2;
+
+	map = TileMap::createTileMap(mapPath, glm::vec2(SCREEN_X, SCREEN_Y), texProgram); // for specific level: maybe have object map?
+
+	player = new Player();
+	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y + 2)); // ¿LIGADO AL NIVEL?
+	player->setTileMap(map);
+
+	vector<glm::ivec2> itemsPositions = map->getItemsPositions();	// siempre tendra 4 posiciones, ya que habra 1 objeto de cada por mapa (si el objeto aparece o no al final sera opcional, a excepcion de la llave)
+
+	random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int> dist(0, itemsPositions.size() - 1);
+	int indexItem1, indexItem2, indexItem3, indexItem4;
+	// asignamos indices de posiciones random a los objetos y evitamos que se repitan entre objetos 
+
+	indexItem1 = dist(mt);
+
+	indexItem2 = dist(mt);
+	while (indexItem2 == indexItem1)
+		indexItem2 = dist(mt);
+
+	indexItem3 = dist(mt);
+	while (indexItem3 == indexItem1 || indexItem3 == indexItem2)
+		indexItem3 = dist(mt);
+
+	indexItem4 = dist(mt);
+	while (indexItem4 == indexItem1 || indexItem4 == indexItem2 || indexItem4 == indexItem3)
+		indexItem4 = dist(mt);
+
+	key.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(int(itemsPositions[indexItem1].x) + int((40 - SIZEITEMS_X) / 2), int(itemsPositions[indexItem1].y) + int((40 - SIZEITEMS_Y) / 2)));
+
+	dist = std::uniform_int_distribution<int>(2, 58);
+
+	gemSec = dist(mt);
+	cout << "segundo aparicion gema: " << gemSec << endl;
+	testGem.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem2].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem2].y + int((40 - SIZEITEMS_Y) / 2)));
+
+	lifeSec = dist(mt);
+	cout << "segundo aparicion life: " << lifeSec << endl;
+	testLife.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem3].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem3].y + int((40 - SIZEITEMS_Y) / 2)));
+
+	watchSec = dist(mt);
+	cout << "segundo aparicion watch: " << watchSec << endl;
+	testWatch.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(itemsPositions[indexItem4].x + int((40 - SIZEITEMS_X) / 2), itemsPositions[indexItem4].y + int((40 - SIZEITEMS_Y) / 2)));
+
+
+	for (int i = 0; i < map->getSoldiersPositions().size(); i++) {
+		testSkelArray[i]->setPosition(glm::vec2(map->getSoldiersPositions()[i].x, map->getSoldiersPositions()[i].y + 2)); // 1a plataforma desde abajo, sin paredes
+		testSkelArray[i]->setTileMap(map);
+		testSkelArray[i]->resetAnimation();
+	}
+
+	for (int i = 0; i < map->getAliensPositions().size(); i++) {
+		testVampArray[i]->setPosition(glm::vec2(map->getAliensPositions()[i].x, map->getAliensPositions()[i].y + 5)); // 1a plataforma desde abajo, sin paredes
+		testVampArray[i]->setTileMap(map);
+		testVampArray[i]->resetAnimation();
+	}
+
+	for (int i = 0; i < map->getMummiesPositions().size(); i++) {
+		testMummyArray[i]->setPosition(glm::vec2(map->getMummiesPositions()[i].x, map->getMummiesPositions()[i].y + 2)); // 1a plataforma desde abajo, sin paredes
+		testMummyArray[i]->setTileMap(map);
+		testMummyArray[i]->resetAnimation();
+	}
+
+	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
+	currentTime = 0.0f;
+	countdownTimer = 0.f;
+	completeTimer = 0.f;
+	countdownDone = false;
+	playedMissionComplete = false;
 }

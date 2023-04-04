@@ -83,12 +83,29 @@ void Player::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 	hitboxSize = glm::ivec2(8, 38);
 	hitboxPos = glm::ivec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
+
+	currentTime = 0;
+
+	invincible = true;
+	reappeared = true;
+	reappearedTime = 0;
 }
 
 void Player::update(int deltaTime, int& score, int& lives)
 {
+	currentTime += deltaTime;
 	sprite->update(deltaTime);
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+	if (reappeared) {
+		invincible = true;
+		reappearedTime += deltaTime;
+		if (reappearedTime >= 2000.f) {
+			reappeared = false;
+			invincible = false;
+		}
+	}
+
 	if (!dead) {
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT))
 		{
@@ -278,7 +295,8 @@ void Player::update(int deltaTime, int& score, int& lives)
 				sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 				deathTime = 0;
 				dead = false;
-				invincible = false;
+				reappeared = true;
+				reappearedTime = 0;
 			}
 		}
 	}
@@ -287,11 +305,28 @@ void Player::update(int deltaTime, int& score, int& lives)
 void Player::setInvincibility(bool inv) 
 {
 	invincible = inv;
+	currentTime = 0;
 }
 
 void Player::render()
 {
-	sprite->render();
+	if (!invincible) {
+		sprite->render();
+	}
+	else {
+		if (dead) {
+			sprite->render();
+		}
+		else {
+			if (currentTime <= 200.f) {
+				sprite->render();
+			}
+			if (currentTime >= 400.f) {
+				currentTime = 0;
+			}
+
+		}
+	}
 }
 
 void Player::setTileMap(TileMap* tileMap)
