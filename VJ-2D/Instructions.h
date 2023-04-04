@@ -17,6 +17,7 @@ public:
 	void render(ShaderProgram& texProgram);
 	void update(int deltaTime);
 
+	void resetSelectedWindow(); // para cuando salgamos de menú instrucciones
 
 private:
 	int selectedWindow;

@@ -85,8 +85,12 @@ void Menu::update(int deltaTime)
 		if (!Game::instance().getStart()) {
 			if (currentWindow == 0)
 				Game::instance().stopGame();
-			else if (currentWindow == 1 || currentWindow == 2)
-				currentWindow = 0;
+			else if (currentWindow == 1 || currentWindow == 2) {
+				if (currentWindow == 1)
+					instructions.resetSelectedWindow(); // para cuando vuelvas al menú de instrucciones
+
+				currentWindow = 0;	
+			}
 			Game::instance().setKeyAlreadyPressing(27);
 		}
 	}

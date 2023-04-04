@@ -66,3 +66,8 @@ void Instructions::update(int deltaTime)
 
 	currentTime += deltaTime;	// posiblemente sobre
 }
+
+void Instructions::resetSelectedWindow()
+{
+	selectedWindow = 0;
+}
