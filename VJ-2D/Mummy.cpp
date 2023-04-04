@@ -87,7 +87,7 @@ void Mummy::init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram)
 
 }
 
-void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
+void Mummy::update(int deltaTime, Player* player)
 {
 	sprite->update(deltaTime);
 
@@ -98,11 +98,15 @@ void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
 
 		bool found = false;
 
-		for (int current_x = posMummy.x + 2; !found && !map->collisionMoveRight(glm::ivec2(current_x, posMummy.y), size)  
-													&& current_x <= posMummy.x + 2; ++current_x)
-			found = Scene::samePosition(playerPos, playerSize, glm::ivec2(current_x, posMummy.y), sizePoison);
+		if (!player->isDead()){
+			
+			for (int current_x = posMummy.x + 2; !found && !map->collisionMoveRight(glm::ivec2(current_x, posMummy.y), size)  
+														&& current_x <= posMummy.x + 2; ++current_x)
+				found = Scene::samePosition(player->getHitBoxPosition(), player->getHitBoxSize(), glm::ivec2(current_x, posMummy.y), sizePoison);
+		}
+		
 
-		if (found) { // si player enfrente nuestro (dentro del rango de búsqueda)
+		if (found) { // si player no está muerto y está enfrente nuestro (dentro del rango de búsqueda)
 
 			sprite->changeAnimation(BREATHE_RIGHT, false);
 			poisonSprite->changeAnimation(POISON_RIGHT, false);
@@ -124,12 +128,13 @@ void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
 
 		bool found = false;
 
-		for (int current_x = posMummy.x - 2; !found && !map->collisionMoveLeft(glm::ivec2(current_x, posMummy.y), size) 
-													&& current_x >= posMummy.x - 2; --current_x)
-			found = Scene::samePosition(playerPos, playerSize, glm::ivec2(current_x - sizePoison.x + size.x, posMummy.y), sizePoison);
-
-
-		if (found) { // si player enfrente nuestro (dentro del rango de búsqueda)
+		if (!player->isDead()){
+			for (int current_x = posMummy.x - 2; !found && !map->collisionMoveLeft(glm::ivec2(current_x, posMummy.y), size) 
+														&& current_x >= posMummy.x - 2; --current_x)
+				found = Scene::samePosition(player->getHitBoxPosition(), player->getHitBoxSize(), glm::ivec2(current_x - sizePoison.x + size.x, posMummy.y), sizePoison);
+		}
+		
+		if (found) { // si player no está muerto y está enfrente nuestro (dentro del rango de búsqueda)
 
 			sprite->changeAnimation(BREATHE_LEFT, false);
 			poisonSprite->changeAnimation(POISON_LEFT, false);

@@ -35,6 +35,7 @@ public:
 
 	void hit(int& lives);
 	bool isInvincible();
+	bool isDead();
 
 private:
 	bool bJumping, falling, dead, reappeared;

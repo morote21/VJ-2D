@@ -259,7 +259,7 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				}
 
 				for (int i = 0; i < testMummyArray.size(); i++) {
-					testMummyArray[i]->update(deltaTime, player->getHitBoxPosition(), player->getHitBoxSize());
+					testMummyArray[i]->update(deltaTime, player);
 				}
 			}
 		

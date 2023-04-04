@@ -401,3 +401,8 @@ bool Player::isInvincible()
 {
 	return invincible;
 }
+
+bool Player::isDead()
+{
+	return dead;
+}

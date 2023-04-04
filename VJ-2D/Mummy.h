@@ -4,6 +4,7 @@
 
 #include "Sprite.h"
 #include "TileMap.h"
+#include "Player.h"
 
 // Class that represents the Mummy enemy
 
@@ -14,7 +15,7 @@ public:
 	~Mummy();
 
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
-	void update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize);
+	void update(int deltaTime, Player* player);
 	void render();
 	void resetAnimation();
 
