@@ -458,6 +458,7 @@ void Scene::resetLevel() {
 	doorEntered = false;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
+	pauseMenu.setPaused(false);
 	stageCompleted = false;
 	playedOne = playedTwo = playedThree = playedStart = false;
 	timeState = 2;
@@ -492,6 +493,7 @@ void Scene::resetLevel() {
 		indexItem4 = dist(mt);
 
 	key.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(int(itemsPositions[indexItem1].x) + int((40 - SIZEITEMS_X) / 2), int(itemsPositions[indexItem1].y) + int((40 - SIZEITEMS_Y) / 2)));
+	door.resetAnimation(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos());
 
 	dist = std::uniform_int_distribution<int>(2, 58);
 
