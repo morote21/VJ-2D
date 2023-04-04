@@ -107,3 +107,7 @@ glm::ivec2 Skeleton::getSize() const
 {
 	return size;
 }
+
+void Skeleton::resetAnimation() {
+	sprite->changeAnimation(MOVE_RIGHT, true);
+}

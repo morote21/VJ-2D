@@ -79,3 +79,8 @@ void ExtraLife::setVisibility(bool visible)
 	else
 		timeLeft = -1;
 }
+
+void ExtraLife::setPosition(const glm::ivec2& tileMapPos, glm::ivec2 itemPos) {
+	position = itemPos;
+	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+}

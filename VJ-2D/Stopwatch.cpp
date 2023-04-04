@@ -92,3 +92,7 @@ void Stopwatch::activate(char& timeState) // se asume visibilidad (ya veremos)
 	timeLeft = FREEZE_TIME;
 }
 
+void Stopwatch::setPosition(const glm::ivec2& tileMapPos, glm::ivec2 itemPos) {
+	position = itemPos;
+	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+}

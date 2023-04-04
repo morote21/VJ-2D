@@ -210,3 +210,8 @@ bool Mummy::poisonExists()
 {
 	return poisonVisible;
 }
+
+void Mummy::resetAnimation() {
+	poisonVisible = false;
+	sprite->changeAnimation(MOVE_RIGHT, true);
+}

@@ -16,6 +16,7 @@ public:
 	void init(const glm::ivec2& tileMapPos, ShaderProgram& shaderProgram);
 	void update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize);
 	void render();
+	void resetAnimation();
 
 	void setTileMap(TileMap* tileMap);
 	void setPosition(const glm::vec2& pos);

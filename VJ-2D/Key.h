@@ -13,6 +13,7 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	void setPosition(const glm::ivec2& tileMapPos, glm::ivec2 itemPos);
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
 
