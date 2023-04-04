@@ -136,3 +136,11 @@ void SoundManager::playMissionComplete()
 	missioncomplete->setVolume(0.4f);
 	missioncomplete->setPlayPosition(100);
 }
+
+void SoundManager::playPoison()
+{
+	poison = engine->play2D("sounds/poison.mp3", false, true);
+	poison->setIsPaused(false);
+	poison->setVolume(0.4f);
+	poison->setPlayPosition(0);
+}

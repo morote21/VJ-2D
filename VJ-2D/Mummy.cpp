@@ -133,7 +133,7 @@ void Mummy::update(int deltaTime, glm::vec2 playerPos, glm::vec2 playerSize)
 
 			sprite->changeAnimation(BREATHE_LEFT, false);
 			poisonSprite->changeAnimation(POISON_LEFT, false);
-			posPoison.x = posMummy.x - sizePoison.y;
+			posPoison.x = posMummy.x - sizePoison.x;
 			posPoison.y = posMummy.y - 5;
 			poisonSprite->setPosition(glm::vec2(float(tileMapDispl.x + posPoison.x), float(tileMapDispl.y + posPoison.y))); // colocar veneno enfrente
 			poisonVisible = true;
