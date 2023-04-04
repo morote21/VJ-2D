@@ -35,6 +35,7 @@ private:
 	ISoundEngine* engine;
 	ISound* menu, * stage1, * stage2, * stage3, * item, * death, * door, * three, * two, * one, * start;
 	ISound* missioncomplete, * poison, * gameover, * allover;
+	bool on;
 };
 
 #endif	

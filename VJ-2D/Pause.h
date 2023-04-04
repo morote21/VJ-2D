@@ -29,6 +29,7 @@ private:
 	Texture spritesheet, pauseWindow;
 	ShaderProgram texProgram;
 	glm::mat4 projection;
+	glm::ivec2 size;
 
 };
 

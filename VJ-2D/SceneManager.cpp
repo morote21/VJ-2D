@@ -178,6 +178,7 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 			lives = 3;
 			score = 0;
 			SoundManager::instance().playMenu();
+
 		}
 		else if (finishTime >= 3000.f) {
 			showScore = true;

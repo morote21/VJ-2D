@@ -16,6 +16,7 @@ public:
 
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
+	void resetAnimation(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos);
 
 
 private:
