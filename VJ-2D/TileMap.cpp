@@ -122,7 +122,7 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 		for (int i = 0; i < mapSize.x; i++)
 		{
 			tile = map[j * mapSize.x + i];
-			if (tile != 0 && tile != 8 && tile != 6 && tile != 3 && tile != 9)
+			if (tile != 0 && tile != 8 && tile != 6 && tile != 3 && tile != 9 && tile != 7)
 			{
 				nTiles++;
 				posTile = glm::vec2(minCoords.x + i * tileWidth, minCoords.y + j * tileHeight);
@@ -165,6 +165,9 @@ void TileMap::prepareArrays(const glm::vec2& minCoords, ShaderProgram& program)
 			}
 			if (tile == 9) {
 				playerInitPos = glm::ivec2(i * tileWidth, j * tileHeight);
+			}
+			if (tile == 7) {
+				mummiesPositions.push_back(glm::ivec2(i * tileWidth, j * tileHeight));
 			}
 		}
 	}
@@ -232,7 +235,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, i
 	y = (pos.y + size.y - 1) / tileHeight; // y ref. es la de abajo
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8  && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9 && map[y * mapSize.x + x] != 3)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 1 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8  && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9 && map[y * mapSize.x + x] != 3 && map[y * mapSize.x + x] != 7)
 		{
 			if (*posY - tileHeight * y + size.y <= 6)
 			{
@@ -272,7 +275,7 @@ bool TileMap::collisionMoveUpAnything(const glm::ivec2& pos, const glm::ivec2& s
 	y = (pos.y - 1) / tileHeight;
 	for (int x = x0; x <= x1; x++)
 	{
-		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8 && map[y * mapSize.x + x] != 3 && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9)
+		if (map[y * mapSize.x + x] != 0 && map[y * mapSize.x + x] != 4 && map[y * mapSize.x + x] != 8 && map[y * mapSize.x + x] != 3 && map[y * mapSize.x + x] != 6 && map[y * mapSize.x + x] != 9 && map[y * mapSize.x + x] != 7)
 		{
 			return true;
 		}
@@ -322,6 +325,11 @@ vector<glm::ivec2> TileMap::getSoldiersPositions()
 vector<glm::ivec2> TileMap::getAliensPositions()
 {
 	return aliensPositions;
+}
+
+vector<glm::ivec2> TileMap::getMummiesPositions()
+{
+	return mummiesPositions;
 }
 
 glm::ivec2 TileMap::getPlayerInitPos()

@@ -54,8 +54,7 @@ private:
 	Pause pauseMenu;
 	vector<Skeleton*> testSkelArray;
 	vector<Vampire*> testVampArray;
-
-	Mummy testMummy;
+	vector<Mummy*> testMummyArray;
 
 	Sprite* countdown, *stageCompleteSprite;
 
