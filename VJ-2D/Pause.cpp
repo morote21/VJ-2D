@@ -31,8 +31,8 @@ void Pause::init()
 	texCoords[0] = glm::vec2(0.5f, 0.0f); texCoords[1] = glm::vec2(1.f, 0.5f);
 	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 
-	texCoords[0] = glm::vec2(0.0f, 0.5f); texCoords[1] = glm::vec2(0.5f, 1.f);
-	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
+	//texCoords[0] = glm::vec2(0.0f, 0.5f); texCoords[1] = glm::vec2(0.5f, 1.f);
+	//backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
 	
 	texCoords[0] = glm::vec2(0.5f, 0.5f); texCoords[1] = glm::vec2(1.f, 1.f);
 	backgroundArray.push_back(TexturedQuad::createTexturedQuad(geom, texCoords, texProgram));
@@ -47,25 +47,24 @@ void Pause::init()
 void Pause::update(int deltaTime)
 {
 	currentTime += deltaTime;
+
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_DOWN)) {
 		if (Game::instance().getStart()) {
-			if (selectorIndex == 3) 
+			if (selectorIndex == 2) 
 				selectorIndex = 0;
 			else
 				selectorIndex += 1;
 			Game::instance().setSpecialKeyAlreadyPressing(GLUT_KEY_DOWN);
-			cout << selectorIndex << endl;
 		}
 	}
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !Game::instance().getSpecialKeyAlreadyPressing(GLUT_KEY_UP)) {
 		if (Game::instance().getStart()) {
 			if (selectorIndex == 0)
-				selectorIndex = 3;
+				selectorIndex = 2;
 			else
 				selectorIndex -= 1;
 			Game::instance().setSpecialKeyAlreadyPressing(GLUT_KEY_UP);
-			cout << selectorIndex << endl;
 		}
 	}
 
@@ -80,11 +79,12 @@ void Pause::update(int deltaTime)
 				state = false;
 			}
 
-			else if (selectorIndex == 3) {
+			else if (selectorIndex == 2) {
 				Game::instance().setStart(false);
 				Game::instance().resetMaps();
 				SoundManager::instance().playMenu();
 			}
+
 			Game::instance().setKeyAlreadyPressing(13);
 		}
 	}
@@ -95,6 +95,7 @@ void Pause::update(int deltaTime)
 			Game::instance().setKeyAlreadyPressing(27);
 		}
 	}
+
 
 }
 

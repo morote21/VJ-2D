@@ -68,3 +68,10 @@ glm::vec2 Door::getPosition()
 {
 	return position;
 }
+
+void Door::resetAnimation(const glm::ivec2& tileMapPos, glm::ivec2 doorMapPos)
+{
+	sprite->changeAnimation(CLOSED, false);
+	position = glm::vec2(float(doorMapPos.x * 40), float((doorMapPos.y - 1) * 20));
+	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+}

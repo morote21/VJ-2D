@@ -71,29 +71,39 @@ void SoundManager::playStage(int nStage)
 		stage3->setPlayPosition(0);
 		stage3->setIsPaused(false);
 	}
+	on = true;
 }
 
 void SoundManager::playItem()
 {
 	item = engine->play2D("sounds/coin.mp3", false, true);
 	item->setIsPaused(false);
-	item->setVolume(0.5f);
+	if (on)
+		item->setVolume(0.4f);
+	else
+		item->setVolume(0.f);
 	item->setPlayPosition(200);
 }
 
 void SoundManager::playDeath()
 {
-	item = engine->play2D("sounds/death.mp3", false, true);
-	item->setIsPaused(false);
-	item->setVolume(0.4f);
-	item->setPlayPosition(320);
+	death = engine->play2D("sounds/death.mp3", false, true);
+	death->setIsPaused(false);
+	if (on)
+		death->setVolume(0.4f);
+	else
+		death->setVolume(0.f);
+	death->setPlayPosition(320);
 }
 
 void SoundManager::playDoor()
 {
 	door = engine->play2D("sounds/door.mp3", false, true);
 	door->setIsPaused(false);
-	door->setVolume(0.4f);
+	if (on)
+		door->setVolume(0.4f);
+	else
+		door->setVolume(0.f);
 	door->setPlayPosition(0);
 }
 
@@ -101,7 +111,10 @@ void SoundManager::playThree()
 {
 	three = engine->play2D("sounds/three.mp3", false, true);
 	three->setIsPaused(false);
-	three->setVolume(0.4f);
+	if (on)
+		three->setVolume(0.4f);
+	else
+		three->setVolume(0.f);
 	three->setPlayPosition(100);
 }
 
@@ -109,7 +122,10 @@ void SoundManager::playTwo()
 {
 	two = engine->play2D("sounds/two.mp3", false, true);
 	two->setIsPaused(false);
-	two->setVolume(0.4f);
+	if (on)
+		two->setVolume(0.4f);
+	else
+		two->setVolume(0.f);
 	two->setPlayPosition(100);
 }
 
@@ -117,7 +133,10 @@ void SoundManager::playOne()
 {
 	one = engine->play2D("sounds/one.mp3", false, true);
 	one->setIsPaused(false);
-	one->setVolume(0.4f);
+	if (on)
+		one->setVolume(0.4f);
+	else
+		one->setVolume(0.f);
 	one->setPlayPosition(100);
 }
 
@@ -125,7 +144,10 @@ void SoundManager::playStart()
 {
 	start = engine->play2D("sounds/start.mp3", false, true);
 	start->setIsPaused(false);
-	start->setVolume(0.4f);
+	if (on)
+		start->setVolume(0.4f);
+	else
+		start->setVolume(0.f);
 	start->setPlayPosition(100);
 }
 
@@ -133,7 +155,10 @@ void SoundManager::playMissionComplete()
 {
 	missioncomplete = engine->play2D("sounds/missioncomplete.mp3", false, true);
 	missioncomplete->setIsPaused(false);
-	missioncomplete->setVolume(0.4f);
+	if (on)
+		missioncomplete->setVolume(0.4f);
+	else
+		missioncomplete->setVolume(0.f);
 	missioncomplete->setPlayPosition(100);
 }
 
@@ -141,7 +166,10 @@ void SoundManager::playPoison()
 {
 	poison = engine->play2D("sounds/poison.mp3", false, true);
 	poison->setIsPaused(false);
-	poison->setVolume(0.4f);
+	if (on)
+		poison->setVolume(0.4f);
+	else
+		poison->setVolume(0.f);
 	poison->setPlayPosition(0);
 }
 
@@ -149,7 +177,10 @@ void SoundManager::playGameover()
 {
 	gameover = engine->play2D("sounds/gameover.wav", false, true);
 	gameover->setIsPaused(false);
-	gameover->setVolume(0.4f);
+	if (on)
+		gameover->setVolume(0.4f);
+	else
+		gameover->setVolume(0.f);
 	gameover->setPlayPosition(0);
 }
 
@@ -157,6 +188,9 @@ void SoundManager::playAllOver()
 {
 	allover = engine->play2D("sounds/allover.wav", false, true);
 	allover->setIsPaused(false);
-	allover->setVolume(0.4f);
+	if (on)
+		allover->setVolume(0.4f);
+	else
+		allover->setVolume(0.f);
 	allover->setPlayPosition(700);
 }
