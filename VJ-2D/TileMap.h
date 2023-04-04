@@ -38,6 +38,7 @@ public:
 	vector<glm::ivec2> getItemsPositions();
 	vector<glm::ivec2> getSoldiersPositions();
 	vector<glm::ivec2> getAliensPositions();
+	vector<glm::ivec2> getMummiesPositions();
 	glm::ivec2 getPlayerInitPos();
 
 private:
@@ -56,7 +57,7 @@ private:
 	glm::vec2 tileTexSize, padding;
 	ShaderProgram texProgram;
 	int* map;	// seguramente poner aqui una matriz con un vector de vectores en vez de simular una matriz 
-	vector<glm::ivec2> itemsPositions, soldiersPositions, aliensPositions;
+	vector<glm::ivec2> itemsPositions, soldiersPositions, aliensPositions, mummiesPositions;
 
 };
 

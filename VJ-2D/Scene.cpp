@@ -143,9 +143,16 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 		testVampArray.push_back(testVamp);
 	}
 	//testVamp.setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSizeX(), INIT_PLAYER_Y_TILES * map->getTileSizeY()+5 )); // suelo inferior, el rodeado por paredes
-	testMummy.init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-	testMummy.setPosition(glm::vec2(map->getSoldiersPositions()[0].x + 18, map->getSoldiersPositions()[0].y + 2)); // 1a plataforma desde abajo, sin paredes
-	testMummy.setTileMap(map);
+	
+	testMummyArray = vector<Mummy*>();
+	for (int i = 0; i < map->getMummiesPositions().size(); i++) {
+		Mummy* testMummy = new Mummy();
+		testMummy->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		testMummy->setPosition(glm::vec2(map->getMummiesPositions()[i].x, map->getMummiesPositions()[i].y + 2)); // 1a plataforma desde abajo, sin paredes
+		testMummy->setTileMap(map);
+		testMummyArray.push_back(testMummy);
+	}
+	
 
 	pauseMenu.init();
 
@@ -250,7 +257,9 @@ void Scene::update(int deltaTime, int& lives, int& score)
 					testVampArray[i]->update(deltaTime);
 				}
 
-				testMummy.update(deltaTime, player->getPosition(), player->getSize());
+				for (int i = 0; i < testVampArray.size(); i++) {
+					testMummyArray[i]->update(deltaTime, player->getHitBoxPosition(), player->getHitBoxSize());
+				}
 			}
 		
 			// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente) (saliendo del bucle después de un hit())
@@ -266,10 +275,11 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				//if (samePosition(testSkel.getPosition(), testSkel.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())
 				// || samePosition(testVamp.getPosition(), testVamp.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()))
 				//	player->hit(lives);
-
-				if (testMummy.poisonExists() && samePosition(testMummy.getPoisonPosition(), testMummy.getPoisonSize(), player->getHitBoxPosition(), player->getHitBoxSize())
-				 || samePosition(testMummy.getPosition(), testMummy.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) )
-					player->hit(lives);
+				for (int i = 0; i < testMummyArray.size(); i++) {
+					if (testMummyArray[i]->poisonExists() && samePosition(testMummyArray[i]->getPoisonPosition(), testMummyArray[i]->getPoisonSize(), player->getHitBoxPosition(), player->getHitBoxSize())
+					 || samePosition(testMummyArray[i]->getPosition(), testMummyArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) )
+						player->hit(lives);
+				}
 			}
 
 			
@@ -360,7 +370,10 @@ int Scene::render()
 		
 	}
 	
-	testMummy.render();
+	for (int i = 0; i < testSkelArray.size(); i++) {
+		testMummyArray[i]->render();
+
+	}
 
 	for (int i = 0; i < testVampArray.size(); i++) {
 		testVampArray[i]->render();
