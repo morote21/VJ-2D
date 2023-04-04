@@ -99,13 +99,14 @@ void Player::update(int deltaTime, int& score, int& lives)
 			{
 				posPlayer.x += PLAYER_SPEED;
 				hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
-				if (sprite->animation() != STAND_LEFT)
-					sprite->changeAnimation(STAND_LEFT, true);
+				if (!falling && !bJumping) {
+					if (sprite->animation() != STAND_LEFT)
+						sprite->changeAnimation(STAND_LEFT, true);
+				}
 			}
 			else {	
 				if (!bJumping) {
 					if (falling) {
-						cout << "entra aqui 2" << endl;
 						if (sprite->animation() != AIR_LEFT)
 							sprite->changeAnimation(AIR_LEFT, false);
 					}
@@ -129,13 +130,14 @@ void Player::update(int deltaTime, int& score, int& lives)
 			{
 				posPlayer.x -= PLAYER_SPEED;
 				hitboxPos.x = posPlayer.x + HITBOXOFFSETX;
-				if (sprite->animation() != STAND_RIGHT)
-					sprite->changeAnimation(STAND_RIGHT, true);
+				if (!falling && !bJumping) {
+					if (sprite->animation() != STAND_RIGHT)
+						sprite->changeAnimation(STAND_RIGHT, true);
+				}
 			}
 			else {
 				if (!bJumping) {
 					if (falling) {
-						cout << "entra aqui 2" << endl;
 						if (sprite->animation() != AIR_RIGHT)
 							sprite->changeAnimation(AIR_RIGHT, false);
 					}
@@ -222,13 +224,11 @@ void Player::update(int deltaTime, int& score, int& lives)
 				if (prevDir == 1) {
 					if (sprite->animation() != AIR_RIGHT) {
 						sprite->changeAnimation(AIR_RIGHT, false);
-						cout << "entra aqui " << endl;
 					}
 				}
 				else if (prevDir == 2) {
 					if (sprite->animation() != AIR_LEFT) {
 						sprite->changeAnimation(AIR_LEFT, false);
-						cout << "entra aqui" << endl;
 					}
 				}
 			
@@ -272,12 +272,14 @@ void Player::update(int deltaTime, int& score, int& lives)
 			falling = true;
 		}
 		if (deathTime >= 2000.f) {
-			posPlayer = glm::vec2(startingPosPlayer.x, startingPosPlayer.y);
-			hitboxPos = glm::vec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
-			sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-			deathTime = 0;
-			dead = false;
-			invincible = false;
+			if (lives > 0) {
+				posPlayer = glm::vec2(startingPosPlayer.x, startingPosPlayer.y);
+				hitboxPos = glm::vec2(posPlayer.x + HITBOXOFFSETX, posPlayer.y);
+				sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+				deathTime = 0;
+				dead = false;
+				invincible = false;
+			}
 		}
 	}
 }

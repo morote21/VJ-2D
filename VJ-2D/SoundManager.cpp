@@ -144,3 +144,19 @@ void SoundManager::playPoison()
 	poison->setVolume(0.4f);
 	poison->setPlayPosition(0);
 }
+
+void SoundManager::playGameover()
+{
+	gameover = engine->play2D("sounds/gameover.wav", false, true);
+	gameover->setIsPaused(false);
+	gameover->setVolume(0.4f);
+	gameover->setPlayPosition(0);
+}
+
+void SoundManager::playAllOver()
+{
+	allover = engine->play2D("sounds/allover.wav", false, true);
+	allover->setIsPaused(false);
+	allover->setVolume(0.4f);
+	allover->setPlayPosition(700);
+}
