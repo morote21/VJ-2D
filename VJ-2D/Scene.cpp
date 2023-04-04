@@ -257,7 +257,7 @@ void Scene::update(int deltaTime, int& lives, int& score)
 					testVampArray[i]->update(deltaTime);
 				}
 
-				for (int i = 0; i < testVampArray.size(); i++) {
+				for (int i = 0; i < testMummyArray.size(); i++) {
 					testMummyArray[i]->update(deltaTime, player->getHitBoxPosition(), player->getHitBoxSize());
 				}
 			}
@@ -277,8 +277,10 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				//	player->hit(lives);
 				for (int i = 0; i < testMummyArray.size(); i++) {
 					if (testMummyArray[i]->poisonExists() && samePosition(testMummyArray[i]->getPoisonPosition(), testMummyArray[i]->getPoisonSize(), player->getHitBoxPosition(), player->getHitBoxSize())
-					 || samePosition(testMummyArray[i]->getPosition(), testMummyArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) )
+						|| samePosition(testMummyArray[i]->getPosition(), testMummyArray[i]->getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
+						SoundManager::instance().playPoison();
 						player->hit(lives);
+					}
 				}
 			}
 
@@ -328,12 +330,10 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			}
 
 			if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
-				cout << "Key collected" << endl;
 				keyCollected = true;
 				SoundManager::instance().playDoor();
 			}
 			if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
-				cout << "Door entered" << endl;
 				doorEntered = true;
 			}
 		}
@@ -370,7 +370,7 @@ int Scene::render()
 		
 	}
 	
-	for (int i = 0; i < testSkelArray.size(); i++) {
+	for (int i = 0; i < testMummyArray.size(); i++) {
 		testMummyArray[i]->render();
 
 	}

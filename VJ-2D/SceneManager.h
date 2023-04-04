@@ -29,7 +29,7 @@ private:
 	vector<TexturedQuad*> numbers;
 	Texture hudBackgroundTexture, numbersTexture, heartTexture, scoreTexture, missionTexture;
 	TexturedQuad* heart, *scoreHud, * missionHud;
-	int lives, score; // para que sea persistente entre niveles
+	int lives, score, finishTime; // para que sea persistente entre niveles
 	Text HUDText; // para HUD
 	glm::mat4 projection;
 	ShaderProgram texProgram;	// pasarlo a la clase Game mas adelante

@@ -58,6 +58,7 @@ void SceneManager::init()
 
 	lives = 3;
 	score = 0;
+	finishTime = 0.f;
 }
 
 void SceneManager::update(int deltaTime) // ??? (keys)
@@ -101,8 +102,9 @@ void SceneManager::update(int deltaTime) // ??? (keys)
 	}
 	
 	sceneArray[currentScene]->update(deltaTime, lives, score);
-
+	
 	if (lives == 0) {
+		finishTime = 0;
 		Game::instance().setStart(false);
 		string levelString = "levels/level0";
 		levelString += to_string(currentScene + 1);
