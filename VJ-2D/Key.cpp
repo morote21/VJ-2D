@@ -26,6 +26,7 @@ void Key::init(const glm::ivec2& tileMapPos, glm::ivec2 itemPos, ShaderProgram& 
 
 	position = itemPos;
 	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+	//itemDisapearSprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
 }
 
 void Key::update(int deltaTime)
@@ -35,7 +36,9 @@ void Key::update(int deltaTime)
 
 void Key::render()
 {
+	
 	sprite->render();
+	
 }
 
 Key::~Key()
@@ -56,4 +59,5 @@ glm::vec2 Key::getPosition()
 void Key::setPosition(const glm::ivec2& tileMapPos, glm::ivec2 itemPos) {
 	position = itemPos;
 	sprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
+	//itemDisapearSprite->setPosition(glm::vec2(position.x + tileMapPos.x, position.y + tileMapPos.y));
 }
