@@ -34,6 +34,8 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	initShaders();
 	keyCollected = false;
 	doorEntered = false;
+	gemTaken = lifeTaken = watchTaken = false;
+	itemDisappeared = true;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
 	stageCompleted = false;
@@ -52,7 +54,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 	player->setStartingPosition(glm::vec2(map->getPlayerInitPos().x, map->getPlayerInitPos().y + 2)); // ¿LIGADO AL NIVEL?
 	player->setTileMap(map);
-	
+
 	
 	countdownTexture.loadFromFile("images/countdown.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	countdown = Sprite::createSprite(glm::vec2(120, 150), glm::vec2(1 / 3.f, 1.f), &countdownTexture, &texProgram); // para el quad representado (+ tamaño frame)
@@ -85,6 +87,20 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 
 	stageCompleteSprite->changeAnimation(ONE, true);
 
+
+
+	itemDisapearTexture.loadFromFile("images/marseye.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	itemDisapearSprite = Sprite::createSprite(glm::vec2(20, 20), glm::vec2(1.f / 8.f, 1.f), &itemDisapearTexture, &texProgram);
+	itemDisapearSprite->setNumberAnimations(1);
+
+	itemDisapearSprite->setAnimationSpeed(ONE, 20);
+	for (int i = 0; i < 8; i++) {
+		itemDisapearSprite->addKeyframe(ONE, glm::vec2(i / 8.f, 0.f));
+	}
+
+
+
+
 	random_device rd;
 	std::mt19937 mt(rd());
 	std::uniform_int_distribution<int> dist(0, itemsPositions.size()-1);
@@ -110,7 +126,7 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	door.init(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos(), texProgram); //
 	
 
-	dist = std::uniform_int_distribution<int>(2, 58);
+	dist = std::uniform_int_distribution<int>(5, 50);
 	
 	cout << mapPath << endl;
 	gemSec = dist(mt);
@@ -158,11 +174,12 @@ void Scene::init(string mapPath) // We may want to modify this so that it sets u
 	pauseMenu.init();
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	currentTime = 0.0f;
+	currentTime = freezeTime = 0.0f;
 	countdownTimer = 0.f;
 	completeTimer = 0.f;
 	countdownDone = false;
 	playedMissionComplete = false;
+	disappearing = false;
 }
 
 void Scene::update(int deltaTime, int& lives, int& score)
@@ -249,6 +266,10 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			testGem.update(deltaTime);
 			testLife.update(deltaTime);
 			testWatch.update(deltaTime, timeState);
+			
+			if (!itemDisappeared) {
+				itemDisapearSprite->update(deltaTime);
+			}
 		
 			if (timeState == 2) { // para evitar que se muevan si no se mueve todo
 				for (int i = 0; i < testSkelArray.size(); i++) {
@@ -261,6 +282,9 @@ void Scene::update(int deltaTime, int& lives, int& score)
 				for (int i = 0; i < testMummyArray.size(); i++) {
 					testMummyArray[i]->update(deltaTime, player);
 				}
+			}
+			else {
+				freezeTime += deltaTime;
 			}
 		
 			// Colisión con Player de los enemigos (lo dejo aquí, porque si lo hacemos bien, podemos reducir el número de checkeos considerablemente) (saliendo del bucle después de un hit())
@@ -311,18 +335,27 @@ void Scene::update(int deltaTime, int& lives, int& score)
 			if (testGem.isVisible() && samePosition(testGem.getPosition(), testGem.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ){
 				testGem.setVisibility(false);
 				score += 100;
+				itemDisappeared = false;
+				itemDisapearSprite->setPosition(glm::vec2(testGem.getPosition().x, testGem.getPosition().y + SCREEN_Y));
 				SoundManager::instance().playItem();
+				gemTaken = true;
 			}
 
 			if (testLife.isVisible() && samePosition(testLife.getPosition(), testLife.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) ) {
 				testLife.setVisibility(false);
 				++lives;
+				itemDisappeared = false;
+				itemDisapearSprite->setPosition(glm::vec2(testLife.getPosition().x, testLife.getPosition().y + SCREEN_Y));
 				SoundManager::instance().playItem();
+				lifeTaken = true;
 			}
 
 			if (testWatch.isVisible() && samePosition(testWatch.getPosition(), testWatch.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
 				testWatch.activate(timeState);
+				itemDisappeared = false;
+				itemDisapearSprite->setPosition(glm::vec2(testWatch.getPosition().x, testWatch.getPosition().y + SCREEN_Y));
 				SoundManager::instance().playItem();
+				watchTaken = true;
 			}
 
 			if (timer == 0) {
@@ -332,6 +365,8 @@ void Scene::update(int deltaTime, int& lives, int& score)
 
 			if (!keyCollected && samePosition(key.getPosition(), key.getSize(), player->getHitBoxPosition(), player->getHitBoxSize()) && map->keyAppeared()) {
 				keyCollected = true;
+				itemDisappeared = false;
+				itemDisapearSprite->setPosition(glm::vec2(key.getPosition().x, key.getPosition().y + SCREEN_Y));
 				SoundManager::instance().playDoor();
 			}
 			if (keyCollected && samePosition(door.getPosition(), door.getSize(), player->getHitBoxPosition(), player->getHitBoxSize())) {
@@ -360,24 +395,90 @@ int Scene::render()
 	if (map->keyAppeared() && !keyCollected)
 		key.render();
 
-	testGem.render();
-	testLife.render();
-	testWatch.render();
+	if (countdownDone) {
+		testGem.render();
+		testLife.render();
+		testWatch.render();
+	}
+
+	if (!itemDisappeared) {
+		if (!disappearing) {
+			itemDisapearSprite->changeAnimation(ONE, false);
+			disappearing = true;
+		}
+		itemDisapearSprite->render();
+		if (itemDisapearSprite->animationFinished()) {
+			itemDisappeared = true;
+			disappearing = false;
+		}
+	}
 
 	door.render();
 	
-	for (int i = 0; i < testSkelArray.size(); i++) {
-		testSkelArray[i]->render();
-		
+	if (testWatch.getClockState() == 2) {
+		if (testWatch.getTimeLeft() < 2000.f) {
+			if (freezeTime <= 100.f) {
+				for (int i = 0; i < testSkelArray.size(); i++) {
+					testSkelArray[i]->render();
+				}
+
+				for (int i = 0; i < testMummyArray.size(); i++) {
+					testMummyArray[i]->render();
+				}
+
+				for (int i = 0; i < testVampArray.size(); i++) {
+					testVampArray[i]->render();
+				}
+			}
+			if (freezeTime >= 200.f) {
+				freezeTime = 0;
+			}
+		}
+		else if (testWatch.getTimeLeft() < 5000.f) {
+			if (freezeTime <= 300.f) {
+				for (int i = 0; i < testSkelArray.size(); i++) {
+					testSkelArray[i]->render();
+				}
+
+				for (int i = 0; i < testMummyArray.size(); i++) {
+					testMummyArray[i]->render();
+				}
+
+				for (int i = 0; i < testVampArray.size(); i++) {
+					testVampArray[i]->render();
+				}
+			}
+			if (freezeTime >= 600.f) {
+				freezeTime = 0;
+			}
+		}
+		else {
+			for (int i = 0; i < testSkelArray.size(); i++) {
+				testSkelArray[i]->render();
+			}
+
+			for (int i = 0; i < testMummyArray.size(); i++) {
+				testMummyArray[i]->render();
+			}
+
+			for (int i = 0; i < testVampArray.size(); i++) {
+				testVampArray[i]->render();
+			}
+		}
 	}
+	else {
+		freezeTime = 0;
+		for (int i = 0; i < testSkelArray.size(); i++) {
+			testSkelArray[i]->render();
+		}
 	
-	for (int i = 0; i < testMummyArray.size(); i++) {
-		testMummyArray[i]->render();
+		for (int i = 0; i < testMummyArray.size(); i++) {
+			testMummyArray[i]->render();
+		}
 
-	}
-
-	for (int i = 0; i < testVampArray.size(); i++) {
-		testVampArray[i]->render();
+		for (int i = 0; i < testVampArray.size(); i++) {
+			testVampArray[i]->render();
+		}
 	}
 
 	if (!doorEntered)
@@ -456,6 +557,7 @@ bool Scene::getStageCompleted() {
 void Scene::resetLevel() {
 	keyCollected = false;
 	doorEntered = false;
+	itemDisappeared = true;
 	timer = 60; // Debería ser diferente entre niveles...
 	pause = false;
 	pauseMenu.setPaused(false);
@@ -495,7 +597,7 @@ void Scene::resetLevel() {
 	key.setPosition(glm::ivec2(SCREEN_X, SCREEN_Y), glm::vec2(int(itemsPositions[indexItem1].x) + int((40 - SIZEITEMS_X) / 2), int(itemsPositions[indexItem1].y) + int((40 - SIZEITEMS_Y) / 2)));
 	door.resetAnimation(glm::ivec2(SCREEN_X, SCREEN_Y), map->getDoorPos());
 
-	dist = std::uniform_int_distribution<int>(2, 58);
+	dist = std::uniform_int_distribution<int>(5, 50);
 
 	gemSec = dist(mt);
 	cout << "segundo aparicion gema: " << gemSec << endl;
@@ -529,9 +631,12 @@ void Scene::resetLevel() {
 	}
 
 	projection = glm::ortho(0.f, float(SCREEN_WIDTH - 1), float(SCREEN_HEIGHT - 1), 0.f);
-	currentTime = 0.0f;
+	currentTime = freezeTime = 0.0f;
 	countdownTimer = 0.f;
 	completeTimer = 0.f;
 	countdownDone = false;
 	playedMissionComplete = false;
+	gemTaken = lifeTaken = watchTaken = false;
+	disappearing = false;
+
 }

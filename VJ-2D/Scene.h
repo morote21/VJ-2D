@@ -49,7 +49,7 @@ private:
 	TileMap* map;
 	Player* player;
 	TexturedQuad* background;
-	Texture levelBackground, countdownTexture, stageCompletedTexture;
+	Texture levelBackground, countdownTexture, stageCompletedTexture, itemDisapearTexture;
 	Key key;
 	Door door;
 	Pause pauseMenu;
@@ -57,7 +57,7 @@ private:
 	vector<Vampire*> testVampArray;
 	vector<Mummy*> testMummyArray;
 
-	Sprite* countdown, *stageCompleteSprite;
+	Sprite* countdown, *stageCompleteSprite, * itemDisapearSprite;
 
 	Gem testGem; // en principio bastará uno de cada de los coleccionables, porque no habrá 2 iguales a la vez (¿podemos borrarlos y cargarlos como con Player, tal vez?)
 	ExtraLife testLife;
@@ -65,12 +65,13 @@ private:
 
 
 	ShaderProgram texProgram;
-	float currentTime; // level time
+	float currentTime, freezeTime; // level time
 	glm::mat4 projection;
 	bool keyCollected, playedMissionComplete, pause, doorEntered, stageCompleted, countdownDone, playedOne, playedTwo, playedThree, playedStart;
 	int timer, countdownTimer, completeTimer, gemSec, lifeSec, watchSec;
 	char timeState; // 0: objetos congelados (debería tambien timer), 1: enemigos congelados, 2: todo en marcha
 	string mapPath;
+	bool gemTaken, lifeTaken, watchTaken, itemDisappeared, disappearing;
 
 	//Text HUDText; // Is this unnecessary? (probably, just one)
 	enum CountdownAnimations

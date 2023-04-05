@@ -17,6 +17,8 @@ public:
 	glm::ivec2 getSize() const;
 	glm::vec2 getPosition();
 	bool isVisible(); // puede que haya que tener presente cuando aparece, para no recogerlo inmediatamente si está en su animación de inicio
+	float getTimeLeft();
+	char getClockState();
 
 	void setVisibility(bool visible);
 	void activate(char& timeState); // para poner en marcha temporizador que congela el tiempo (le pasamos el timeState de Scene para que sincronize con ello)
