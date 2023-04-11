@@ -390,10 +390,16 @@ void Player::hit(int& lives)
 	dead = true;
 	falling = false;
 	bJumping = false; // para resetear el estado
-	if (prevDir == 1)
-		sprite->changeAnimation(DIE_RIGHT, false);
-	else if (prevDir == 2)
-		sprite->changeAnimation(DIE_LEFT, false);
+	if (prevDir == 1) {
+		if (sprite->animation() != DIE_RIGHT) {
+			sprite->changeAnimation(DIE_RIGHT, false);
+		}
+	}
+	else if (prevDir == 2) {
+		if (sprite->animation() != DIE_LEFT) {
+			sprite->changeAnimation(DIE_LEFT, false);
+		}
+	}
 	SoundManager::instance().playDeath();
 }
 
